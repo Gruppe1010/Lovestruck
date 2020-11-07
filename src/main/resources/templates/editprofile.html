@@ -38,7 +38,15 @@
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/candidatePage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadlinelogout" href="/"> Min Profil <i class="fas fa-caret-down"></i></a></span>
+            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
+                <span th:text="${loggedInUser.getUsername()}"></span>
+                <div class="dropdown-content">
+                    <a href="/viewProfile" class="linkmenubarheadline">Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/editProfile" class="linkmenubarheadline">Rediger profil</a>
+                    <a href="/logOut" class="linkmenubarheadline">Log out</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
+                </div>
+                <i class="fas fa-caret-down"></i>
+            </span>
         </div>
 
 
@@ -115,10 +123,10 @@
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling" required><br><br>
                                 <!--postalInfo -->
-                                <!--TODO -->
+                                <!--? == hvis den er null regnes den ikke med-->
                                 <input type="number" id="zipcode" name="zipcodeinput"
                                        placeholder="Postnummer"
-                                       th:value="${postalInfoModel.getZipCode()}"
+                                       th:value="${postalInfoModel?.getZipCode()}"
                                        minlength="4" maxlength="4"
                                        oninvalid="this.setCustomValidity('Angiv venligst postnummer i tal')"
                                        oninput="setCustomValidity('')"
@@ -129,13 +137,13 @@
                                        placeholder="Ændr adgangskode"
                                        oninvalid="this.setCustomValidity('Indtast venligst adgangskode på mindst 8 tegn')"
                                        oninput="setCustomValidity('')"
-                                       class="color fontsize formlinestyling password" required><br><br>
+                                       class="color fontsize formlinestyling password"><br><br>
 
                                 <input type="password" id="confirmpassword" name="confirmpasswordinput"
                                        placeholder="Bekræft adgangskode"
                                        oninvalid="this.setCustomValidity('Gentag venligst din adgangskode')"
                                        oninput="setCustomValidity('')"
-                                       class="color fontsize formlinestyling password" required><br><br>
+                                       class="color fontsize formlinestyling password"><br><br>
 
 
                                 <!--description -->

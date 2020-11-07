@@ -96,6 +96,14 @@ public class DatingController
     }
     
     
+    @GetMapping("/logOut")
+    public String logOut()
+    {
+        resetLoggedInUsers();
+        
+        return "logout"; // html
+    }
+    
     // I PostMappingens "/" SKAL der stå "post" FØRST! : fx IKKE "/createUser" men "/postCreateUser"
     @PostMapping("/postCreateUser")
     public String postCreateUser(WebRequest dataFromCreateUserForm)
@@ -174,6 +182,12 @@ public class DatingController
         }
     }
     
+    
+    public void resetLoggedInUsers()
+    {
+        loggedInAdmin = null;
+        loggedInDatingUser = null;
+    }
     
     
     

@@ -39,7 +39,15 @@
             <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/candidatePage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadlinelogout" href="/"> Min Profil <i class="fas fa-caret-down"></i></a></span>
+            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
+                <span th:text="${loggedInUser.getUsername()}"></span>
+                <div class="dropdown-content">
+                    <a href="/viewProfile" class="linkmenubarheadline">Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/editProfile" class="linkmenubarheadline">Rediger profil</a>
+                    <a href="/logOut" class="linkmenubarheadline">Log out</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
+                </div>
+                <i class="fas fa-caret-down"></i>
+            </span>
         </div>
 
         <div class="content-container">
