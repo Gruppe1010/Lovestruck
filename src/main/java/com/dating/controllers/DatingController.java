@@ -38,9 +38,23 @@ public class DatingController
     }
     
     @GetMapping("/startPage")
-    public String startPage(Model userModel)
+    public String startPage(Model adminModel, Model datingUserModel)
     {
-        addAttributeToUserModel(userModel);
+    
+        addAttributeToUserModel(adminModel, datingUserModel);
+        /*
+        if(loggedInAdmin!=null)
+        {
+            adminModel.addAttribute("loggedInUser", loggedInAdmin);
+        }
+        else if(loggedInDatingUser!=null)
+        {
+            datingUserModel.addAttribute("loggedInUser", loggedInDatingUser);
+        }
+        
+         */
+        
+        //addAttributeToUserModel(userModel);
         
         return "startpage"; // html
     }
@@ -64,9 +78,21 @@ public class DatingController
     }
     
     @GetMapping("/editProfile")
-    public String editProfile(Model userModel)
+    public String editProfile(Model datingUserModel, Model adminModel)
     {
-        addAttributeToUserModel(userModel);
+        addAttributeToUserModel(adminModel, datingUserModel);
+        /*
+        // fordi vi skal bruge den samme loggedInUser-reference i html'en
+        if(loggedInAdmin!=null)
+        {
+            adminModel.addAttribute("loggedInUser", loggedInAdmin);
+        }
+        else if(loggedInDatingUser!=null)
+        {
+            datingUserModel.addAttribute("loggedInUser", loggedInDatingUser);
+        }
+        
+         */
         
         return "editprofile"; // html
     }
@@ -135,25 +161,25 @@ public class DatingController
             return "redirect:/editProfileConfirmation"; // url
         }
         
-        
         return "redirect:/editProfile"; // url
     }
     
     
-    
-    public void addAttributeToUserModel(Model userModel)
+    public void addAttributeToUserModel(Model adminModel, Model datingUserModel)
     {
+        /*
         loggedInDatingUser = userRepository.retrieveLoggedInDatingUser();
         loggedInAdmin = userRepository.retrieveLoggedInAdmin();
+         */
         
         // fordi vi skal bruge den samme loggedInUser-reference i html'en
         if(loggedInAdmin != null)
         {
-            userModel.addAttribute("loggedInUser", loggedInAdmin);
+            adminModel.addAttribute("loggedInUser", loggedInAdmin);
         }
         else if(loggedInDatingUser != null)
         {
-            userModel.addAttribute("loggedInUser", loggedInDatingUser);
+            datingUserModel.addAttribute("loggedInUser", loggedInDatingUser);
         }
     }
     
