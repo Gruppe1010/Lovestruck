@@ -4,6 +4,9 @@ import com.dating.models.PostalInfo;
 import com.dating.models.users.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class DatingUser extends User
 {
@@ -17,7 +20,7 @@ public class DatingUser extends User
     private String imagePath;
     // TODO private Image profilePicture;
     private String description;
-    private ArrayList<String> tags;
+    private ArrayList<String> tagsList;
     private PostalInfo postalInfo;
     private ArrayList<DatingUser> kandidatListe;
     
@@ -34,7 +37,7 @@ public class DatingUser extends User
         // sættes til standard-billede
         imagePath = "https://i.imgur.com/66Dq0AJ.png";
         description = null;
-        tags = null;
+        tagsList = null;
         postalInfo = null;
         kandidatListe = null;
     }
@@ -113,13 +116,13 @@ public class DatingUser extends User
     {
         this.description = description;
     }
-    public ArrayList<String> getTags()
+    public ArrayList<String> getTagsList()
     {
-        return tags;
+        return tagsList;
     }
-    public void setTags(ArrayList<String> tags)
+    public void setTagsList(ArrayList<String> tags)
     {
-        this.tags = tags;
+        this.tagsList = tags;
     }
     public PostalInfo getPostalInfo()
     {
@@ -217,6 +220,52 @@ public class DatingUser extends User
             return ""+ interestedIn;
         }
         return null;
+    }
+    
+    public ArrayList<String> convertStringToTagsArrayList(String tagsString)
+    {
+        ArrayList<String> tagsList = new ArrayList<>();
+        
+        if(tagsString!=null)
+        {
+            // splitter tagsString ved # og laver til String-array
+            String[] stringArray = tagsString.split("#");
+            
+            // lægger stringArray over i tagsList-ArrayListen
+            Collections.addAll(tagsList, stringArray);
+            //fordi Stringen STARTER med et #, sætter den null ind på index 0 - derfor slettes index 0
+            
+            tagsList.remove(0);
+            
+            // tilføjer # foran hver string, fordi den sletter #'et siden den splitter ved #
+            // TODO: find evt på en anden løsning end split"#" hvor den ikke sletter #'et
+            addHashTag(tagsList);
+        }
+    
+        return tagsList;
+    }
+    
+    public void addHashTag(ArrayList<String> tagsList)
+    {
+        for(int i = 0; i < tagsList.size(); i++)
+        {
+            tagsList.set(i, "#" + tagsList.get(i));
+            System.out.println("#" + tagsList.get(i));
+        }
+    }
+    
+    public String convertTagsListToString()
+    {
+        String tagsString = "";
+        
+        if(tagsList.size()>0)
+        {
+            for(String tag : tagsList)
+            {
+                tagsString += tag;
+            }
+        }
+       return tagsString;
     }
     
     

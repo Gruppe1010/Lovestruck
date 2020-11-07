@@ -338,27 +338,18 @@ public class UserRepository
             
             if(resultSet.next()) // hvis det er en datingUser
             {
-    
-                /*
-                private boolean sex; // false == mænd, true == kvinder
-             
-                private int age;
-                private String imagePath;
-                // TODO private Image profilePicture;
-                private String description;
-                private ArrayList<String> tags;
-                private PostalInfo postalInfo;
-                
-                 */
-                
                 loggedInDatingUser.setIdDatingUser(resultSet.getInt(1));
                 loggedInDatingUser.setBlacklisted(loggedInDatingUser.convertIntToBoolean(resultSet.getInt(2)));
                 loggedInDatingUser.setUsername(resultSet.getString(3));
                 loggedInDatingUser.setEmail(resultSet.getString(4));
                 loggedInDatingUser.setPassword(resultSet.getString(5));
-                
+                loggedInDatingUser.setAge(resultSet.getInt(6));
+                loggedInDatingUser.setSex(loggedInDatingUser.convertIntToBoolean(resultSet.getInt(7)));
                 loggedInDatingUser.setInterestedIn(resultSet.getInt(8));
-                
+                //TODO PROFILEPICTURE loggedInDatingUser.setInterestedIn(resultSet.getInt(9));
+                loggedInDatingUser.setDescription(resultSet.getString(10));
+                loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsArrayList(resultSet.getString(11)));
+                loggedInDatingUser.setPostalInfo(findPostalInfoObjectFromIdPostalInfo(resultSet.getInt(12)));
             }
             
         }
@@ -436,7 +427,43 @@ public class UserRepository
     }
     
     
+    public PostalInfo findPostalInfoObjectFromIdPostalInfo(int id)
+    {
+        PostalInfo postalInfo = null;
     
+        try
+        {
+            String sqlCommand = "SELECT * FROM postal_info WHERE id_postal_info = ?";
+        
+            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, id);
+        
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            if(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+            {
+                postalInfo = new PostalInfo(resultSet.getInt(2), resultSet.getString(3));
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in findPostalInfoObjectFromIdPostalInfo: " + e.getMessage());
+        }
+        
+        return postalInfo;
+    }
+    
+    
+    
+    public void updateProfile()
+    {
+        String tagsString = " ";
+        
+        // tagsString = tagsString contains" " erstat med "";
+        
+    }
     
     
 }

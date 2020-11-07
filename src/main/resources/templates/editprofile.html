@@ -114,6 +114,15 @@
                                        oninvalid="this.setCustomValidity('Angiv venligst alder i tal')"
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling" required><br><br>
+                                <!--postalInfo -->
+                                <!--TODO -->
+                                <input type="number" id="zipcode" name="zipcodeinput"
+                                       placeholder="Postnummer"
+                                       th:value="${postalInfoModel.getZipCode()}"
+                                       minlength="4" maxlength="4"
+                                       oninvalid="this.setCustomValidity('Angiv venligst postnummer i tal')"
+                                       oninput="setCustomValidity('')"
+                                       class="color fontsize formlinestyling"><br><br>
 
                                 <!--password -->
                                 <input type="password" id="password" name="passwordinput"
@@ -132,13 +141,16 @@
                                 <!--description -->
                                 <input type="text" id="description" name="descriptioninput"
                                        placeholder="Skriv noget om dig selv"
+                                       th:value="${loggedInUser.getDescription()}"
                                        class="color fontsize descriptionbox"><br><br>
-                                <!--<textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>><br><br>-->
-
+                                <!--TODO <textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>><br><br>-->
 
                                 <!--tags -->
+                                <!--TODO tilføj liste - noget med th: each something-->
+
                                 <input type="text" id="tags" name="tagsinput"
                                        placeholder="Tags til din profil"
+                                       th:value="${loggedInUser.convertTagsListToString()}"
                                        class="color fontsize tagsbox"><br><br>
 
                                 <input type="submit" value="Gem bruger" class="editprofilesubmit fontsize">

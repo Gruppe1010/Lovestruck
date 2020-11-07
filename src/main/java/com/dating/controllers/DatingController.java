@@ -19,7 +19,6 @@ public class DatingController
     UserRepository userRepository = new UserRepository();
     
     
-    
     /**
      * Returnerer index-html-side ved /-request
      *
@@ -78,21 +77,13 @@ public class DatingController
     }
     
     @GetMapping("/editProfile")
-    public String editProfile(Model datingUserModel, Model adminModel)
+    public String editProfile(Model datingUserModel, Model adminModel, Model postalInfoModel, Model tagsListModel)
     {
         addAttributeToUserModel(adminModel, datingUserModel);
-        /*
-        // fordi vi skal bruge den samme loggedInUser-reference i html'en
-        if(loggedInAdmin!=null)
-        {
-            adminModel.addAttribute("loggedInUser", loggedInAdmin);
-        }
-        else if(loggedInDatingUser!=null)
-        {
-            datingUserModel.addAttribute("loggedInUser", loggedInDatingUser);
-        }
-        
-         */
+    
+        postalInfoModel.addAttribute("postalInfoModel", loggedInDatingUser.getPostalInfo());
+    
+        tagsListModel.addAttribute("tagsList", loggedInDatingUser.getTagsList());
         
         return "editprofile"; // html
     }
