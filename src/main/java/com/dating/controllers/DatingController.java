@@ -77,6 +77,29 @@ public class DatingController
         return "viewprofile";
     }
     
+    /* TODO HER ER JEG I GANG
+    @GetMapping("/editProfile")
+    public String editProfile(Model editDatingUserModel)
+    {
+    
+        editDatingUserModel.addAttribute("editDatingUser", loggedInDatingUser.converToEditDatingUser());
+        
+        // Model datingUserModel, Model adminModel, Model postalInfoModel, Model tagsListModel,
+        //                              Model errorModel
+        addAttributeToUserModel(adminModel, datingUserModel);
+        
+        postalInfoModel.addAttribute("postalInfoModel", loggedInDatingUser.getPostalInfo());
+        
+        tagsListModel.addAttribute("tagsList", loggedInDatingUser.getTagsList());
+        
+        errorModel.addAttribute("error", error);
+        
+        return "editprofile"; // html
+    }
+    
+     */
+    
+     //TODO: DEN GAMLE METODER
     @GetMapping("/editProfile")
     public String editProfile(Model datingUserModel, Model adminModel, Model postalInfoModel, Model tagsListModel,
                               Model errorModel)
@@ -91,6 +114,8 @@ public class DatingController
         
         return "editprofile"; // html
     }
+    
+    
     
     @GetMapping("/editProfileConfirmation")
     public String editProfileConfirmation(Model adminModel, Model datingUserModel)
@@ -154,6 +179,7 @@ public class DatingController
         return "redirect:/logIn"; // url
     }
     
+    //TODO: DEN GAMLE METODE
     @PostMapping("/postEditProfile")
     public String postEditProfile(WebRequest dataFromEditProfileForm, Model datingUserModel, Model adminModel,
                                   Model postalInfoModel, Model tagsListModel, Model errorModel)
@@ -188,8 +214,13 @@ public class DatingController
         
          */
         
+        
+        
         return "redirect:/editprofile"; // url // TODO: hvis vi laver viewModel- skriv: "editprofile"
     }
+    
+    
+    
     
     /*
     

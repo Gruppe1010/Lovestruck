@@ -509,6 +509,16 @@ public class UserRepository
         return postalInfo;
     }
     
+    /* TODO
+    public int findZipCodeFromPostalInfoObject(PostalInfo postalInfo)
+    {
+    
+    
+    
+    }
+    
+     */
+    
     
     
     public void updateProfile()

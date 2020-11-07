@@ -2,6 +2,7 @@ package com.dating.models.users;
 
 import com.dating.models.PostalInfo;
 import com.dating.models.users.User;
+import com.dating.viewModels.datingUser.EditDatingUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -268,12 +269,17 @@ public class DatingUser extends User
        return tagsString;
     }
     
-    
-    public void editUserInfo()
+    /* TODO
+    public EditDatingUser converToEditDatingUser()
     {
-    
+        
+        //int zipCode = userRepository.findZipCode;
+        
+        //return EditDatingUser(interestedIn, super.getUsername(), super.getEmail(), age, zipCode, "", "",
+                description, convertTagsListToString());
     }
     
+     */
     
 }
 
