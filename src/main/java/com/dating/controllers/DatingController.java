@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 
+
 @Controller
 public class DatingController
 {
     Admin loggedInAdmin = null;
     DatingUser loggedInDatingUser = null;
+    
+    Error error = null;
     UserService userService = new UserService();
     UserRepository userRepository = new UserRepository();
     
@@ -30,6 +33,7 @@ public class DatingController
         return "index";
     }
     
+    
     @GetMapping("/logIn")
     public String logIn()
     {
@@ -39,58 +43,59 @@ public class DatingController
     @GetMapping("/startPage")
     public String startPage(Model adminModel, Model datingUserModel)
     {
-    
         addAttributeToUserModel(adminModel, datingUserModel);
-        /*
-        if(loggedInAdmin!=null)
-        {
-            adminModel.addAttribute("loggedInUser", loggedInAdmin);
-        }
-        else if(loggedInDatingUser!=null)
-        {
-            datingUserModel.addAttribute("loggedInUser", loggedInDatingUser);
-        }
-        
-         */
-        
-        //addAttributeToUserModel(userModel);
         
         return "startpage"; // html
     }
     
     @GetMapping("/chatPage")
-    public String chatPage()
+    public String chatPage(Model adminModel, Model datingUserModel)
     {
+        addAttributeToUserModel(adminModel, datingUserModel);
+        
         return "chatpage"; // html
     }
     
     @GetMapping("/candidatePage")
-    public String candidatePage()
+    public String candidatePage(Model adminModel, Model datingUserModel)
     {
+        addAttributeToUserModel(adminModel, datingUserModel);
         return "candidatepage"; // html
     }
     
     @GetMapping("/searchPage")
-    public String searchPage()
+    public String searchPage(Model adminModel, Model datingUserModel)
     {
+        addAttributeToUserModel(adminModel, datingUserModel);
         return "searchpage"; // html
     }
     
-    @GetMapping("/editProfile")
-    public String editProfile(Model datingUserModel, Model adminModel, Model postalInfoModel, Model tagsListModel)
+    @GetMapping("/ViewProfile")
+    public String viewProfile(Model adminModel, Model datingUserModel)
     {
         addAttributeToUserModel(adminModel, datingUserModel);
+        return "viewprofile";
+    }
     
+    @GetMapping("/editProfile")
+    public String editProfile(Model datingUserModel, Model adminModel, Model postalInfoModel, Model tagsListModel,
+                              Model errorModel)
+    {
+        addAttributeToUserModel(adminModel, datingUserModel);
+        
         postalInfoModel.addAttribute("postalInfoModel", loggedInDatingUser.getPostalInfo());
-    
+        
         tagsListModel.addAttribute("tagsList", loggedInDatingUser.getTagsList());
+        
+        errorModel.addAttribute("error", error);
         
         return "editprofile"; // html
     }
     
     @GetMapping("/editProfileConfirmation")
-    public String editProfileConfirmation()
+    public String editProfileConfirmation(Model adminModel, Model datingUserModel)
     {
+        addAttributeToUserModel(adminModel, datingUserModel);
         
         return "editprofileconfirmation"; // html
     }
@@ -103,6 +108,9 @@ public class DatingController
         
         return "logout"; // html
     }
+    
+    
+    
     
     // I PostMappingens "/" SKAL der stå "post" FØRST! : fx IKKE "/createUser" men "/postCreateUser"
     @PostMapping("/postCreateUser")
@@ -147,21 +155,63 @@ public class DatingController
     }
     
     @PostMapping("/postEditProfile")
-    public String postEditProfile(WebRequest dataFromEditProfileForm)
+    public String postEditProfile(WebRequest dataFromEditProfileForm, Model datingUserModel, Model adminModel,
+                                  Model postalInfoModel, Model tagsListModel, Model errorModel)
     {
-        boolean isProfileEditted = userRepository.checkIfProfileWasEditted(dataFromEditProfileForm);
-        
-        // hvis checkIfChangesWereMade == true
-        
-        // updateUser()
+        // TODO: evt nyt navn til metoden: didUserAddChanges()
+        // tjekker om brugeren har indtastet nye oplysninger
+        boolean userAddedChanges = userRepository.checkIfProfileWasEditted(dataFromEditProfileForm, loggedInDatingUser);
+    
+        // if checkIfChangesWereMade == true
+        // tjek om email er ledig
+        // tjek om username er ledigt
+        // tjek om password-inputs matcher
+        // det matcher ikke = error = new Error("fejl i password")
+    
+    
+        // if alle er true
+        // == userService.applyChangesToProfile() (metoden ændrer både loggedInUser OG brugeren i database)
+        // return "redirect:/editProfileConfirmation"; // url
+        // else: send fejlmeddelelse alt ud fra hvad der gik galt
+        //else (hvis brugeren ikke indtastede ændringer)
+        // sker der ingenting?
         
         if(true)
         {
             return "redirect:/editProfileConfirmation"; // url
         }
+     
+        /*
+        setDatingUserModel(datingUserModel, dataFromEditProfileForm);
         
-        return "redirect:/editProfile"; // url
+        errorModel.addAttribute("errorModel", new Error("Adgangskoder matcher ikke."));
+        
+         */
+        
+        return "redirect:/editprofile"; // url // TODO: hvis vi laver viewModel- skriv: "editprofile"
     }
+    
+    /*
+    
+    public void setDatingUserModel(Model datingUserModel, WebRequest dataFromEditProfileForm)
+    {
+        
+        int interestedIn = userService.resolveInterestedInInput(dataFromEditProfileForm.getParameter(
+                "interestedininput"));
+        int age = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
+        String username = dataFromEditProfileForm.getParameter("usernameinput");
+        String email =  dataFromEditProfileForm.getParameter("emailinput");
+        String password = dataFromEditProfileForm.getParameter("passwordinput");
+        String confirmPassword = dataFromEditProfileForm.getParameter("confirmpasswordinput");
+    
+        if(userService.checkIfPasswordsMatch(password, confirmPassword))
+        
+        DatingUser datingUser = new DatingUser(sex, interestedIn, age, username, email, password);
+        
+        
+    }
+    
+     */
     
     
     public void addAttributeToUserModel(Model adminModel, Model datingUserModel)
@@ -174,11 +224,11 @@ public class DatingController
         // fordi vi skal bruge den samme loggedInUser-reference i html'en
         if(loggedInAdmin != null)
         {
-            adminModel.addAttribute("loggedInUser", loggedInAdmin);
+            adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
         }
         else if(loggedInDatingUser != null)
         {
-            datingUserModel.addAttribute("loggedInUser", loggedInDatingUser);
+            datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         }
     }
     
