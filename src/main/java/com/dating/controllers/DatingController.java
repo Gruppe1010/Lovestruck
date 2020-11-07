@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 
 @Controller
 public class DatingController
@@ -177,16 +180,21 @@ public class DatingController
     @PostMapping("/postEditProfile")
     public String postEditProfile(WebRequest dataFromEditProfileForm, Model editDatingUserModel)
     {
-        
+        // TODO: evt nyt navn til metoden: didUserAddChanges()
+        // tjekker om brugeren har indtastet nye oplysninger
         boolean userAddedChanges = userService.checkIfProfileWasEditted(dataFromEditProfileForm, editDatingUser);
-        //boolean userAddedChanges = userRepository.checkIfProfileWasEditted(dataFromEditProfileForm,
-            loggedInDatingUser);
         
+        // hvis bruger har indtastet ny info
         if(userAddedChanges)
         {
-        
-        
-        
+            userService.checkUsernameEmailPassword(dataFromEditProfileForm, editDatingUser);
+            
+            
+            if(true)
+            {
+                // opdateEditDatingUser - og dermed også modellen
+                return "redirect:/editProfileConfirmation"; // url
+            }
         }
         // else skal den update
         
@@ -195,15 +203,9 @@ public class DatingController
     
     
     
-        // TODO: evt nyt navn til metoden: didUserAddChanges()
-        // tjekker om brugeren har indtastet nye oplysninger
+        
+       
    
-    
-        // if checkIfChangesWereMade == true
-        // tjek om email er ledig
-        // tjek om username er ledigt
-        // tjek om password-inputs matcher
-        // det matcher ikke = error = new Error("fejl i password")
     
     
         // if alle er true
@@ -213,10 +215,6 @@ public class DatingController
         //else (hvis brugeren ikke indtastede ændringer)
         // sker der ingenting?
     
-        if(true)
-        {
-            return "redirect:/editProfileConfirmation"; // url
-        }
     
     
         return "redirect:/editprofile"; // url // TODO: hvis vi laver viewModel- skriv: "editprofile"

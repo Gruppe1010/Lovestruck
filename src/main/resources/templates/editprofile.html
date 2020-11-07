@@ -39,7 +39,7 @@
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/candidatePage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
             <span class="menubarheadline dropdown linkmenubarheadlinelogout">
-                <span th:text="${loggedInDatingUser.getUsername()}"></span>
+                <span th:text="${editDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
                     <a href="/viewProfile" class="linkmenubarheadline">Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
                     <a href="/editProfile" class="linkmenubarheadline">Rediger profil</a>
@@ -83,17 +83,17 @@
                                 <br><br>
                                 <div class="sex fontsize">
                                     <input type="radio" id="males" name="interestedininput" value="males"
-                                           th:checked="${loggedInDatingUser.checkIfInterestedInMales()}"
+                                           th:checked="${editDatingUser.checkIfInterestedInMales()}"
                                            class="color">
                                     <label for="males">Mænd&nbsp;</label>
 
                                     <input type="radio" id="females" name="interestedininput" value="females"
-                                           th:checked="${loggedInDatingUser.checkIfInterestedInFemales()}"
+                                           th:checked="${editDatingUser.checkIfInterestedInFemales()}"
                                            class="color" required>
                                     <label for="females">Kvinder&nbsp;</label>
 
                                     <input type="radio" id="maleandfemale" name="interestedininput" value="maleandfemale"
-                                           th:checked="${loggedInDatingUser.checkIfInterestedInMalesAndFemales()}"
+                                           th:checked="${editDatingUser.checkIfInterestedInMalesAndFemales()}"
                                            class="color" required>
                                     <label for="maleandfemale">Begge</label>
                                 </div><br>
@@ -101,7 +101,7 @@
                                 <!--username -->
                                 <input type="text" id="username" name="usernameinput"
                                        placeholder="Brugernavn"
-                                       th:value="${loggedInDatingUser.getUsername()}"
+                                       th:value="${editDatingUser.getUsername()}"
                                        oninvalid="this.setCustomValidity('Indtast venligst brugernavn')"
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling" required><br><br>
@@ -109,7 +109,7 @@
                                 <!--email -->
                                 <input type="email" id="email" name="emailinput"
                                        placeholder="Email"
-                                       th:value="${loggedInDatingUser.getEmail()}"
+                                       th:value="${editDatingUser.getEmail()}"
                                        oninvalid="this.setCustomValidity('Din email skal indeholde \'@\'')"
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling" required><br><br>
@@ -117,7 +117,7 @@
                                 <!--age -->
                                 <input type="number" id="age" name="ageinput"
                                        placeholder="Min alder"
-                                       th:value="${loggedInDatingUser.getAge()}"
+                                       th:value="${editDatingUser.getAge()}"
                                        min="1" max="150"
                                        oninvalid="this.setCustomValidity('Angiv venligst alder i tal')"
                                        oninput="setCustomValidity('')"
@@ -126,7 +126,7 @@
                                 <!--? == hvis den er null regnes den ikke med-->
                                 <input type="number" id="zipcode" name="zipcodeinput"
                                        placeholder="Postnummer"
-                                       th:value="${postalInfoModel?.getZipCode()}"
+                                       th:value="${editDatingUser.getZipCode()}"
                                        minlength="4" maxlength="4"
                                        oninvalid="this.setCustomValidity('Angiv venligst postnummer i tal')"
                                        oninput="setCustomValidity('')"
@@ -149,7 +149,7 @@
                                 <!--description -->
                                 <input type="text" id="description" name="descriptioninput"
                                        placeholder="Skriv noget om dig selv"
-                                       th:value="${loggedInDatingUser.getDescription()}"
+                                       th:value="${editDatingUser.getDescription()}"
                                        class="color fontsize descriptionbox"><br><br>
                                 <!--TODO <textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>><br><br>-->
 
@@ -158,7 +158,7 @@
 
                                 <input type="text" id="tags" name="tagsinput"
                                        placeholder="Tags til din profil"
-                                       th:value="${loggedInDatingUser.convertTagsListToString()}"
+                                       th:value="${editDatingUser.getTagsList()}"
                                        class="color fontsize tagsbox"><br><br>
 
                                 <input type="submit" value="Gem bruger" class="editprofilesubmit fontsize">

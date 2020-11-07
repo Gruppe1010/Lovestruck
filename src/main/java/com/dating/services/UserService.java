@@ -5,6 +5,8 @@ import com.dating.repositories.UserRepository;
 import com.dating.viewModels.datingUser.EditDatingUser;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.Objects;
+
 public class UserService
 {
     UserRepository userRepository = new UserRepository();
@@ -58,7 +60,7 @@ public class UserService
         return interestedIn;
     }
     
-    public static boolean checkIfPasswordsMatch(String password, String confirmPassword)
+    public boolean checkIfPasswordsMatch(String password, String confirmPassword)
     {
         return password.equals(confirmPassword);
     }
@@ -67,46 +69,69 @@ public class UserService
     {
         boolean wasProfileEditted = false;
     
+        //
         int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
-        String username = dataFromEditProfileForm.getParameter("usernameinput");
-        String email = dataFromEditProfileForm.getParameter("emailinput");
-        int age = dataFromEditProfileForm.getParameter("ageinput");
-        int zipCode = dataFromEditProfileForm.getParameter("zipcodeinput");
-        String password = dataFromEditProfileForm.getParameter("usernameinput");
-        String confirmPassword;
+        String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
+        String emailInput = dataFromEditProfileForm.getParameter("emailinput");
+        int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
+        int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
+        String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
+        String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
         // TODO private String imagePath;
-        String description;
-        String tagsList;
-    
-       
-      
-     
-        private int zipCode;
-        private String password;
-        private String confirmPassword;
-        // TODO private String imagePath;
-        private String description;
-        private String tagsList;
-       
-       
-        
+        String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
+        String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
         
         if(!(interestedInInput == editDatingUser.getInterestedIn()) ||
-           !(dataFromEditProfileForm.getParameter("usernameinput").equals(editDatingUser.getUsername())) ||
-           !(dataFromEditProfileForm.getParameter("emailinput").equals(editDatingUser.getEmail())) ||
-           !(dataFromEditProfileForm.getParameter("ageinput").equals(editDatingUser.getAge())) ||
-           !(dataFromEditProfileForm.getParameter("zipcodeinput").equals(editDatingUser.getZipCode())) ||
-           !(dataFromEditProfileForm.getParameter("passwordinput").equals(editDatingUser.getPassword())) ||
-            !(dataFromEditProfileForm.getParameter("usernameinput").equals(editDatingUser.getUsername())) ||
-        )
+           !(Objects.equals(usernameInput, editDatingUser.getUsername())) ||
+           !(Objects.equals(emailInput, editDatingUser.getEmail())) ||
+           !(ageInput == editDatingUser.getAge()) ||
+           !(zipCodeInput == editDatingUser.getZipCode()) ||
+           !(Objects.equals(passwordInput, editDatingUser.getPassword())) ||
+           !(Objects.equals(confirmPasswordInput, editDatingUser.getConfirmPassword())) ||
+           !(Objects.equals(descriptionInput, editDatingUser.getDescription())) ||
+           !(Objects.equals(tagsListInput, editDatingUser.getTagsList())))
         {
             wasProfileEditted = true;
         }
-        
-        
       
         return wasProfileEditted;
+    }
+    
+    public boolean checkUsernameEmailPassword(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
+    {
+        // boolean to return
+        boolean isInputValid = false;
         
+        boolean isEmailAvailable = true;
+        boolean isUsernameAvailable = true;
+        boolean doPasswordInputsMatch = checkIfPasswordsMatch(dataFromEditProfileForm.getParameter("passwordinput"),
+                                                              dataFromEditProfileForm.getParameter("confirmpasswordinput"));
+    
+        // hvis nyt emailinput
+        if(Objects.equals(dataFromEditProfileForm.getParameter("emailinput"), editDatingUser.getEmail()))
+        {
+            isEmailAvailable = userRepository.isEmailAvailable(dataFromEditProfileForm.getParameter(
+                    "emailinput"));
+        }
+    
+        // hvis nyt usernameinput
+        if(Objects.equals(dataFromEditProfileForm.getParameter("usernamenput"), editDatingUser.getUsername()))
+        {
+            isUsernameAvailable = userRepository.isUsernameAvailable(dataFromEditProfileForm.getParameter(
+                    "usernameinput"));
+        }
+    
+
+        
+        
+        
+        
+            return isInputValid;
+    }
+    
+    public boolean emailWasChanged()
+    {
+    
     }
     
     
