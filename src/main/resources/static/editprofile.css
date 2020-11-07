@@ -1,0 +1,49 @@
+
+.relativeinline
+{
+    position: relative;
+    display: flex;
+    border: #333333;
+}
+
+.profilepicture
+{
+    float: right;
+    margin: 20px;
+}
+
+.descriptionbox
+{
+    position: relative;
+    width: 100%;
+    height: 200px;
+
+    border-color: #333;
+    border-radius: 5px; /*For afrundede kanter på border*/
+
+    line-height: 40px; /*For luft om bogstaver*/
+    padding-left: 10px; /*For luft om bogstaver*/
+}
+.tagsbox
+{
+    position: relative;
+    width: 100%;
+
+    border-color: #333;
+    border-radius: 5px; /*For afrundede kanter på border*/
+
+    line-height: 40px; /*For luft om bogstaver*/
+    padding-left: 10px; /*For luft om bogstaver*/
+}
+
+.editprofilesubmit
+{
+    position: relative;
+    /*float fik den til at ødelægge dynamikken i boksen. Left gjorde ikke.*/
+    left: 800px;
+}
+
+
+
+/*HERFRA*/
+

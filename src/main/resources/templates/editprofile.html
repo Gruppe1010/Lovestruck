@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Love Struck </title>
+
+    <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Love struck - tænd gnisten"/>
+
+    <!-- css-filer -->
+    <link href="/editprofile.css" type="text/css" rel="stylesheet">
+    <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
+    <link href="/formtemplate.css" type="text/css" rel="stylesheet">
+
+    <!-- bootstraaaaap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!--Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&display=swap" rel="stylesheet">
+    <!-- font-family: 'Bitter', sans-serif; -->
+
+    <!--Icon-->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+</head>
+<body>
+<!--pagecontainer der tager footer med-->
+<div class="pagecontainer">
+    <!--content der inkapsler hele siden undtagen footer-->
+    <div class="content">
+        <div class="logo">
+            <a href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
+        </div>
+
+        <div class="menubar">
+            <!--for at style linkene skulle a have sin egen klasse-->
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/candidatePage"><i class="fas fa-heart"></i> Kandidater</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadlinelogout" href="/"> Min Profil <i class="fas fa-caret-down"></i></a></span>
+        </div>
+
+
+        <div class="row">
+            <!-- Kolonne til inputfelt -->
+            <div class="col">
+                <div id="form-container">
+                    <!-- Dette er en form
+                    Vi laver @PostMapping("/createUser") i Controlleren for at lave et endpoint - pga. denne form -->
+                    <form id="form" action="/postEditProfile" method="post">
+                        <h3 class="formheadline">Rediger din bruger</h3>
+
+                        <!--<input> Laver input-felt
+                        type="text" == typen af input der tages imod i inputfeltet
+                        id="brugernavn" == Et inputfelt SKAL have et id (man kan evt. tilføje styling på id'et i css)
+                        name="sexinput" == når vi skal hente værdien som indtastes i feltet bruges dette navn, som reference
+                        i metoden i controlleren - dvs. man skriver: getParameter("sexinput")
+                        value="male" == når type="radio", SKAL man have denne for at sige hvilken værdi der skal tildeles name'et
+                        når en specifik button vælges - dvs. vælges malebutton er value til sexinput=male
+                        required == gør at man SKAL udfylde feltet
+                        for="female" == siger at det er en label til female-inputtet
+                        placeholder="Indtast alder" == Tekst som står i input-felt
+                        min="1" max="150" == siger at talinput >= 1 og =< 150
+                        oninvalid="this.setCustomValidity('fejlmeddelelse')" == sætter fejlmeddelelse ved forkert input
+                        oninput="setCustomValidity('')" == gør så der ikke er nogen fejlmeddelelse ved korrekt input
+                        (skal kun bruges hvis oninvalid er brugt)
+                        -->
+                        <div class="relativeinline fontsize"> <!--TIL: profilePicture -->
+
+                            <div> <!--Til: username, email, interestedIn, age, city -->
+                                <!--interestedIn -->
+                                <br>
+                                <span>Jeg er interesseret i: </span>
+                                <br><br>
+                                <div class="sex fontsize">
+                                    <input type="radio" id="males" name="interestedininput" value="males"
+                                           th:checked="${loggedInUser.checkIfInterestedInMales()}"
+                                           class="color">
+                                    <label for="males">Mænd&nbsp;</label>
+
+                                    <input type="radio" id="females" name="interestedininput" value="females"
+                                           th:checked="${loggedInUser.checkIfInterestedInFemales()}"
+                                           class="color" required>
+                                    <label for="females">Kvinder&nbsp;</label>
+
+                                    <input type="radio" id="maleandfemale" name="interestedininput" value="maleandfemale"
+                                           th:checked="${loggedInUser.checkIfInterestedInMalesAndFemales()}"
+                                           class="color" required>
+                                    <label for="maleandfemale">Begge</label>
+                                </div><br>
+
+                                <!--username -->
+                                <input type="text" id="username" name="usernameinput"
+                                       placeholder="Brugernavn"
+                                       th:value="${loggedInUser.getUsername()}"
+                                       oninvalid="this.setCustomValidity('Indtast venligst brugernavn')"
+                                       oninput="setCustomValidity('')"
+                                       class="color fontsize formlinestyling" required><br><br>
+
+                                <!--email -->
+                                <input type="email" id="email" name="emailinput"
+                                       placeholder="Email"
+                                       th:value="${loggedInUser.getEmail()}"
+                                       oninvalid="this.setCustomValidity('Din email skal indeholde \'@\'')"
+                                       oninput="setCustomValidity('')"
+                                       class="color fontsize formlinestyling" required><br><br>
+
+                                <!--age -->
+                                <input type="number" id="age" name="ageinput"
+                                       placeholder="Min alder"
+                                       th:value="${loggedInUser.getAge()}"
+                                       min="1" max="150"
+                                       oninvalid="this.setCustomValidity('Angiv venligst alder i tal')"
+                                       oninput="setCustomValidity('')"
+                                       class="color fontsize formlinestyling" required><br><br>
+
+                                <!--password -->
+                                <input type="password" id="password" name="passwordinput"
+                                       placeholder="Ændr adgangskode"
+                                       oninvalid="this.setCustomValidity('Indtast venligst adgangskode på mindst 8 tegn')"
+                                       oninput="setCustomValidity('')"
+                                       class="color fontsize formlinestyling password" required><br><br>
+
+                                <input type="password" id="confirmpassword" name="confirmpasswordinput"
+                                       placeholder="Bekræft adgangskode"
+                                       oninvalid="this.setCustomValidity('Gentag venligst din adgangskode')"
+                                       oninput="setCustomValidity('')"
+                                       class="color fontsize formlinestyling password" required><br><br>
+
+
+                                <!--description -->
+                                <input type="text" id="description" name="descriptioninput"
+                                       placeholder="Skriv noget om dig selv"
+                                       class="color fontsize descriptionbox"><br><br>
+                                <!--<textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>><br><br>-->
+
+
+                                <!--tags -->
+                                <input type="text" id="tags" name="tagsinput"
+                                       placeholder="Tags til din profil"
+                                       class="color fontsize tagsbox"><br><br>
+
+                                <input type="submit" value="Gem bruger" class="editprofilesubmit fontsize">
+                            </div> <!--TIL: interestedIn, username, email, age, city -->
+
+                            <div class="profilepicture"> <!--TIL: profilePicture -->
+
+                                <!-- <span th:src="@{loggedInUser.getImagePath()}"></span>
+                                <form action="/action_page.php">
+                                    <label for="profilepicture">Tilføj profilbillede</label>
+                                    <input type="file" id="profilepicture" name="imageinput" accept="image/*"><br><br>
+
+                                </form> -->
+
+                            </div>
+                        </div>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div>
+            <div class="floatright">
+                <span><a class="footertext" href="https://www.google.com/maps/place/Lygten+37,+2400+K%C3%B8benhavn/data=!4m2!3m1!1s0x465252496d687ed3:0xab513417c1575967?sa=X&ved=2ahUKEwj9ya6NqJHsAhUPzqQKHYjIAKoQ8gEwAHoECAwQAQ">
+                    Lygten 37, 2400 København</a></span>
+                <span><a class="footertext" href="mailto:kontakt@lovestruck.dk">kontakt@lovestruck.dk</a></span>
+                <span><a class="footertext" href="tel:+45 0000 1010">+45 0000 1010</a></span>
+            </div>
+        </div>
+
+    </footer>
+</div>
+</body>
+</html>

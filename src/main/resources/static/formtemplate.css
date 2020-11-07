@@ -1,0 +1,165 @@
+#form-container
+{
+    padding-top: 70px;
+    width: 1000px;
+    margin: auto;
+}
+
+#form
+{
+    background: rgba(255, 255, 255, 0.7);
+    padding: 20px 30px 20px 30px;
+    border: 2px solid;
+    border-radius: 5px;
+}
+
+.formheadline
+{
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.formsubheadline
+{
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.formlinestyling
+{
+    position: relative;
+    width: 50%;
+
+    border-color: #333;
+    border-radius: 5px; /*For afrundede kanter på border*/
+
+    line-height: 40px; /*For luft om bogstaver*/
+    padding-left: 10px; /*For luft om bogstaver*/
+}
+
+.password:hover
+{
+    cursor: text;
+}
+
+input[type=password]
+{
+    background-color: #FAD4E2;
+
+    font-weight: bold;
+    border: 2px solid;
+    border-radius: 5px;
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*Gør at musen bliver til en text cursor som ved de andre felter*/
+input[type=password]:hover
+{
+    background-color: #FA6CA0;
+}
+
+input[type=submit]:hover
+{
+    background-color: #FA6CA0;
+    border-color: #333;
+}
+input[type=text]:hover
+{
+    background-color: #FA6CA0;
+}
+
+.topcornerbutton:hover
+{
+    background-color: #FA6CA0;
+    border-color: #333;
+}
+
+input[type=submit]
+{
+    background-color: #FAD4E2;
+    font-weight: bold;
+    border: 2px solid;
+    border-radius: 5px;
+    color: #333;
+    padding: 10px 20px; /*MÅSKE FJERN*/
+    text-decoration: none;
+    /*margin: 4px 2px;*/
+    margin: auto;
+    cursor: pointer;
+}
+/*Ændre styling på radio knapperne*/
+input[type='radio']:after
+{
+    width: 15px;
+    height: 15px;
+    border-radius: 5px;
+    top: -8px;
+    left: -1px;
+    position: relative;
+    background-color: #FAD4E2;
+    content: '';
+    display: inline-block;
+    border: 2px solid #333;
+}
+
+/*Ændre styling på radio knapperne*/
+input[type='radio']:checked:after
+{
+    width: 15px;
+    height: 15px;
+    border-radius: 5px;
+    top: -8px;
+    left: -1px;
+    position: relative;
+    background-color: #FA6CA0;
+    content: '';
+    display: inline-block;
+    border: 2px solid #333;
+}
+
+
+/*Fjerner pile på inputfelterne på indexsiden*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+.topcornerbutton
+{
+    position: relative;
+    display: inline;
+    float: right;
+    float: top;
+
+    background-color: #FAD4E2;
+    font-weight: bold;
+    border: 2px solid;
+    border-radius: 5px;
+    color: #333;
+    padding: 10px 20px; /*MÅSKE FJERN*/
+    text-decoration: none;
+    /*margin: 4px 2px;*/
+    margin: 50px;
+    cursor: pointer;
+}
+
+.submit
+{
+    position: relative;
+    /*float fik den til at ødelægge dynamikken i boksen. Left gjorde ikke.*/
+    left: 269px;
+}
+
+.login
+{
+    position: relative;
+    /*float fik den til at ødelægge dynamikken i boksen. Left gjorde ikke.*/
+    left: 323px;
+}

@@ -1,0 +1,93 @@
+body
+{
+    margin: 0;
+    background-image: url("https://i.imgur.com/CygUGRW.jpg");
+    background-attachment: fixed;
+    /*background: url("https://i.imgur.com/q9sNJ39.png") fixed; Denne linje svare til de to linjer ovenover*/
+    /*Ændre størrelsen så den passer til siden*/
+    background-size: cover;
+    /*background-repeat: no-repeat;*/ /*Så billdet ikke gentager sig*/
+    min-height: 100%;
+}
+
+.indexlogo
+{
+    position: relative;
+    display: inline-block;
+    padding-top: 20px;
+    height: 150px;
+}
+
+.indexlogos
+{
+    text-align:center; /* i midten */
+}
+
+.indexwrapper
+{
+    font-family: 'Bitter', serif;
+    font-weight: bold;
+}
+
+.sex
+{
+    position: relative;
+    float: right;
+    padding-right: 5px;
+}
+
+/*
+.createuser
+{
+    position: relative;
+    display: inline;
+    float: left;
+    background-color: #FAD4E2;
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 10px 20px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+ */
+/*
+a.createuser:link
+{
+    color: #333;
+    border-color: #333;
+    text-decoration: none;
+}
+a.createuser:hover
+{
+    background-color: #FA6CA0;
+}
+a.createuser:visited
+{
+    color: #333;
+}
+
+ */
+
+
+/* DET VIRKER IKKE
+a.logInButton:link
+{
+    color: #333;
+    border-color: #333;
+    text-decoration: none;
+}
+a.logInButton:hover
+{
+    background-color: #FA6CA0;
+}
+a.logInButton:visited
+{
+    color: #333;
+}
+
+ */
+
+
+

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Love Struck </title>
+
+    <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Love struck - tænd gnisten"/>
+
+    <!-- css-filer -->
+    <link href="/indexandloginpage.css" type="text/css" rel="stylesheet">
+    <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
+    <link href="/formtemplate.css" type="text/css" rel="stylesheet">
+
+
+
+    <!-- bootstraaaaap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!--Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&display=swap" rel="stylesheet">
+    <!-- font-family: 'Bitter', sans-serif; -->
+
+    <!--Icon-->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+</head>
+<body>
+
+<button class="topcornerbutton fontsize"><a href="/logIn">Log ind</a></button>
+
+<div class="indexwrapper">
+
+    <div class="container font">
+
+        <div class="indexlogos">
+            <div class="indexlogo">
+                <img src="https://i.imgur.com/h8kGO5J.png" alt="/textLogo.png" class="indexlogo">
+                <span>&nbsp; &nbsp; &nbsp;</span>
+                <img src="https://i.imgur.com/LToUXOO.png" alt="/heartLogo.png" class="indexlogo">
+            </div>
+        </div>
+
+      <div class="row">
+        <!-- Kolonne til inputfelt -->
+            <div class="col">
+                <div id="form-container">
+                    <!-- Dette er en form
+                    Vi laver @PostMapping("/createUser") i Controlleren for at lave et endpoint - pga. denne form -->
+                    <form id="form" action="/postCreateUser" method="post">
+                        <h3 class="formheadline">Opret din bruger</h3>
+                        <h5 class="formsubheadline">- og bliv lovestruck</h5>
+
+                        <!--<input> Laver input-felt
+                        type="text" == typen af input der tages imod i inputfeltet
+                        id="brugernavn" == Et inputfelt SKAL have et id (man kan evt. tilføje styling på id'et i css)
+                        name="sexinput" == når vi skal hente værdien som indtastes i feltet bruges dette navn, som reference
+                        i metoden i controlleren - dvs. man skriver: getParameter("sexinput")
+                        value="male" == når type="radio", SKAL man have denne for at sige hvilken værdi der skal tildeles name'et
+                        når en specifik button vælges - dvs. vælges malebutton er value til sexinput=male
+                        required == gør at man SKAL udfylde feltet
+                        for="female" == siger at det er en label til female-inputtet
+                        placeholder="Indtast alder" == Tekst som står i input-felt
+                        min="1" max="150" == siger at talinput >= 1 og =< 150
+                        oninvalid="this.setCustomValidity('fejlmeddelelse')" == sætter fejlmeddelelse ved forkert input
+                        oninput="setCustomValidity('')" == gør så der ikke er nogen fejlmeddelelse ved korrekt input
+                        (skal kun bruges hvis oninvalid er brugt)
+                        -->
+
+                        <span class="fontsize">Mit køn: </span><br>
+                        <div class="sex fontsize">
+
+                            <input type="radio" id="male" name="sexinput" value="male"
+                                   class="color" required>
+                            <label for="male">Mand&nbsp;&nbsp;&nbsp;</label>
+
+                            <input type="radio" id="female" name="sexinput" value="female"
+                                   class="color" required>
+                            <label for="female">Kvinde</label>
+
+                        </div><br><br>
+
+                        <span class="fontsize">Jeg er interesseret i: </span>
+                        <div class="sex fontsize">
+                            <input type="radio" id="males" name="interestedininput" value="males"
+                                   class="color" required>
+                            <label for="males">Mænd&nbsp;</label>
+
+                            <input type="radio" id="females" name="interestedininput" value="females"
+                                   class="color" required>
+                            <label for="females">Kvinder&nbsp;</label>
+
+                            <input type="radio" id="maleandfemale" name="interestedininput" value="maleandfemale"
+                                   class="color" required>
+                            <label for="maleandfemale">Begge</label>
+                        </div><br><br><br>
+
+                        <input type="number" id="age" name="ageinput"
+                               placeholder="Min alder"
+                               min="1" max="150"
+                               oninvalid="this.setCustomValidity('Angiv venligst alder i tal')"
+                               oninput="setCustomValidity('')"
+                               class="color fontsize formlinestyling" required><br><br>
+
+                        <input type="text" id="username" name="usernameinput"
+                               placeholder="Brugernavn"
+                               oninvalid="this.setCustomValidity('Indtast venligst brugernavn')"
+                               oninput="setCustomValidity('')"
+                               class="color fontsize formlinestyling" required><br><br>
+
+                        <input type="email" id="email" name="emailinput"
+                               placeholder="Email"
+                               oninvalid="this.setCustomValidity('Din email skal indeholde \'@\'')"
+                               oninput="setCustomValidity('')"
+                               class="color fontsize formlinestyling" required><br><br>
+
+                        <input type="password" id="password" name="passwordinput"
+                               placeholder="Adgangskode"
+                               oninvalid="this.setCustomValidity('Indtast venligst adgangskode på mindst 8 tegn')"
+                               oninput="setCustomValidity('')"
+                               class="color fontsize formlinestyling password" required><br><br>
+
+                        <input type="password" id="confirmpassword" name="confirmpasswordinput"
+                               placeholder="Bekræft adgangskode"
+                               oninvalid="this.setCustomValidity('Gentag venligst din adgangskode')"
+                               oninput="setCustomValidity('')"
+                               class="color fontsize formlinestyling password" required><br><br>
+
+                        <input type="submit" value="Opret bruger" class="submit fontsize">
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

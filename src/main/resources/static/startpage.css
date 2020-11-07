@@ -1,0 +1,67 @@
+.content-container
+{
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px;
+}
+
+.textbox-container
+{
+    padding-top:20px;
+    width: 300px;
+    margin: auto;
+}
+
+.startpage-textbox
+{
+    padding: 20px 30px 20px 30px;
+    margin-bottom: 70px;
+}
+
+.startpage-bulletpointbox
+{
+    padding: 20px 30px 20px 30px;
+    margin-bottom: 70px;
+}
+
+.textboxheadline
+{
+    font-size: 30px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.textboxcontent
+{
+    font-size: 20px;
+
+}
+
+.seagreen
+{
+    color: seagreen;
+}
+
+.size
+{
+    font-size: 25px;
+}
+
+.positiv
+{
+    color: #00B050;
+    font-weight: bold;
+}
+
+.negativ
+{
+    color: #C00000;
+    font-weight: bold;
+}
+
+.italic
+{
+    font-style: italic;
+}

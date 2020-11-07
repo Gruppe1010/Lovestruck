@@ -1,0 +1,226 @@
+body
+{
+    margin: 0;
+    background-image: url("https://i.imgur.com/CygUGRW.jpg");
+    /*background-repeat: no-repeat;*/  /*Så billdet ikke gentager sig*/
+    /*Ændre størrelsen så den passer til siden*/
+    background-size: cover;
+
+    min-height: 100%;
+    background-attachment: fixed;
+}
+
+.fontsize
+{
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Bitter', serif;
+}
+
+.color
+{
+    background-color: #FAD4E2;
+}
+
+.logo
+{
+    position: relative;
+    margin: 10px;
+    padding-bottom: 20px;
+    height: 100px;
+}
+
+.white
+{
+    color: white;
+}
+
+.menubar
+{
+    position: -webkit-sticky; /*Så sticky også virker i Safari*/
+    position: sticky;
+
+    top: 0; /*Ellers virker den ikke. Virker om den er 0, 20px, 999 osv. Hvorfor, kan jeg ikke finde svar på*/
+    z-index: 2; /*For at menubaren altid er forrest på siden*/
+    border-top: 2px solid #333;
+    border-bottom: 2px solid #333;
+    padding-top: 8px; /*For at give luft om bogstaverne*/
+    padding-bottom: 8px; /*For at give luft om bogstaverne*/
+    background-color: #FAD4E2;
+}
+
+.menubarheadline
+{
+    font-size: 20px;
+    display: inline;
+    padding: 10px 0 10px 70px;
+}
+
+
+a.linkmenubarheadlineactive:link
+{
+    color: #FA6CA0;
+    text-decoration: none;
+}
+
+a.linkmenubarheadlineactive:visited
+{
+    color: #FA6CA0;
+}
+
+
+a.linkmenubarheadline:link
+{
+    color: #333;
+    text-decoration: none;
+}
+
+a.linkmenubarheadline:visited
+{
+    color: #333;
+}
+
+a.linkmenubarheadline:hover
+{
+    color: #FA6CA0;
+}
+
+
+.linkmenubarheadlinelogout
+{
+    float: right;
+    padding-right: 70px;
+}
+
+a.linkmenubarheadlinelogout:link
+{
+    color: #333;
+    text-decoration: none;
+}
+
+a.linkmenubarheadlinelogout:visited
+{
+    color: #333;
+}
+
+a.linkmenubarheadlinelogout:hover
+{
+    color: #FA6CA0;
+}
+
+footer
+{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: #FAD4E2;
+    padding-left: 20px;
+    height: 70px;
+    border-top: 2px solid #333;
+}
+
+a.footerlogo:link
+{
+    color: #333;
+    text-decoration: none;
+}
+
+
+.footerlogo
+{
+
+    /*position: relative;
+    display: inline-block;
+
+     */
+    position: relative;
+    float: left;
+    top: 12px;
+    left: 25px;
+    height: 20px;
+
+    /*padding-left: 30px;*/
+
+}
+
+.footertext
+{
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    padding-top: 20px;
+    padding-right: 20px;
+}
+
+a.footertext
+{
+    color: #333;
+    text-decoration: none;
+}
+
+a.footertext:hover
+{
+    color: #FA6CA0;
+    -webkit-text-fill-color: #FA6CA0;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #FA6CA0;
+    text-decoration: none;
+}
+
+.floatright
+{
+    position: relative;
+    float: right;
+    right: 50px;
+}
+
+.guideline-container
+{
+    padding: 90px 30px 90px 30px;
+    width: 350px;
+    margin: auto;
+}
+
+.guidelineheadline
+{
+    font-size: 20px;
+    font-style: italic;
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 10px;
+}
+
+.guidelinecontent
+{
+    font-style: italic;
+}
+
+.fa-question-circle
+{
+    color: seagreen;
+}
+
+.pagecontainer
+{
+    font-family: 'Bitter', serif;
+    position: relative;
+
+    /*100% af viewport height som muliggøre at den kan ændre sig afhængig af vinduets størrelse*/
+    min-height: 100vh;
+}
+
+.content
+{
+    /*Skal være samme højde som footer*/
+    padding-bottom: 70px;
+}
+
+
+
+/*The page-container goes around everything on the page, and sets its minimum height to 100% of the viewport height (vh).
+As it is relative, its child elements can be set with absolute position based on it later.
+The content-wrap has a bottom padding that is the height of the footer, ensuring that exactly enough space is left for the footer inside the container they are both in.
+A wrapping div is used here that would contain all other page content.
+The footer is set to absolute, sticking to the bottom: 0 of the page-container it is within.
+This is important, as it is not absolute to the viewport, but will move down if the page-container is taller than the viewport.
+As stated, its height, arbitrarily set to 2.5rem here, is used in the content-wrap above it.*/
