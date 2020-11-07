@@ -1,7 +1,7 @@
 #form-container
 {
     padding-top: 70px;
-    width: 1000px;
+    width: 500px;
     margin: auto;
 }
 
@@ -30,7 +30,7 @@
 .formlinestyling
 {
     position: relative;
-    width: 50%;
+    width: 100%;
 
     border-color: #333;
     border-radius: 5px; /*For afrundede kanter på border*/
@@ -47,7 +47,6 @@
 input[type=password]
 {
     background-color: #FAD4E2;
-
     font-weight: bold;
     border: 2px solid;
     border-radius: 5px;
@@ -62,6 +61,16 @@ input[type=password]:hover
     background-color: #FA6CA0;
 }
 
+input[type=email]:hover
+{
+    background-color: #FA6CA0;
+}
+
+input[type=number]:hover
+{
+    background-color: #FA6CA0;
+}
+
 input[type=submit]:hover
 {
     background-color: #FA6CA0;
@@ -70,12 +79,6 @@ input[type=submit]:hover
 input[type=text]:hover
 {
     background-color: #FA6CA0;
-}
-
-.topcornerbutton:hover
-{
-    background-color: #FA6CA0;
-    border-color: #333;
 }
 
 input[type=submit]
@@ -130,14 +133,12 @@ input::-webkit-inner-spin-button
     margin: 0;
 }
 
-
 .topcornerbutton
 {
     position: relative;
     display: inline;
     float: right;
     float: top;
-
     background-color: #FAD4E2;
     font-weight: bold;
     border: 2px solid;
@@ -150,11 +151,27 @@ input::-webkit-inner-spin-button
     cursor: pointer;
 }
 
+.topcornerbutton:hover
+{
+    background-color: #FA6CA0;
+}
+
+a.topcornerbuttonlink:link
+{
+    color: #333;
+    text-decoration: none;
+}
+
+a.topcornerbuttonlink:visited
+{
+    color: #333;
+}
+
 .submit
 {
     position: relative;
     /*float fik den til at ødelægge dynamikken i boksen. Left gjorde ikke.*/
-    left: 269px;
+    left: 268px;
 }
 
 .login
