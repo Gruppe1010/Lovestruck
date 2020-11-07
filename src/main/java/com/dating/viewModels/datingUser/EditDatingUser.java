@@ -19,8 +19,94 @@ public class EditDatingUser
     private String description;
     private String tagsList;
     
-    // tilføj de attributter som vi skal vise på denne html
+    // constructor
+    public EditDatingUser(int interestedIn, String username, String email, int age, int zipCode, String password, String confirmPassword, String description, String tagsList)
+    {
+        this.interestedIn = interestedIn;
+        this.username = username;
+        this.email = email;
+        this.age = age;
+        this.zipCode = zipCode;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.description = description;
+        this.tagsList = tagsList;
+    }
     
+    // getters + setters
+    public int getInterestedIn()
+    {
+        return interestedIn;
+    }
+    public void setInterestedIn(int interestedIn)
+    {
+        this.interestedIn = interestedIn;
+    }
+    public String getUsername()
+    {
+        return username;
+    }
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+    public String getEmail()
+    {
+        return email;
+    }
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+    public int getAge()
+    {
+        return age;
+    }
+    public void setAge(int age)
+    {
+        this.age = age;
+    }
+    public int getZipCode()
+    {
+        return zipCode;
+    }
+    public void setZipCode(int zipCode)
+    {
+        this.zipCode = zipCode;
+    }
+    public String getPassword()
+    {
+        return password;
+    }
+    public void setPassword(String password)
+    {
+        this.password = password;
+    }
+    public String getConfirmPassword()
+    {
+        return confirmPassword;
+    }
+    public void setConfirmPassword(String confirmPassword)
+    {
+        this.confirmPassword = confirmPassword;
+    }
+    public String getDescription()
+    {
+        return description;
+    }
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+    public String getTagsList()
+    {
+        return tagsList;
+    }
+    public void setTagsList(String tagsList)
+    {
+        this.tagsList = tagsList;
+    }
     
+    // andre metoder
     
 }

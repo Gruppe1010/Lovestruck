@@ -410,6 +410,7 @@ public class UserRepository
         loggedInDatingUser = null;
     }
     
+    /* TODO : slet metode
     public boolean checkIfProfileWasEditted(WebRequest dataFromEditProfileForm, DatingUser loggedInUser)
     {
         // return værdi
@@ -421,14 +422,14 @@ public class UserRepository
         // henter værdi der er indtastet i form
         // hvis INGEN værdi indtastet henter den: ""
         String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
-        /*hvis password IKKE er ændret er det == ""
+        //hvis password IKKE er ændret er det == ""
         // DERFOR hvis password == "", er det IKKE blevet ændret
         // wasPasswordEditted skal altså have den omvendte værdi
         
-         */
+        
         wasPasswordEditted = !(passwordInput == "");
         
-        /*
+        
         // hvis de HAR fået en nye værdi
         else if(!userService.checkIfPasswordsMatch(passwordInput, confirmPasswordInput))
         {
@@ -438,7 +439,6 @@ public class UserRepository
             // hvis de nye værdier matcher så fortsætter de med at have samme input
         }
         
-         */
         try
         {
             // hvis ALT input fra form er HELT det samme, som ligger på en bruger i db, er der IKKE blevet ændret noget
@@ -469,6 +469,7 @@ public class UserRepository
         return wasProfileEditted;
      
     }
+    */
     
     public DatingUser retrieveLoggedInDatingUser()
     {

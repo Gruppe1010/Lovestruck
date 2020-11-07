@@ -269,17 +269,24 @@ public class DatingUser extends User
        return tagsString;
     }
     
-    /* TODO
-    public EditDatingUser converToEditDatingUser()
-    {
-        
-        //int zipCode = userRepository.findZipCode;
-        
-        //return EditDatingUser(interestedIn, super.getUsername(), super.getEmail(), age, zipCode, "", "",
-                description, convertTagsListToString());
-    }
     
-     */
+    public EditDatingUser convertToEditDatingUser()
+    {
+        int zipCode = 0;
+        String tagsListString = null;
+        
+        if(postalInfo!=null) // hvis der ER noget i postInfo
+        {
+            zipCode = postalInfo.getZipCode();
+        }
+        if(tagsList.size()>0) // hvis der ER noget i tagsList
+        {
+            tagsListString = convertTagsListToString();
+        }
+        
+        return new EditDatingUser(interestedIn, super.getUsername(), super.getEmail(), age, zipCode,
+                "", "", description, tagsListString);
+    }
     
 }
 
