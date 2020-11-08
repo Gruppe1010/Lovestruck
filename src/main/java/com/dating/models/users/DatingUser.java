@@ -196,8 +196,6 @@ public class DatingUser extends User
         return "malesandfemales";
     }
     
- 
-    
     public ArrayList<String> convertStringToTagsList(String tagsString)
     {
         ArrayList<String> tagsList = new ArrayList<>();
