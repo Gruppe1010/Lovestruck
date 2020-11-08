@@ -85,29 +85,6 @@ a.linkmenubarheadline:hover
     color: #FA6CA0;
 }
 
-
-.linkmenubarheadlinelogout
-{
-    float: right;
-    padding-right: 70px;
-}
-
-a.linkmenubarheadlinelogout:link
-{
-    color: #333;
-    text-decoration: none;
-}
-
-a.linkmenubarheadlinelogout:visited
-{
-    color: #333;
-}
-
-a.linkmenubarheadlinelogout:hover
-{
-    color: #FA6CA0;
-}
-
 footer
 {
     position: absolute;
@@ -215,34 +192,65 @@ a.footertext:hover
     padding-bottom: 70px;
 }
 
-
 /*DROPDOWN TEST*/
 
-.dropdown {
+.dropdown
+{
+    float: right;
+    padding-right: 50px;
+    bottom: 10px;
+}
 
+a.dropdown:link
+{
+    color: #333;
+    text-decoration: none;
+}
+
+a.dropdown:visited
+{
+    color: #333;
+}
+
+.dropdown:hover
+{
+    color: #fa6ca0;
 }
 
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
+    background-color: #FAD4E2;
+    min-width: 185px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    /*Giver runde kanter i bunden af dropdown og fjerner toppen*/
+    border: 2px solid #333;
+    border-top: none;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    /*Positionere dropdown under menubar og får den til at rulle ud i højre side, da den ellers ville ændre position efter brugernavnets længde*/
+    top: 50px;
+    right: 40px;
+    left: auto;
 }
 
 .dropdown-content a {
     color: black;
-    padding: 12px 16px;
+    padding: 12px 10px;
     text-decoration: none;
     display: block;
 }
 
-.dropdown-content a:hover {background-color: #ddd;}
+.dropdown-content a:hover
+{
+    background-color: white;
+}
 
-.dropdown:hover .dropdown-content {display: block;}
-
-.dropdown:hover .dropbtn {background-color: #3e8e41;}
+.dropdown:hover .dropdown-content
+{
+    display: block;
+}
 
 
 

@@ -38,12 +38,12 @@
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/candidatePage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
-            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
+            <span class="menubarheadline dropdown">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
-                    <a href="/viewProfile" class="linkmenubarheadline">Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
-                    <a href="/editProfile" class="linkmenubarheadline">Rediger profil</a>
-                    <a href="/logOut" class="linkmenubarheadline">Log out</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
+                    <a href="/viewProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/editProfile" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
+                    <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
                 </div>
                 <i class="fas fa-caret-down"></i>
             </span>
