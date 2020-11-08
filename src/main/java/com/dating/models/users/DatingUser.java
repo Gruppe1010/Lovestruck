@@ -196,34 +196,9 @@ public class DatingUser extends User
         return "malesandfemales";
     }
     
-    public String checkIfInterestedInMales()
-    {
-        if(interestedIn == 0)
-        {
-            return ""+ interestedIn;
-        }
-        return null;
-    }
+ 
     
-    public String checkIfInterestedInFemales()
-    {
-        if(interestedIn == 1)
-        {
-            return "" + interestedIn;
-        }
-        return null;
-    }
-    
-    public String checkIfInterestedInMalesAndFemales()
-    {
-        if(interestedIn == 2)
-        {
-            return ""+ interestedIn;
-        }
-        return null;
-    }
-    
-    public ArrayList<String> convertStringToTagsArrayList(String tagsString)
+    public ArrayList<String> convertStringToTagsList(String tagsString)
     {
         ArrayList<String> tagsList = new ArrayList<>();
         
@@ -269,8 +244,7 @@ public class DatingUser extends User
        return tagsString;
     }
     
-    
-    public EditDatingUser convertToEditDatingUser()
+    public EditDatingUser convertDatingUserToEditDatingUser()
     {
         int zipCode = 0;
         String tagsListString = null;

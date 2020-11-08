@@ -3,7 +3,6 @@ package com.dating.repositories;
 import com.dating.models.PostalInfo;
 import com.dating.models.users.Admin;
 import com.dating.models.users.DatingUser;
-import com.dating.services.UserService;
 import org.springframework.web.context.request.WebRequest;
 import java.sql.*;
 
@@ -14,8 +13,6 @@ public class UserRepository
 
     DatingUser loggedInDatingUser = new DatingUser();
     Admin loggedInAdmin = new Admin();
-    
-    
     
     
     /**
@@ -347,7 +344,7 @@ public class UserRepository
                 loggedInDatingUser.setInterestedIn(resultSet.getInt(8));
                 //TODO PROFILEPICTURE loggedInDatingUser.setInterestedIn(resultSet.getInt(9));
                 loggedInDatingUser.setDescription(resultSet.getString(10));
-                loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsArrayList(resultSet.getString(11)));
+                loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsList(resultSet.getString(11)));
                 loggedInDatingUser.setPostalInfo(findPostalInfoObjectFromIdPostalInfo(resultSet.getInt(12)));
             }
             
@@ -510,15 +507,80 @@ public class UserRepository
         return postalInfo;
     }
     
-    /* TODO
-    public int findZipCodeFromPostalInfoObject(PostalInfo postalInfo)
+    public void updateLoggedInDatingUserInDb(DatingUser loggedInDatingUser)
     {
+        int postalId = findIdPostalInfoFromPostalInfoObject(loggedInDatingUser.getPostalInfo());
+        String tagsListString = loggedInDatingUser.convertTagsListToString();
+        
+        try
+        {
+            lovestruckConnection = establishConnection("lovestruck");
+            
+            // TODO: tilføj: image_path som kolonne i database - og så tilføj den sqlCommanden her
+            String sqlCommand = "UPDATE dating_users SET intersted_in = ? AND " +
+                                        "SET username = ? AND " +
+                                        "SET email = ? AND " +
+                                        "SET age = ? AND " +
+                                        "SET id_postal_info = ? AND " +
+                                        "SET password = ? AND " +
+                                        "SET description = ? AND " +
+                                        "SET tags = ?" +
+                                        "WHERE id_dating_user = ?";
+        
+            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, loggedInDatingUser.getInterestedIn());
+            preparedStatement.setString(2, loggedInDatingUser.getUsername());
+            preparedStatement.setString(3, loggedInDatingUser.getEmail());
+            preparedStatement.setInt(4, loggedInDatingUser.getAge());
+            preparedStatement.setInt(5, postalId);
+            preparedStatement.setString(6, loggedInDatingUser.getPassword());
+            preparedStatement.setString(7, loggedInDatingUser.getDescription());
+            preparedStatement.setString(8, tagsListString);
+            preparedStatement.setInt(9, loggedInDatingUser.getIdDatingUser());
+        
+            // user tilføjes til database
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in updateLoggedInDatingUserInDb: " + e.getMessage());
     
+        }
     
     
     }
     
-     */
+   
+    public int findIdPostalInfoFromPostalInfoObject(PostalInfo postalInfo)
+    {
+        int idPostalInfo = 0;
+    
+        try
+        {
+            String sqlCommand = "SELECT * FROM postal_info WHERE zip_code = ?";
+        
+            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, postalInfo.getZipCode());
+        
+            ResultSet resultSet = preparedStatement.executeQuery();
+        
+            if(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+            {
+                idPostalInfo = resultSet.getInt(1);
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in findIdPostalInfoFromPostalInfoObject: " + e.getMessage());
+        }
+    
+        return idPostalInfo;
+    
+    }
     
     
     

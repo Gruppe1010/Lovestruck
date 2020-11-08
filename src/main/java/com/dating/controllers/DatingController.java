@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.ArrayList;
-import java.util.Objects;
-
 
 @Controller
 public class DatingController
@@ -89,14 +86,13 @@ public class DatingController
     @GetMapping("/editProfile")
     public String editProfile(Model editDatingUserModel)
     {
-        editDatingUser = loggedInDatingUser.convertToEditDatingUser();
+        editDatingUser = loggedInDatingUser.convertDatingUserToEditDatingUser();
         
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
         
         return "editprofile"; // html
     }
     
-     
     
      /* TODO: DEN GAMLE METODER
     @GetMapping("/editProfile")
@@ -181,44 +177,33 @@ public class DatingController
     public String postEditProfile(WebRequest dataFromEditProfileForm, Model editDatingUserModel)
     {
         // TODO: evt nyt navn til metoden: didUserAddChanges()
-        // tjekker om brugeren har indtastet nye oplysninger
+        // tjekker om brugeren har indtastet ny info
         boolean userAddedChanges = userService.checkIfProfileWasEditted(dataFromEditProfileForm, editDatingUser);
-        
+    
         // hvis bruger har indtastet ny info
         if(userAddedChanges)
         {
-            userService.checkUsernameEmailPassword(dataFromEditProfileForm, editDatingUser);
+            boolean isUsernameEmailPasswordValid = userService.checkUsernameEmailPassword(dataFromEditProfileForm, editDatingUser);
             
-            
-            if(true)
+            if(isUsernameEmailPasswordValid)
             {
-                // opdateEditDatingUser - og dermed også modellen
+                // TODO: det er HER der er en fejl
+                loggedInDatingUser = userService.updateLoggedInDatingUser(dataFromEditProfileForm, loggedInDatingUser);
+                userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
+                
                 return "redirect:/editProfileConfirmation"; // url
             }
         }
-        // else skal den update
         
-        // updateEditDatingUser()
-        // editDatingUserModel.setEditDatingUserModel
-    
-    
-    
+        // Hvis INGEN ny info ELLER hvis usernameEmailPassword er invalid
+        // editDatingUser opdateres fordi viewet skal vise det brugeren skrev ind!!!!!!!!!!!!!!!!
+        editDatingUser = userService.updateEditDatingUser(dataFromEditProfileForm);
+        editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
         
-       
-   
-    
-    
-        // if alle er true
-        // == userService.applyChangesToProfile() (metoden ændrer både loggedInUser OG brugeren i database)
-        // return "redirect:/editProfileConfirmation"; // url
-        // else: send fejlmeddelelse alt ud fra hvad der gik galt
-        //else (hvis brugeren ikke indtastede ændringer)
-        // sker der ingenting?
-    
-    
-    
-        return "redirect:/editprofile"; // url // TODO: hvis vi laver viewModel- skriv: "editprofile"
+        return "editprofile"; // url // TODO: hvis vi laver viewModel- skriv: "editprofile"
     }
+    
+ 
     
     
     /*TODO: DEN GAMLE METODE

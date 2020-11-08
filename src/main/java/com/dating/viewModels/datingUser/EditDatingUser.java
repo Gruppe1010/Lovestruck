@@ -109,4 +109,31 @@ public class EditDatingUser
     
     // andre metoder
     
+    public String checkIfInterestedInMales()
+    {
+        if(interestedIn == 0)
+        {
+            return ""+ interestedIn;
+        }
+        return null;
+    }
+    
+    public String checkIfInterestedInFemales()
+    {
+        if(interestedIn == 1)
+        {
+            return "" + interestedIn;
+        }
+        return null;
+    }
+    
+    public String checkIfInterestedInMalesAndFemales()
+    {
+        if(interestedIn == 2)
+        {
+            return ""+ interestedIn;
+        }
+        return null;
+    }
+    
 }
