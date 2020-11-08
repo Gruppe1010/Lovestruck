@@ -62,7 +62,7 @@ public class UserService
             loggedInDatingUser.setPostalInfo(postalInfo);
         }
    
-        if(passwordInput.equals("")) // hvis nyt password
+        if(!(passwordInput.equals(""))) // hvis nyt password
         {
             loggedInDatingUser.setPassword(passwordInput);
         }
