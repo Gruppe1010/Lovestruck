@@ -41,9 +41,9 @@
             <span class="menubarheadline dropdown linkmenubarheadlinelogout">
                 <span th:text="${editDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
-                    <a href="/viewProfile" class="linkmenubarheadline">Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
-                    <a href="/editProfile" class="linkmenubarheadline">Rediger profil</a>
-                    <a href="/logOut" class="linkmenubarheadline">Log out</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
+                    <a href="/viewProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/editProfile" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
+                    <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
                 </div>
                 <i class="fas fa-caret-down"></i>
             </span>
@@ -53,11 +53,11 @@
         <div class="row">
             <!-- Kolonne til inputfelt -->
             <div class="col">
-                <div id="form-container">
+                <div id="editprofile-container">
                     <!-- Dette er en form
                     Vi laver @PostMapping("/createUser") i Controlleren for at lave et endpoint - pga. denne form -->
                     <form id="form" action="/postEditProfile" method="post">
-                        <h3 class="formheadline">Rediger din bruger</h3>
+                        <h3 class="formheadline">Rediger din profil</h3>
 
                         <!--<input> Laver input-felt
                         type="text" == typen af input der tages imod i inputfeltet
@@ -80,7 +80,6 @@
                                 <!--interestedIn -->
                                 <br>
                                 <span>Jeg er interesseret i: </span>
-                                <br><br>
                                 <div class="sex fontsize">
                                     <input type="radio" id="males" name="interestedininput" value="males"
                                            th:checked="${editDatingUser.checkIfInterestedInMales()}"
@@ -99,33 +98,34 @@
                                 </div><br>
 
                                 <!--username -->
+                                <span>Brugernavn: </span>
                                 <input type="text" id="username" name="usernameinput"
-                                       placeholder="Brugernavn"
                                        th:value="${editDatingUser.getUsername()}"
                                        oninvalid="this.setCustomValidity('Indtast venligst brugernavn')"
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling" required><br><br>
 
                                 <!--email -->
+                                <span>Email: </span>
                                 <input type="email" id="email" name="emailinput"
-                                       placeholder="Email"
                                        th:value="${editDatingUser.getEmail()}"
                                        oninvalid="this.setCustomValidity('Din email skal indeholde \'@\'')"
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling" required><br><br>
 
                                 <!--age -->
+                                <span>Alder: </span>
                                 <input type="number" id="age" name="ageinput"
-                                       placeholder="Min alder"
                                        th:value="${editDatingUser.getAge()}"
                                        min="1" max="150"
                                        oninvalid="this.setCustomValidity('Angiv venligst alder i tal')"
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling" required><br><br>
+
                                 <!--postalInfo -->
                                 <!--? == hvis den er null regnes den ikke med-->
+                                <span>Postnummer: </span>
                                 <input type="number" id="zipcode" name="zipcodeinput"
-                                       placeholder="Postnummer"
                                        th:value="${editDatingUser.getZipCode()}"
                                        minlength="4" maxlength="4"
                                        oninvalid="this.setCustomValidity('Angiv venligst postnummer i tal')"
@@ -133,46 +133,56 @@
                                        class="color fontsize formlinestyling"><br><br>
 
                                 <!--password -->
+                                <span>Ændre adgangskode: </span>
                                 <input type="password" id="password" name="passwordinput"
-                                       placeholder="Ændr adgangskode"
                                        oninvalid="this.setCustomValidity('Indtast venligst adgangskode på mindst 8 tegn')"
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling password"><br><br>
 
+                                <span>Bekræft adgangskode: </span>
                                 <input type="password" id="confirmpassword" name="confirmpasswordinput"
-                                       placeholder="Bekræft adgangskode"
                                        oninvalid="this.setCustomValidity('Gentag venligst din adgangskode')"
                                        oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling password"><br><br>
 
-
-                                <!--description -->
+                                <!--
+                                <span>Beskrivelse: </span>
                                 <input type="text" id="description" name="descriptioninput"
-                                       placeholder="Skriv noget om dig selv"
+
                                        th:value="${editDatingUser.getDescription()}"
                                        class="color fontsize descriptionbox"><br><br>
-                                <!--TODO <textarea name="message" rows="10" cols="30">The cat was playing in the garden.</textarea>><br><br>-->
+                                       -->
+
+                                <!--description -->
+                                <span>Beskrivelse: </span>
+                                <textarea id="description" name="descriptioninput" rows="4" cols="50"
+                                          th:value="${editDatingUser.getDescription()}"
+                                          class="color fontsize descriptionbox"></textarea><br><br>
 
                                 <!--tags -->
                                 <!--TODO tilføj liste - noget med th: each something-->
-
+                                <span>Tags: </span>
                                 <input type="text" id="tags" name="tagsinput"
-                                       placeholder="Tags til din profil"
                                        th:value="${editDatingUser.getTagsList()}"
                                        class="color fontsize tagsbox"><br><br>
 
                                 <input type="submit" value="Gem bruger" class="editprofilesubmit fontsize">
                             </div> <!--TIL: interestedIn, username, email, age, city -->
 
-                            <div class="profilepicture"> <!--TIL: profilePicture -->
+                            <div class="profilepicturecontainer">
+                                <div class="profilepicture"> <!--TIL: profilePicture -->
 
-                                <!-- <span th:src="@{loggedInUser.getImagePath()}"></span>
-                                <form action="/action_page.php">
-                                    <label for="profilepicture">Tilføj profilbillede</label>
-                                    <input type="file" id="profilepicture" name="imageinput" accept="image/*"><br><br>
+                                    <img src="https://i.imgur.com/66Dq0AJ.png" alt="" class="profilepictureimage">
+                                    <!-- <span th:src="@{loggedInUser.getImagePath()}"></span>
+                                    <form action="/action_page.php">
+                                        <label for="profilepicture">Tilføj profilbillede</label>
+                                        <input type="file" id="profilepicture" name="imageinput" accept="image/*"><br><br>
 
-                                </form> -->
-
+                                    </form> -->
+                                </div>
+                                <label class="browsefiles">Vælg en billede fil
+                                    <input type="file"/>
+                                </label>
                             </div>
                         </div>
 

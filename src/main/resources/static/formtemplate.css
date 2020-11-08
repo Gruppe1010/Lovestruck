@@ -94,6 +94,7 @@ input[type=submit]
     margin: auto;
     cursor: pointer;
 }
+
 /*Ændre styling på radio knapperne*/
 input[type='radio']:after
 {

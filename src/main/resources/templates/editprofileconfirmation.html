@@ -43,9 +43,9 @@
             <span class="menubarheadline dropdown linkmenubarheadlinelogout">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
-                    <a href="/viewProfile" class="linkmenubarheadline">Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
-                    <a href="/editProfile" class="linkmenubarheadline">Rediger profil</a>
-                    <a href="/logOut" class="linkmenubarheadline">Log out</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
+                    <a href="/viewProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/editProfile" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
+                    <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
                 </div>
                 <i class="fas fa-caret-down"></i>
             </span>
@@ -55,7 +55,11 @@
             <!-- Kolonne til inputfelt -->
             <div class="col">
                 <div id="form-container">
-                    <h3 class="formheadline">Vi har gemt dine oplysninger,<br> og du er nu totalt klar til at blive lovestruck!!!<br><3<3<3</h3>
+                    <h3 class="formheadline"><br><br><br><i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"><br></i></h3>
+                    <h1 class="formheadline">Dine oplysninger er gemt<br></h1>
+                    <h3 class="formheadline">Du er nu totalt klar til at blive lovestruck!<br><br>
+                    <i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"></i>
+                    </h3>
                 </div>
             </div>
         </div>

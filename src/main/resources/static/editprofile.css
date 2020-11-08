@@ -1,15 +1,72 @@
+#editprofile-container
+{
+    padding: 20px;
+    width: 800px;
+    margin: auto;
+}
 
 .relativeinline
 {
     position: relative;
     display: flex;
-    border: #333333;
 }
 
 .profilepicture
 {
+    position: relative;
     float: right;
-    margin: 20px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    height: 150px;
+}
+
+.profilepictureimage
+{
+    height: 100%;
+    z-index: -1;
+}
+
+/*Skjuler den originale fil knap*/
+.browsefiles
+{
+    overflow: hidden;
+    position: relative;
+}
+
+.browsefiles [type=file]
+{
+    cursor: inherit;
+    display: block;
+    font-size: 999px;
+    filter: alpha(opacity=0);
+    min-height: 100%;
+    min-width: 100%;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+}
+
+/*Styling af den nye knap fil knap*/
+.browsefiles
+{
+    background-color: #FAD4E2;
+    border: 2px solid #333;
+    border-radius: 5px;
+    color: #333;
+    padding: 6px 10px 6px 10px;
+    text-decoration: none;
+    cursor: pointer;
+    float: right;
+}
+
+.browsefiles:hover
+{
+    background-color: #FA6CA0;
 }
 
 .descriptionbox
@@ -17,21 +74,20 @@
     position: relative;
     width: 100%;
     height: 200px;
-
-    border-color: #333;
+    border: 2px solid #333;
     border-radius: 5px; /*For afrundede kanter på border*/
-
     line-height: 40px; /*For luft om bogstaver*/
     padding-left: 10px; /*For luft om bogstaver*/
+    /*Fjerne resize trekanten i højre hjørne*/
+    resize: none;
 }
+
 .tagsbox
 {
     position: relative;
     width: 100%;
-
     border-color: #333;
     border-radius: 5px; /*For afrundede kanter på border*/
-
     line-height: 40px; /*For luft om bogstaver*/
     padding-left: 10px; /*For luft om bogstaver*/
 }
@@ -40,10 +96,5 @@
 {
     position: relative;
     /*float fik den til at ødelægge dynamikken i boksen. Left gjorde ikke.*/
-    left: 800px;
+    left: 538px;
 }
-
-
-
-/*HERFRA*/
-

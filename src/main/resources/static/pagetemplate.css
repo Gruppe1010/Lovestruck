@@ -5,7 +5,6 @@ body
     /*background-repeat: no-repeat;*/  /*Så billdet ikke gentager sig*/
     /*Ændre størrelsen så den passer til siden*/
     background-size: cover;
-
     min-height: 100%;
     background-attachment: fixed;
 }
@@ -172,11 +171,6 @@ a.footertext:hover
     font-style: italic;
 }
 
-.fa-question-circle
-{
-    color: seagreen;
-}
-
 .pagecontainer
 {
     font-family: 'Bitter', serif;
@@ -199,6 +193,7 @@ a.footertext:hover
     float: right;
     padding-right: 50px;
     bottom: 10px;
+    cursor: pointer;
 }
 
 a.dropdown:link
