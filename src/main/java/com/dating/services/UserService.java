@@ -13,11 +13,27 @@ public class UserService
     UserRepository userRepository = new UserRepository();
     
     ///////////  metoder
+    /**
+     * Konverterer en sex-værdi repræsenteret som String om til boolsk værdi
+     * (male == false, female == true)
+     *
+     * @param sexInput Sex-String som konverteres til bool
+     *
+     * @return boolean Sex-værdien konverteret til boolsk værdi
+     * */
     public static boolean resolveSexInput(String sexInput)
     {
         return sexInput.equals("female");
     }
     
+    /**
+     * Konverterer en interestedIn repræsenteret som String om til int værdi
+     * (1 == males, 2 == females, 3 == males and females)
+     *
+     * @param interestedInInput InterestedIn-String som konverteres til int
+     *
+     * @return int InterestedIn konverteret til int
+     * */
     public static int convertInterestedInStringToInt(String interestedInInput)
     {
         int interestedIn = -1;
@@ -38,6 +54,11 @@ public class UserService
     }
     
     /////////// datingUser
+    /**
+     * Konverterer en sex-værdi repræsenteret som String om til boolsk værdi
+     *
+     * @return
+     * */
     public DatingUser updateLoggedInDatingUser(WebRequest dataFromEditProfileForm, DatingUser loggedInDatingUser)
     {
         // TODO: overvej at rykke linjer ud i metode
