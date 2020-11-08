@@ -49,7 +49,6 @@ public class UserRepository
      */
     public boolean addDatingUserToDb(DatingUser datingUser)
     {
-        
         try
         {
             lovestruckConnection = establishConnection("lovestruck");
@@ -369,6 +368,8 @@ public class UserRepository
      */
     public ResultSet findUserInDb(WebRequest dataFromLogInForm, String table)
     {
+        lovestruckConnection = establishConnection("lovestruck");
+        
         ResultSet resultSet = null;
         try
         {
@@ -479,34 +480,6 @@ public class UserRepository
     }
     
     
-    public PostalInfo findPostalInfoObjectFromIdPostalInfo(int id)
-    {
-        PostalInfo postalInfo = null;
-    
-        try
-        {
-            String sqlCommand = "SELECT * FROM postal_info WHERE id_postal_info = ?";
-        
-            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
-            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
-        
-            preparedStatement.setInt(1, id);
-        
-            ResultSet resultSet = preparedStatement.executeQuery();
-            
-            if(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
-            {
-                postalInfo = new PostalInfo(resultSet.getInt(2), resultSet.getString(3));
-            }
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in findPostalInfoObjectFromIdPostalInfo: " + e.getMessage());
-        }
-        
-        return postalInfo;
-    }
-    
     public void updateLoggedInDatingUserInDb(DatingUser loggedInDatingUser)
     {
         int postalId = findIdPostalInfoFromPostalInfoObject(loggedInDatingUser.getPostalInfo());
@@ -517,14 +490,14 @@ public class UserRepository
             lovestruckConnection = establishConnection("lovestruck");
             
             // TODO: tilføj: image_path som kolonne i database - og så tilføj den sqlCommanden her
-            String sqlCommand = "UPDATE dating_users SET intersted_in = ? AND " +
-                                        "SET username = ? AND " +
-                                        "SET email = ? AND " +
-                                        "SET age = ? AND " +
-                                        "SET id_postal_info = ? AND " +
-                                        "SET password = ? AND " +
-                                        "SET description = ? AND " +
-                                        "SET tags = ?" +
+            String sqlCommand = "UPDATE dating_users SET interested_in = ?, " +
+                                        "username = ?, " +
+                                        "email = ?, " +
+                                        "age = ?, " +
+                                        "id_postal_info = ?, " +
+                                        "password = ?, " +
+                                        "description = ?, " +
+                                        "tags = ? " +
                                         "WHERE id_dating_user = ?";
         
             // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
@@ -552,9 +525,54 @@ public class UserRepository
     
     }
     
-   
+    /**
+     * Finder PostalInfo-entitet knyttet til bestemt idPostalInfo
+     *
+     * @param id idPostalInfo som PostalInfo-entitet findes ud fra
+     *
+     * @return PostalInfo Returnerer PostalInfo-entiteten omdannet til postalInfo-obj
+     */
+    public PostalInfo findPostalInfoObjectFromIdPostalInfo(int id)
+    {
+        lovestruckConnection = establishConnection("lovestruck");
+        
+        PostalInfo postalInfo = null;
+        
+        try
+        {
+            String sqlCommand = "SELECT * FROM postal_info WHERE id_postal_info = ?";
+            
+            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+            
+            preparedStatement.setInt(1, id);
+            
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            if(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+            {
+                postalInfo = new PostalInfo(resultSet.getInt(2), resultSet.getString(3));
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in findPostalInfoObjectFromIdPostalInfo: " + e.getMessage());
+        }
+        
+        return postalInfo;
+    }
+    
+    /**
+     * Finder idPostalInfo knyttet til et givent postInfo-obj i db
+     *
+     * @param postalInfo PostalInfo-objektet som tilsvarende id findes til
+     *
+     * @return int IdPostalInfo-værdien som er fundet i db
+     */
     public int findIdPostalInfoFromPostalInfoObject(PostalInfo postalInfo)
     {
+        lovestruckConnection = establishConnection("lovestruck");
+        
         int idPostalInfo = 0;
     
         try
@@ -582,6 +600,35 @@ public class UserRepository
     
     }
     
+    public PostalInfo findPostalInfoObjectFromZipCodeInput(int zipCode)
+    {
+        lovestruckConnection = establishConnection("lovestruck");
+        
+        PostalInfo postalInfo = null;
+    
+        try
+        {
+            String sqlCommand = "SELECT * FROM postal_info WHERE zip_code = ?";
+        
+            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, zipCode);
+        
+            ResultSet resultSet = preparedStatement.executeQuery();
+        
+            if(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+            {
+                postalInfo = new PostalInfo(resultSet.getInt(2), resultSet.getString(3));
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in findPostalInfoObjectFromZipCodeInput: " + e.getMessage());
+        }
+    
+        return postalInfo;
+    }
     
     
     public void updateProfile()

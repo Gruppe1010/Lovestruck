@@ -58,10 +58,11 @@ public class UserService
         
         if(zipCodeInput!=0) // hvis der er en zipCode
         {
-            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromIdPostalInfo(zipCodeInput));
+            PostalInfo postalInfo = userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput);
+            loggedInDatingUser.setPostalInfo(postalInfo);
         }
    
-        if(passwordInput != null) // hvis nyt password
+        if(passwordInput.equals("")) // hvis nyt password
         {
             loggedInDatingUser.setPassword(passwordInput);
         }
