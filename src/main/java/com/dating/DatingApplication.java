@@ -1,6 +1,7 @@
 package com.dating;
 
 import com.dating.models.PostalInfo;
+import com.dating.repositories.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,12 +14,13 @@ import java.util.ArrayList;
 @SpringBootApplication
 public class DatingApplication
 {
+
     
     public static void main(String[] args)
     {
         SpringApplication.run(DatingApplication.class, args);
-        
-        
+        UserRepository us = new UserRepository();
+        us.pictureToDb();
         
     }
     

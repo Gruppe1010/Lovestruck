@@ -4,6 +4,10 @@ import com.dating.models.PostalInfo;
 import com.dating.models.users.Admin;
 import com.dating.models.users.DatingUser;
 import org.springframework.web.context.request.WebRequest;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.sql.*;
 
 public class UserRepository
@@ -36,6 +40,27 @@ public class UserRepository
         }
         
         return connection;
+    }
+
+    public void pictureToDb()
+    {
+        lovestruckConnection = establishConnection("lovestruck");
+
+        try
+        {
+            PreparedStatement pstmt = lovestruckConnection.prepareStatement("UPDATE dating_users SET profilepicture VALUES(?)");
+
+            InputStream in = new FileInputStream("/Users/tobias/IdeaProjects/Lovestruck/src/main/resources/static/image/backgroundImage.jpg");
+            pstmt.setBlob(1, in);
+
+            pstmt.execute();
+
+
+
+        } catch(SQLException | FileNotFoundException throwables)
+        {
+            throwables.printStackTrace();
+        }
     }
     
     /**
@@ -101,6 +126,9 @@ public class UserRepository
      *
      * @return void
      */
+
+
+
     public void createFavouritesListTableDb(int idDatingUser)
     {
         try
