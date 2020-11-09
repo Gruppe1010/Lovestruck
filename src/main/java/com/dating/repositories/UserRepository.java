@@ -48,12 +48,14 @@ public class UserRepository
 
         try
         {
-            PreparedStatement pstmt = lovestruckConnection.prepareStatement("UPDATE dating_users SET profilepicture VALUES(?)");
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement("UPDATE dating_users SET profilepicture = ? WHERE id_dating_user = ?");
 
-            InputStream in = new FileInputStream("/Users/tobias/IdeaProjects/Lovestruck/src/main/resources/static/image/backgroundImage.jpg");
-            pstmt.setBlob(1, in);
+            InputStream inputStream = new FileInputStream("C:\\Users\\rasmu\\IdeaProjects\\Lovestruck\\src\\main\\resources\\static\\image\\backgroundImage.jpg");
 
-            pstmt.execute();
+            preparedStatement.setBlob(1, inputStream);
+            preparedStatement.setInt(2, 5);
+
+            preparedStatement.executeUpdate();
 
 
 
