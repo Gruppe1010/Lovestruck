@@ -74,11 +74,12 @@ public class UserRepository
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            File file = new File(fileName);
+            File file = new File("C:\\Users\\rasmu\\IdeaProjects\\Lovestruck\\src\\main\\resources\\static\\image\\profilepictures\\" +fileName);
 
             FileOutputStream outputStream = new FileOutputStream(file);
 
-            //String filePath = file.getAbsolutePath(); gemmer fils path
+
+            //String filePath = "" + file.getAbsolutePath(); gemmer fils path
             System.out.println("Writing to file: " + file.getAbsolutePath());
 
             while (resultSet.next())
@@ -90,7 +91,6 @@ public class UserRepository
                     outputStream.write(buffer);
                 }
             }
-
 
             }
             catch(Exception exception)
