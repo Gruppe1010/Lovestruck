@@ -154,7 +154,7 @@
 
                                 <!--description -->
                                 <span>Beskrivelse: </span>
-                                <textarea form="form" id="description" name="descriptioninput" rows="4" cols="50"
+                                <textarea id="description" name="descriptioninput" rows="4" cols="50"
                                           th:value="${editDatingUser.getDescription()}"
                                           class="color fontsize descriptionbox"></textarea><br><br>
 
@@ -183,7 +183,7 @@
 
                                 <!--browse filer -->
                                 <label class="browsefiles">Vælg en billede fil
-                                    <input type="file"/>
+                                    <input type="file" accept="image/*"/>
                                 </label>
 
                             </div>
