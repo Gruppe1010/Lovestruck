@@ -444,13 +444,6 @@ public class UserRepository
             preparedStatement.setString(2, dataFromLogInForm.getParameter("passwordinput"));
             
             resultSet = preparedStatement.executeQuery();
-            
-            if(!resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
-            {
-                resultSet = null;
-            }
-
-            
         }
         catch(SQLException e)
         {

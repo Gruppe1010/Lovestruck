@@ -3,18 +3,69 @@ package com.dating.viewModels.datingUser;
 public class ViewProfileDatingUser
 {
     // tilføj de attributter som vi skal vise på denne html
-    private boolean isBlacklisted;
-    private boolean sex; // false == mænd, true == kvinder
+    // TODO måske slettes permanent: private boolean isBlacklisted;
+    private String sex; // false == mænd, true == kvinder
     private String username;
     // TODO: private image
     private int age;
+    private String zipcodeAndCity;
     private String decription;
-    // TODO: overvej om by skal på
     private String tags;
     
+    // constructor
+    public ViewProfileDatingUser(){}
+    public ViewProfileDatingUser(boolean sex, String username, int age, String decription, String tags)
+    {
+        this.sex = sex;
+        this.username = username;
+        this.age = age;
+        this.decription = decription;
+        this.tags = tags;
+    }
     
+    //getters + setters
+    public boolean isSex()
+    {
+        return sex;
+    }
+    public void setSex(boolean sex)
+    {
+        this.sex = sex;
+    }
+    public String getUsername()
+    {
+        return username;
+    }
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+    public int getAge()
+    {
+        return age;
+    }
+    public void setAge(int age)
+    {
+        this.age = age;
+    }
+    public String getDecription()
+    {
+        return decription;
+    }
+    public void setDecription(String decription)
+    {
+        this.decription = decription;
+    }
+    public String getTags()
+    {
+        return tags;
+    }
+    public void setTags(String tags)
+    {
+        this.tags = tags;
+    }
     
-    
+    // metoder
     public boolean isMale()
     {
         // male: sex == false OG female: sex == true

@@ -2,13 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title> Love Struck </title>
+    <!-- TODO evt. hvis vi vil have den til at redirecte til editProfile igen
+    <meta http-equiv = "refresh" content = "5; url = /editProfile"/> -->
 
     <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
     <meta charset="utf-8"/>
     <meta name="description" content="Love struck - tænd gnisten"/>
 
     <!-- css-filer -->
-    <link href="/startpage.css" type="text/css" rel="stylesheet">
+    <link href="/editprofile.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
 
@@ -28,17 +30,17 @@
     <!--content der inkapsler hele siden undtagen footer-->
     <div class="content">
         <div class="logo">
-            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
-            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
         </div>
 
         <div class="menubar">
             <!--for at style linkene skulle a have sin egen klasse-->
-            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadline" href="/candidatePage"><i class="fas fa-heart"></i> Kandidater</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
-            <span class="menubarheadline dropdown">
+            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
                     <a href="/viewProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
@@ -49,18 +51,15 @@
             </span>
         </div>
 
-        <div class="content-container">
-            <div class="row">
-                <!-- Kolonne til inputfelt -->
-                <div class="col">
-                    <div class="textbox-container">
-                        <div class="startpage-textbox textboxcontent">
-
-                            <p>Velkommen til Love Struck <3 <br>Vi giver dig chancen for at møde nye mennesker.<br>
-                                ... og hvem ved? Måske bliver du LoveStruck</p>
-
-                        </div>
-                    </div>
+        <div class="row">
+            <!-- Kolonne til inputfelt -->
+            <div class="col">
+                <div id="form-container">
+                    <h3 class="formheadline"><br><br><br><i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"><br></i></h3>
+                    <h1 class="formheadline">Dine oplysninger er gemt<br></h1>
+                    <h3 class="formheadline">Du er nu totalt klar til at blive lovestruck!<br><br>
+                    <i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"></i>
+                    </h3>
                 </div>
             </div>
         </div>
@@ -79,4 +78,3 @@
 </div>
 </body>
 </html>
-

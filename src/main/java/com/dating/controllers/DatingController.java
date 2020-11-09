@@ -48,11 +48,11 @@ public class DatingController
     }
     
     @GetMapping("/startPage")
-    public String startPage( Model datingUserModel)
+    public String startPage(Model datingUserModel)
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "startpage"; // html
+        return "DatingUser/startpage"; // html
     }
     
     @GetMapping("/chatPage")
@@ -60,15 +60,15 @@ public class DatingController
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "chatpage"; // html
+        return "DatingUser/chatpage"; // html
     }
     
-    @GetMapping("/candidatePage")
-    public String candidatePage(Model datingUserModel)
+    @GetMapping("/favouritesPage")
+    public String favouritesPage(Model datingUserModel)
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "candidatepage"; // html
+        return "DatingUser/favouritespage"; // html
     }
     
     @GetMapping("/searchPage")
@@ -76,7 +76,7 @@ public class DatingController
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "searchpage"; // html
+        return "DatingUser/searchpage"; // html
     }
     
     @GetMapping("/ViewProfile")
@@ -86,7 +86,7 @@ public class DatingController
     
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         
-        return "viewprofile";
+        return "DatingUser/viewprofile";
     }
     
     @GetMapping("/editProfile")
@@ -96,7 +96,7 @@ public class DatingController
         
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
         
-        return "editprofile"; // html
+        return "DatingUser/editprofile"; // html
     }
     
     @GetMapping("/editProfileConfirmation")
@@ -104,7 +104,7 @@ public class DatingController
     {
         datingUserModel.addAttribute("datingUserModel", datingUserModel);
         
-        return "editprofileconfirmation"; // html
+        return "DatingUser/editprofileconfirmation"; // html
     }
     
     @GetMapping("/logOut")
@@ -190,7 +190,7 @@ public class DatingController
                 loggedInDatingUser.getEmail());
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
         
-        return "editprofile"; //
+        return "DatingUser/editprofile"; // html
     }
     
     

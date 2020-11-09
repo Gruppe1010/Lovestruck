@@ -261,7 +261,43 @@ public class DatingUser extends User
     // TODO lav denne
     public ViewProfileDatingUser convertDatingUserToViewProfileDatingUser()
     {
-        return new ViewProfileDatingUser();
+        /*
+        private String sex; // false == mænd, true == kvinder
+        private String username;
+        // TODO: private image
+        private int age;
+        private String zipcodeAndCity;
+        private String decription;
+        private String tags;
+        
+         */
+    
+        int zipCode = 0;
+        String tagsListString = null;
+    
+        if(postalInfo!=null) // hvis der ER noget i postInfo
+        {
+            zipCode = postalInfo.getZipCode();
+        }
+        if(tagsList != null) // hvis der ER noget i tagsList
+        {
+            tagsListString = convertTagsListToString();
+        }
+        
+        convertSexToString()
+    
+        return new ViewProfileDatingUser(interestedIn, super.getUsername(), super.getEmail(), age, zipCode,
+                "", "", description, tagsListString);
+        
+    }
+    
+    public String convertSexToString()
+    {
+        if(sex == true)
+        {
+            return "Kvinde";
+        }
+        return "Mand";
     }
     
 }

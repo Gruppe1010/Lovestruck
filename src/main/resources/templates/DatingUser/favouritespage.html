@@ -9,7 +9,7 @@
 
     <!-- css-filer -->
 
-    <link href="/chatpage.css" type="text/css" rel="stylesheet">
+    <link href="/candidatepage.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
 
@@ -36,8 +36,8 @@
         <div class="menubar">
             <!--for at style linkene skulle a have sin egen klasse-->
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadline" href="/candidatePage"><i class="fas fa-heart"></i> Kandidater</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
             <span class="menubarheadline dropdown linkmenubarheadlinelogout">
                 <span th:text="${loggedInUser.getUsername()}"></span>
@@ -69,4 +69,3 @@
 </div>
 </body>
 </html>
-
