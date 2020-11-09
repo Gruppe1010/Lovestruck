@@ -70,6 +70,7 @@ public class UserService
         String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
         String emailInput = dataFromEditProfileForm.getParameter("emailinput");
         int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
+        
         // de attributter som en bruge kan UNDLADE
         int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
         String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
@@ -85,8 +86,7 @@ public class UserService
         
         if(zipCodeInput!=0) // hvis der er en zipCode
         {
-            PostalInfo postalInfo = userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput);
-            loggedInDatingUser.setPostalInfo(postalInfo);
+            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput));
         }
     
         // opdaterer KUN password hvis nyt passwordInput - fordi ellers stilles det til ""
@@ -121,6 +121,7 @@ public class UserService
     {
         DatingUser datingUser = null;
         
+        // TODO: måske lave en metode som gør alt dette - returnerer en editdatinguser med alle disse fields
         boolean sex = resolveSexInput(dataFromCreateUserForm.getParameter("sexinput"));
         int interestedIn = convertInterestedInStringToInt(dataFromCreateUserForm.getParameter("interestedininput"));
         int age = Integer.parseInt(dataFromCreateUserForm.getParameter("ageinput"));
@@ -150,9 +151,9 @@ public class UserService
     /////////// editDatingUser
     public boolean checkForProfileAlterations(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
     {
-        boolean wasProfileEditted = false;
+        boolean wasProfileAltered = false;
     
-        //
+        // TODO måske metode
         int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
         String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
         String emailInput = dataFromEditProfileForm.getParameter("emailinput");
@@ -174,12 +175,13 @@ public class UserService
            !(Objects.equals(descriptionInput, editDatingUser.getDescription())) ||
            !(Objects.equals(tagsListInput, editDatingUser.getTagsList())))
         {
-            wasProfileEditted = true;
+            wasProfileAltered = true;
         }
       
-        return wasProfileEditted;
+        return wasProfileAltered;
     }
     
+    // TODO: test lige denne funktion
     public boolean checkUsernameEmailPassword(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
     {
         boolean isEmailAvailable = true;
@@ -187,7 +189,7 @@ public class UserService
         boolean doesPasswordInputsMatch = true;
         
         // hvis nyt emailinput
-        if(!(Objects.equals(dataFromEditProfileForm.getParameter("emailinput"), editDatingUser.getEmail())))
+        if(!(dataFromEditProfileForm.getParameter("emailinput").equals(editDatingUser.getEmail())))
         {
             // hvis email ER available == returneres true
             // hvis email IKKE er available == returneres false
@@ -196,7 +198,7 @@ public class UserService
         }
     
         // hvis nyt usernameinput
-        if(!(Objects.equals(dataFromEditProfileForm.getParameter("usernameinput"), editDatingUser.getUsername())))
+        if(!(dataFromEditProfileForm.getParameter("usernameinput").equals(editDatingUser.getUsername())))
         {
             // hvis username ER available == returneres true
             // hvis userne IKKE er available == returneres false
@@ -205,7 +207,6 @@ public class UserService
         }
         
         // hvis nyt password
-        System.out.println("passwordInput: " + dataFromEditProfileForm.getParameter("passwordinput").equals(""));
         if(!(dataFromEditProfileForm.getParameter("passwordinput").equals("")))
         {
             doesPasswordInputsMatch = checkIfPasswordsMatch(dataFromEditProfileForm.getParameter("passwordinput"),
@@ -216,8 +217,9 @@ public class UserService
         return isEmailAvailable && isUsernameAvailable && doesPasswordInputsMatch;
     }
     
-    public EditDatingUser updateEditDatingUser(WebRequest dataFromEditProfileForm)
+    public EditDatingUser updateEditDatingUser(WebRequest dataFromEditProfileForm, String oldUsername, String oldEmail)
     {
+        
         // TODO: find ud af om alle de der linjer kan lægges ud i en metode for sig
         int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
         String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
@@ -229,8 +231,19 @@ public class UserService
         // TODO private String imagePath;
         String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
         String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
+    
+        // hvis nyt usernameInput IKKE er available
+        if(!(userRepository.isUsernameAvailable(usernameInput)))
+        {
+            usernameInput = oldUsername;
+        }
+    
+        if(!(userRepository.isEmailAvailable(emailInput)))
+        {
+            emailInput = oldEmail;
+        }
         
-        return new EditDatingUser(interestedInInput, usernameInput, emailInput, ageInput, zipCodeInput, passwordInput,
+            return new EditDatingUser(interestedInInput, usernameInput, emailInput, ageInput, zipCodeInput, passwordInput,
                 confirmPasswordInput, descriptionInput, tagsListInput);
     }
     

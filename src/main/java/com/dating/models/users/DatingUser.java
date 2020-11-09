@@ -3,6 +3,7 @@ package com.dating.models.users;
 import com.dating.models.PostalInfo;
 import com.dating.models.users.User;
 import com.dating.viewModels.datingUser.EditDatingUser;
+import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -258,6 +259,12 @@ public class DatingUser extends User
         
         return new EditDatingUser(interestedIn, super.getUsername(), super.getEmail(), age, zipCode,
                 "", "", description, tagsListString);
+    }
+    
+    // TODO lav denne
+    public ViewProfileDatingUser convertDatingUserToViewProfileDatingUser()
+    {
+        return new ViewProfileDatingUser();
     }
     
 }

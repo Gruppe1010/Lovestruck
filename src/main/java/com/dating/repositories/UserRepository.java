@@ -531,17 +531,6 @@ public class UserRepository
     }
     */
     
-    public DatingUser retrieveLoggedInDatingUser()
-    {
-        return loggedInDatingUser;
-    }
-    
-    public Admin retrieveLoggedInAdmin()
-    {
-        return loggedInAdmin;
-    }
-    
-    
     public void updateLoggedInDatingUserInDb(DatingUser loggedInDatingUser)
     {
         int postalId = findIdPostalInfoFromPostalInfoObject(loggedInDatingUser.getPostalInfo());
@@ -583,8 +572,6 @@ public class UserRepository
             System.out.println("Error in updateLoggedInDatingUserInDb: " + e.getMessage());
     
         }
-    
-    
     }
     
     /**
