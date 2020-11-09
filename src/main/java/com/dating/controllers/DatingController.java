@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.WebRequest;
 
+import java.util.ArrayList;
+
 
 @Controller
 public class DatingController
@@ -61,9 +63,13 @@ public class DatingController
     //------------------ GET DATINGUSER -------------------//
     
     @GetMapping("/startPage")
-    public String startPage(Model datingUserModel)
+    public String startPage(Model datingUserModel, Model datingUsersListModel)
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        
+        ArrayList<DatingUser> datingUsersList = userRepository.createListOfAllDatingUsersFromDb(loggedInDatingUser.getIdDatingUser());
+    
+        datingUsersListModel.addAllAttributes("datingUsersList", datingUsersList);
         
         return "DatingUser/startpage"; // html
     }

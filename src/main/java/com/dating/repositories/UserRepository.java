@@ -7,6 +7,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class UserRepository
 {
@@ -612,14 +613,38 @@ public class UserRepository
         return postalInfo;
     }
     
-    
-    public void updateProfile()
+    public ArrayList<DatingUser> createListOfAllDatingUsersFromDb(int idDatingUser)
     {
-        String tagsString = " ";
+        lovestruckConnection = establishConnection("lovestruck");
+    
+        ArrayList<PreviewDatingUser> datingUsersList = new ArrayList<>();
+    
+        try
+        {
+            String sqlCommand = "SELECT * FROM dating_users WHERE NOT id_dating_user = ?";
         
-        // tagsString = tagsString contains" " erstat med "";
+            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+            // henter ALLE datingUsers fra tabel BORTSET fra den der er logget ind
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, idDatingUser);
+        
+            ResultSet resultSet = preparedStatement.executeQuery();
+        
+            while(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+            {
+                DatingUser datingUser =
+                datingUsersList.add()
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in findPostalInfoObjectFromZipCodeInput: " + e.getMessage());
+        }
+    
+        return datingUsersList;
+        
         
     }
-    
     
 }

@@ -7,17 +7,17 @@
     margin: 20px;
 }
 
-.textbox-container
+.startpageheadline
 {
-    padding-top:20px;
-    width: 300px;
-    margin: auto;
+    text-align: center;
 }
 
-.startpage-textbox
+.textbox-container
 {
-    padding: 20px 30px 20px 30px;
-    margin-bottom: 70px;
+    position: relative;
+    display: flex;
+    padding-top:20px;
+    margin: auto;
 }
 
 .startpage-bulletpointbox
@@ -31,34 +31,6 @@
     font-size: 30px;
     text-align: center;
     padding-bottom: 20px;
-}
-
-.textboxcontent
-{
-    font-size: 20px;
-
-}
-
-.seagreen
-{
-    color: seagreen;
-}
-
-.size
-{
-    font-size: 25px;
-}
-
-.positiv
-{
-    color: #00B050;
-    font-weight: bold;
-}
-
-.negativ
-{
-    color: #C00000;
-    font-weight: bold;
 }
 
 .italic
