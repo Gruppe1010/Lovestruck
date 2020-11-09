@@ -79,10 +79,12 @@ public class DatingController
         return "DatingUser/searchpage"; // html
     }
     
-    @GetMapping("/ViewProfile")
+    @GetMapping("/viewProfile")
     public String viewProfile(Model viewProfileDatingUserModel)
     {
         viewProfileDatingUser = loggedInDatingUser.convertDatingUserToViewProfileDatingUser();
+    
+        System.out.println(viewProfileDatingUser.getZipCodeAndCity());
     
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         
@@ -102,7 +104,7 @@ public class DatingController
     @GetMapping("/editProfileConfirmation")
     public String editProfileConfirmation(Model datingUserModel)
     {
-        datingUserModel.addAttribute("datingUserModel", datingUserModel);
+        datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
         return "DatingUser/editprofileconfirmation"; // html
     }

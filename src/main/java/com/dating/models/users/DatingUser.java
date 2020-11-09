@@ -261,33 +261,44 @@ public class DatingUser extends User
     // TODO lav denne
     public ViewProfileDatingUser convertDatingUserToViewProfileDatingUser()
     {
-        /*
-        private String sex; // false == mænd, true == kvinder
-        private String username;
-        // TODO: private image
-        private int age;
-        private String zipcodeAndCity;
-        private String decription;
-        private String tags;
         
-         */
+        String zipCodeAndCity;
     
-        int zipCode = 0;
-        String tagsListString = null;
+        System.out.println(postalInfo.getZipCode() + postalInfo.getCity());
+        System.out.println(postalInfo!=null);
     
         if(postalInfo!=null) // hvis der ER noget i postInfo
         {
-            zipCode = postalInfo.getZipCode();
+            zipCodeAndCity = postalInfo.getZipCode() + ", " + postalInfo.getCity();
         }
+        else
+        {
+            zipCodeAndCity = "By ukendt";
+        }
+    
+        String descriptionInput;
+        if(description != null) // hvis der ER noget i postInfo
+        {
+            descriptionInput = description;
+        }
+        else
+        {
+            descriptionInput = "Ingen beskrivelse tilgængelig...";
+        }
+        
+        String tagsListString;
+        
         if(tagsList != null) // hvis der ER noget i tagsList
         {
             tagsListString = convertTagsListToString();
         }
-        
-        convertSexToString()
+        else
+        {
+            tagsListString = "Ingen tags";
+        }
     
-        return new ViewProfileDatingUser(interestedIn, super.getUsername(), super.getEmail(), age, zipCode,
-                "", "", description, tagsListString);
+        return new ViewProfileDatingUser(convertSexToString(), super.getUsername(), age, zipCodeAndCity,
+                descriptionInput, tagsListString);
         
     }
     
@@ -295,9 +306,9 @@ public class DatingUser extends User
     {
         if(sex == true)
         {
-            return "Kvinde";
+            return "Kvinde, ";
         }
-        return "Mand";
+        return "Mand, ";
     }
     
 }

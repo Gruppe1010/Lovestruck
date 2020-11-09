@@ -7,31 +7,26 @@ public class ViewProfileDatingUser
     private String sex; // false == mænd, true == kvinder
     private String username;
     // TODO: private image
-    private int age;
-    private String zipcodeAndCity;
-    private String decription;
+    private int age; // tODO lav om til String - 25 år fx
+    private String zipCodeAndCity;
+    private String description;
     private String tags;
+    
     
     // constructor
     public ViewProfileDatingUser(){}
-    public ViewProfileDatingUser(boolean sex, String username, int age, String decription, String tags)
+    public ViewProfileDatingUser(String sex, String username, int age, String zipCodeAndCity, String description,
+                                 String tags)
     {
         this.sex = sex;
         this.username = username;
         this.age = age;
-        this.decription = decription;
+        this.zipCodeAndCity = zipCodeAndCity;
+        this.description = description;
         this.tags = tags;
     }
     
     //getters + setters
-    public boolean isSex()
-    {
-        return sex;
-    }
-    public void setSex(boolean sex)
-    {
-        this.sex = sex;
-    }
     public String getUsername()
     {
         return username;
@@ -48,13 +43,29 @@ public class ViewProfileDatingUser
     {
         this.age = age;
     }
-    public String getDecription()
+    public String getSex()
     {
-        return decription;
+        return sex;
     }
-    public void setDecription(String decription)
+    public void setSex(String sex)
     {
-        this.decription = decription;
+        this.sex = sex;
+    }
+    public String getZipCodeAndCity()
+    {
+        return zipCodeAndCity;
+    }
+    public void setZipCodeAndCity(String zipcodeAndCity)
+    {
+        this.zipCodeAndCity = zipCodeAndCity;
+    }
+    public String getDescription()
+    {
+        return description;
+    }
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
     public String getTags()
     {
@@ -66,6 +77,7 @@ public class ViewProfileDatingUser
     }
     
     // metoder
+    /*
     public boolean isMale()
     {
         // male: sex == false OG female: sex == true
@@ -85,5 +97,7 @@ public class ViewProfileDatingUser
         // == derfor skal isFemale ALTID returnere samme værdi som sex
         return sex;
     }
+    
+     */
     
 }
