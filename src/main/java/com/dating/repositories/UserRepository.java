@@ -40,7 +40,7 @@ public class UserRepository
         return connection;
     }
 
-    public void writePictureToDb()
+    public void writePictureToDb(int idDatingUser)
     {
         lovestruckConnection = establishConnection("lovestruck");
 
@@ -48,10 +48,10 @@ public class UserRepository
         {
             PreparedStatement preparedStatement = lovestruckConnection.prepareStatement("UPDATE dating_users SET profilepicture = ? WHERE id_dating_user = ?");
 
-            InputStream inputStream = new FileInputStream("C:\\Users\\rasmu\\IdeaProjects\\Lovestruck\\src\\main\\resources\\static\\image\\backgroundImage.jpg");
+            InputStream inputStream = new FileInputStream("C:\\Users\\rasmu\\IdeaProjects\\Lovestruck\\src\\main\\resources\\static\\image\\textLogo.png");
 
             preparedStatement.setBlob(1, inputStream);
-            preparedStatement.setInt(2, 5);
+            preparedStatement.setInt(2, idDatingUser);
 
             preparedStatement.executeUpdate();
 
@@ -63,14 +63,14 @@ public class UserRepository
         }
     }
 
-    public void readPictureFromDb(String fileName)
+    public void readPictureFromDb(int idDatingUser, String fileName)
     {
         lovestruckConnection = establishConnection("lovestruck");
 
         try {
             PreparedStatement preparedStatement = lovestruckConnection.prepareStatement("SELECT profilepicture FROM dating_users WHERE id_dating_user = ?");
 
-            preparedStatement.setInt(1, 5);
+            preparedStatement.setInt(1, idDatingUser);
 
             ResultSet resultSet = null;
 
@@ -80,10 +80,13 @@ public class UserRepository
 
             FileOutputStream outputStream = new FileOutputStream(file);
 
+            //String filePath = file.getAbsolutePath(); gemmer fils path
+            System.out.println("Writing to file: " + file.getAbsolutePath());
+
             while (resultSet.next())
             {
                 InputStream inputStream = resultSet.getBinaryStream("profilepicture");
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[128];
                 while (inputStream.read(buffer) > 0) {
                     outputStream.write(buffer);
                 }
