@@ -72,9 +72,7 @@ public class UserRepository
 
             preparedStatement.setInt(1, idDatingUser);
 
-            ResultSet resultSet = null;
-
-            resultSet = preparedStatement.executeQuery();
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             File file = new File(fileName);
 
@@ -87,16 +85,17 @@ public class UserRepository
             {
                 InputStream inputStream = resultSet.getBinaryStream("profilepicture");
                 byte[] buffer = new byte[128];
-                while (inputStream.read(buffer) > 0) {
+                while (inputStream.read(buffer) > 0)
+                {
                     outputStream.write(buffer);
                 }
             }
 
 
             }
-            catch(Exception e)
+            catch(Exception exception)
             {
-                System.out.println(e);
+                System.out.println("Error in readPictureFromDb: " + exception.getMessage());
             }
 
     }
