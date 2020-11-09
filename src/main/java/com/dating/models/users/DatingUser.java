@@ -21,7 +21,7 @@ public class DatingUser extends User
     private String description;
     private ArrayList<String> tagsList;
     private PostalInfo postalInfo;
-    private ArrayList<DatingUser> kandidatListe;
+    private ArrayList<DatingUser> favouritesList;
     
     // constructors
     public DatingUser(){}
@@ -38,7 +38,7 @@ public class DatingUser extends User
         description = null;
         tagsList = null;
         postalInfo = null;
-        kandidatListe = null;
+        favouritesList = null;
     }
     
     // getters + setters
@@ -131,13 +131,13 @@ public class DatingUser extends User
     {
         this.postalInfo = postalInfo;
     }
-    public ArrayList<DatingUser> getKandidatListe()
+    public ArrayList<DatingUser> getFavouritesList()
     {
-        return kandidatListe;
+        return favouritesList;
     }
-    public void setKandidatListe(ArrayList<DatingUser> kandidatListe)
+    public void setFavouritesList(ArrayList<DatingUser> favouritesList)
     {
-        this.kandidatListe = kandidatListe;
+        this.favouritesList = favouritesList;
     }
     
     public String getImagePath()

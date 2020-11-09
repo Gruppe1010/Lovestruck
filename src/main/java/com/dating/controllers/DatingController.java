@@ -27,8 +27,10 @@ public class DatingController
     UserService userService = new UserService();
     UserRepository userRepository = new UserRepository();
     
+    // TODO: overvej at dele Controlleren op i flere controllers!!! -
+    //  fx GenerelController, AdminController, DatingUserController
     
-    /*------------------ GET -------------------*/
+    //------------------ GET GENEREL -------------------//
     
     /**
      * Returnerer index-html-side ved /-request
@@ -46,6 +48,25 @@ public class DatingController
     {
         return "login"; // html
     }
+    
+    @GetMapping("/logOut")
+    public String logOut()
+    {
+        // TODO: slet måske denne metode - fordi måske giver det mest mening bare skrive koden her
+        resetLoggedInUsers();
+        
+        return "logout"; // html
+    }
+    
+    @GetMapping("/editProfileConfirmation")
+    public String editProfileConfirmation(Model datingUserModel)
+    {
+        datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        
+        return "DatingUser/editprofileconfirmation"; // html
+    }
+    
+    //------------------ GET DATINGUSER -------------------//
     
     @GetMapping("/startPage")
     public String startPage(Model datingUserModel)
@@ -66,6 +87,18 @@ public class DatingController
     @GetMapping("/favouritesPage")
     public String favouritesPage(Model datingUserModel)
     {
+        /*
+        Possibly noget ala:
+        tager som param:
+             - Model favouritesListModel
+        
+        datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        favouritesListModel.addAttribute("favouritesList", loggedInUser.getFavouritesList());
+        
+       og så thymeleafer vi en array på favouritespage-html'en
+         */
+        
+        
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
         return "DatingUser/favouritespage"; // html
@@ -84,8 +117,6 @@ public class DatingController
     {
         viewProfileDatingUser = loggedInDatingUser.convertDatingUserToViewProfileDatingUser();
     
-        System.out.println(viewProfileDatingUser.getZipCodeAndCity());
-    
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         
         return "DatingUser/viewprofile";
@@ -101,39 +132,78 @@ public class DatingController
         return "DatingUser/editprofile"; // html
     }
     
-    @GetMapping("/editProfileConfirmation")
-    public String editProfileConfirmation(Model datingUserModel)
+    
+    //------------------ GET ADMIN -------------------//
+    
+    @GetMapping("/startPageAdmin")
+    public String startPageAdmin(Model adminModel)
+    {
+        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        
+        return "Admin/startpageadmin"; // html
+    }
+    
+    /* TODO: probably slet denne
+    @GetMapping("/chatPageAdmin")
+    public String chatPageAdmin(Model datingUserModel)
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "DatingUser/editprofileconfirmation"; // html
+        return "DatingUser/chatpage"; // html
     }
     
-    @GetMapping("/logOut")
-    public String logOut()
+     */
+    
+    @GetMapping("/blacklistedUsersPageAdmin")
+    public String blacklistedUsersPageAdmin(Model adminModel)
     {
-        resetLoggedInUsers();
+        /*
+        Possibly noget ala:
+        tager som param:
+             - Model blacklistedUsersListModel
         
-        return "logout"; // html
+        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        blacklistedUsersListModel.addAttribute("blacklistedUsersList", loggedInAdmin.getBlacklistedUsersList());
+        
+       og så thymeleafer vi en array på favouritespage-html'en
+         */
+        
+        
+        return "Admin/blacklisteduserspageadmin"; // html
     }
     
-    /*------------------ POST -------------------*/
-    
-    // I PostMappingens "/" SKAL der stå "post" FØRST! : fx IKKE "/createUser" men "/postCreateUser"
-    @PostMapping("/postCreateUser")
-    public String postCreateUser(WebRequest dataFromCreateUserForm)
+    @GetMapping("/searchPageAdmin")
+    public String searchPageAdmin(Model adminModel)
     {
-        loggedInDatingUser = userService.createDatingUser(dataFromCreateUserForm);
+        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
         
-        if(loggedInDatingUser!=null)
-        {
-            userRepository.addDatingUserToDb(loggedInDatingUser);
-            
-            return "redirect:/editProfile";
-        }
-        
-        return "redirect:/";
+        return "DatingUser/searchpage"; // html
     }
+    
+    @GetMapping("/viewProfileAdmin")
+    public String viewProfileAdmin(Model adminModel, Model viewProfileDatingUserModel)
+    {
+        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        
+        viewProfileDatingUser = loggedInDatingUser.convertDatingUserToViewProfileDatingUser();
+        
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        
+        return "DatingUser/viewprofile";
+    }
+    
+    @GetMapping("/editProfileAdmin")
+    public String editProfileAdmin(Model editDatingUserModel)
+    {
+        editDatingUser = loggedInDatingUser.convertDatingUserToEditDatingUser();
+        
+        editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
+        
+        return "DatingUser/editprofile"; // html
+    }
+    
+    
+    //------------------ POST GENEREL -------------------//
     
     @PostMapping("/postLogIn")
     public String postLogIn(WebRequest dataFromLogInForm)
@@ -160,6 +230,24 @@ public class DatingController
         loggedInAdmin = null;
         loggedInDatingUser = null;
         return "redirect:/logIn"; // url
+    }
+    
+    //------------------ POST DATINGUSER -------------------//
+    
+    // I PostMappingens "/" SKAL der stå "post" FØRST! : fx IKKE "/createUser" men "/postCreateUser"
+    @PostMapping("/postCreateUser")
+    public String postCreateUser(WebRequest dataFromCreateUserForm)
+    {
+        loggedInDatingUser = userService.createDatingUser(dataFromCreateUserForm);
+        
+        if(loggedInDatingUser!=null)
+        {
+            userRepository.addDatingUserToDb(loggedInDatingUser);
+            
+            return "redirect:/editProfile";
+        }
+        
+        return "redirect:/";
     }
     
     @PostMapping("/postEditProfile")
@@ -195,16 +283,50 @@ public class DatingController
         return "DatingUser/editprofile"; // html
     }
     
+    //------------------ POST ADMIN -------------------//
     
-    /*------------------ ANDRE METODER -------------------*/
+    @PostMapping("/postEditProfileAdmin")
+    public String postEditProfileAdmin(WebRequest dataFromEditProfileForm, Model editDatingUserModel)
+    {
+        // tjekker om brugeren har indtastet ny info
+        boolean userAddedChanges = userService.checkForProfileAlterations(dataFromEditProfileForm, editDatingUser);
+        
+        // hvis bruger har indtastet ny info
+        if(userAddedChanges)
+        {
+            // TODO NICE lav måske en errorPage som skriver hvilken fejl det er og skifter tilbage til
+            //  editProfile-html'en
+            // TODO: fix at den siger confirmationPage ved zipcode 0000 - ved ikkesisterende-zipcode
+            boolean isUsernameEmailPasswordValid = userService.checkUsernameEmailPassword(dataFromEditProfileForm, editDatingUser);
+            
+            if(isUsernameEmailPasswordValid)
+            {
+                loggedInDatingUser = userService.updateLoggedInDatingUser(dataFromEditProfileForm, loggedInDatingUser);
+                userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
+                
+                return "redirect:/editProfileConfirmation"; // url
+            }
+        }
+        
+        // Hvis INGEN ny info ELLER hvis usernameEmailPassword er invalid
+        // editDatingUser opdateres fordi viewet skal vise det brugeren skrev ind!!!!!!!!!!!!!!!!
+        editDatingUser = userService.updateEditDatingUser(dataFromEditProfileForm,
+                loggedInDatingUser.getUsername(),
+                loggedInDatingUser.getEmail());
+        editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
+        
+        return "DatingUser/editprofile"; // html
+    }
+    
+    
+    //------------------ ANDRE METODER -------------------//
+    
     /**
-     *
+     * Nulstiller attributterne loggedInAdmin og loggedInDatingUser DatingController-klassen
      *
      *
      *
      * */
-    
-    
     public void resetLoggedInUsers()
     {
         loggedInAdmin = null;

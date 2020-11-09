@@ -4,9 +4,10 @@ public class ViewProfileDatingUser
 {
     // tilføj de attributter som vi skal vise på denne html
     // TODO måske slettes permanent: private boolean isBlacklisted;
-    private String sex; // false == mænd, true == kvinder
+   
     private String username;
     // TODO: private image
+    private String sex; // TODO! overvej at sammensmelte sex og age - da det alligevel skal stå samme sted
     private int age; // tODO lav om til String - 25 år fx
     private String zipCodeAndCity;
     private String description;
