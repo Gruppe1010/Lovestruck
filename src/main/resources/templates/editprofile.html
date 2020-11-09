@@ -38,7 +38,7 @@
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/candidatePage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
-            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
+            <span class="menubarheadline dropdown">
                 <span th:text="${editDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
                     <a href="/viewProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
@@ -49,14 +49,13 @@
             </span>
         </div>
 
-
-        <div class="row">
-            <!-- Kolonne til inputfelt -->
-            <div class="col">
-                <div id="editprofile-container">
+        <div id="editprofile-container">
+            <div class="row">
+                <!-- Kolonne til inputfelt -->
+                <div class="col">
                     <!-- Dette er en form
                     Vi laver @PostMapping("/createUser") i Controlleren for at lave et endpoint - pga. denne form -->
-                    <form id="form" action="/postEditProfile" method="post">
+                    <form id="editprofileform" action="/postEditProfile" method="post">
                         <h3 class="formheadline">Rediger din profil</h3>
 
                         <!--<input> Laver input-felt
@@ -185,9 +184,6 @@
                                 </label>
                             </div>
                         </div>
-
-
-
                     </form>
                 </div>
             </div>
