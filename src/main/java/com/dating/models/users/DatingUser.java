@@ -287,9 +287,8 @@ public class DatingUser extends User
     {
         
         String zipCodeAndCity;
-    
-        System.out.println(postalInfo.getZipCode() + postalInfo.getCity());
-        System.out.println(postalInfo!=null);
+        String tagsListString;
+        String sexAndAge = convertSexToString() + ", " + age + " år";
     
         if(postalInfo!=null) // hvis der ER noget i postInfo
         {
@@ -310,8 +309,6 @@ public class DatingUser extends User
             descriptionInput = "Ingen beskrivelse tilgængelig...";
         }
         
-        String tagsListString;
-        
         if(tagsList != null) // hvis der ER noget i tagsList
         {
             tagsListString = convertTagsListToString();
@@ -320,8 +317,8 @@ public class DatingUser extends User
         {
             tagsListString = "Ingen tags";
         }
-    
-        return new ViewProfileDatingUser(convertSexToString(), super.getUsername(), age, zipCodeAndCity,
+     
+        return new ViewProfileDatingUser(super.getUsername(), sexAndAge, zipCodeAndCity,
                 descriptionInput, tagsListString);
         
     }
@@ -330,9 +327,9 @@ public class DatingUser extends User
     {
         if(sex == true)
         {
-            return "Kvinde, ";
+            return "Kvinde";
         }
-        return "Mand, ";
+        return "Mand";
     }
     
 }

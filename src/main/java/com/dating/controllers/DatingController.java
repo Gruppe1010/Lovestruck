@@ -17,11 +17,11 @@ import org.springframework.web.context.request.WebRequest;
 public class DatingController
 {
     Admin loggedInAdmin = null;
-    DatingUser loggedInDatingUser = null;
+    //DatingUser loggedInDatingUser = null; // TODO det er denne som skal kopieres ind når vi ikke tester
+    DatingUser loggedInDatingUser = new DatingUser(true, 2, 24, "tester", "tester@hotmail.com", "hej");
     
     ViewProfileDatingUser viewProfileDatingUser = null;
     EditDatingUser editDatingUser = null;
-    
     
     Error error = null;
     UserService userService = new UserService();
@@ -56,14 +56,6 @@ public class DatingController
         resetLoggedInUsers();
         
         return "logout"; // html
-    }
-    
-    @GetMapping("/editProfileConfirmation")
-    public String editProfileConfirmation(Model datingUserModel)
-    {
-        datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
-        
-        return "DatingUser/editprofileconfirmation"; // html
     }
     
     //------------------ GET DATINGUSER -------------------//
@@ -112,14 +104,14 @@ public class DatingController
         return "DatingUser/searchpage"; // html
     }
     
-    @GetMapping("/viewProfile")
-    public String viewProfile(Model viewProfileDatingUserModel)
+    @GetMapping("/viewMyProfile")
+    public String viewMyProfile(Model viewProfileDatingUserModel)
     {
         viewProfileDatingUser = loggedInDatingUser.convertDatingUserToViewProfileDatingUser();
     
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         
-        return "DatingUser/viewprofile";
+        return "DatingUser/viewmyprofile";
     }
     
     @GetMapping("/editProfile")
@@ -130,6 +122,14 @@ public class DatingController
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
         
         return "DatingUser/editprofile"; // html
+    }
+    
+    @GetMapping("/editProfileConfirmation")
+    public String editProfileConfirmation(Model datingUserModel)
+    {
+        datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        
+        return "DatingUser/editprofileconfirmation"; // html
     }
     
     
@@ -205,6 +205,7 @@ public class DatingController
     
     //------------------ POST GENEREL -------------------//
     
+    // TODO: denne her gør det tricky at dele Controlleren op i flere Controller-klasser
     @PostMapping("/postLogIn")
     public String postLogIn(WebRequest dataFromLogInForm)
     {

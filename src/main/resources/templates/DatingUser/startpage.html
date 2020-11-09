@@ -41,7 +41,7 @@
             <span class="menubarheadline dropdown">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
-                    <a href="/viewProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/viewMyProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
                     <a href="/editProfile" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
                     <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
                 </div>
@@ -58,6 +58,9 @@
 
                             <p>Velkommen til Love Struck <3 <br>Vi giver dig chancen for at møde nye mennesker.<br>
                                 ... og hvem ved? Måske bliver du LoveStruck</p>
+
+
+
 
                         </div>
                     </div>

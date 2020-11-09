@@ -6,9 +6,8 @@ public class ViewProfileDatingUser
     // TODO måske slettes permanent: private boolean isBlacklisted;
    
     private String username;
-    // TODO: private image
-    private String sex; // TODO! overvej at sammensmelte sex og age - da det alligevel skal stå samme sted
-    private int age; // tODO lav om til String - 25 år fx
+    // TODO: private image sex, age år
+    private String sexAndAge; // TODO! overvej at sammensmelte sex og age - da det alligevel skal stå samme sted
     private String zipCodeAndCity;
     private String description;
     private String tags;
@@ -16,12 +15,11 @@ public class ViewProfileDatingUser
     
     // constructor
     public ViewProfileDatingUser(){}
-    public ViewProfileDatingUser(String sex, String username, int age, String zipCodeAndCity, String description,
+    public ViewProfileDatingUser(String username,String sexAndAge, String zipCodeAndCity, String description,
                                  String tags)
     {
-        this.sex = sex;
         this.username = username;
-        this.age = age;
+        this.sexAndAge = sexAndAge;
         this.zipCodeAndCity = zipCodeAndCity;
         this.description = description;
         this.tags = tags;
@@ -36,21 +34,13 @@ public class ViewProfileDatingUser
     {
         this.username = username;
     }
-    public int getAge()
+    public String getSexAndAge()
     {
-        return age;
+        return sexAndAge;
     }
-    public void setAge(int age)
+    public void setSexAndAge(String sexAndAge)
     {
-        this.age = age;
-    }
-    public String getSex()
-    {
-        return sex;
-    }
-    public void setSex(String sex)
-    {
-        this.sex = sex;
+        this.sexAndAge = sexAndAge;
     }
     public String getZipCodeAndCity()
     {

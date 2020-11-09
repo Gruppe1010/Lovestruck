@@ -83,29 +83,23 @@
                                 <!--? == hvis den er null regnes den ikke med-->
                                 <span>Postnummer: </span>
                                 <span id="zipcode"
-                                       th:text="${viewProfileDatingUser.getZipCodeAndCity()}"
-                                       class="color fontsize formlinestyling"> </span><br><br>
+                                      th:text="${viewProfileDatingUser.getZipCodeAndCity()}"
+                                      class="color fontsize formlinestyling"> </span><br><br>
 
                                 <!--description -->
                                 <!-- textarea virker ikke til input rows="4" cols="50"-->
                                 <span>Beskrivelse: </span>
                                 <span id="description"
-                                       th:text="${viewProfileDatingUser.getDescription()}"
+                                      th:text="${viewProfileDatingUser.getDescription()}"
                                       class="color fontsize descriptionbox"></span><br><br>
 
                                 <!--tags -->
                                 <!--TODO tilføj liste - noget med th: each something-->
                                 <span>Tags: </span>
                                 <span type="text" id="tags"
-                                       th:text="${viewProfileDatingUser.getTags()}"
+                                      th:text="${viewProfileDatingUser.getTags()}"
                                       class="color fontsize tagsbox"></span><br><br>
-
-                                <!--TODO: tilføj lille favorit-symbol-->
-
-                                <button class="editprofilesubmit fontsize">Gør til favorit</button>
-
-                                <!--<input type="submit" value="Gør til favorit" class="editprofilesubmit fontsize">-->
-                            </div> <!--TIL: interestedIn, username, email, age, city -->
+                            </div>
 
                             <!--profilbillede -->
                             <div class="profilepicturecontainer">

@@ -42,7 +42,7 @@
             <span class="menubarheadline dropdown linkmenubarheadlinelogout">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
-                    <a href="/viewProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/viewMyProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
                     <a href="/editProfile" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
                     <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
                 </div>
