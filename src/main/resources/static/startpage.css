@@ -15,7 +15,7 @@
 .textbox-container
 {
     position: relative;
-    display: flex;
+    display: inline-flex;
     padding-top:20px;
     margin: auto;
 }

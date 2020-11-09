@@ -5,6 +5,7 @@ import com.dating.models.users.DatingUser;
 import com.dating.repositories.UserRepository;
 import com.dating.services.UserService;
 import com.dating.viewModels.datingUser.EditDatingUser;
+import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,8 +30,8 @@ public class DatingController
     UserService userService = new UserService();
     UserRepository userRepository = new UserRepository();
     
-    // TODO: overvej at dele Controlleren op i flere controllers!!! -
-    //  fx GenerelController, AdminController, DatingUserController
+    /*TODO: overvej at dele Controlleren op i flere controllers!!! -
+    //  fx GenerelController, AdminController, DatingUserController*/
     
     //------------------ GET GENEREL -------------------//
     
@@ -63,13 +64,14 @@ public class DatingController
     //------------------ GET DATINGUSER -------------------//
     
     @GetMapping("/startPage")
-    public String startPage(Model datingUserModel, Model datingUsersListModel)
+    public String startPage(Model datingUserModel, Model previewDatingUsersListModel)
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        ArrayList<DatingUser> datingUsersList = userRepository.createListOfAllDatingUsersFromDb(loggedInDatingUser.getIdDatingUser());
+        ArrayList<PreviewDatingUser> previewDatingUsersList =
+                userRepository.createListOfAllDatingUsersFromDb(loggedInDatingUser.getIdDatingUser());
     
-        datingUsersListModel.addAllAttributes("datingUsersList", datingUsersList);
+        previewDatingUsersListModel.addAttribute("previewDatingUsersList", previewDatingUsersList);
         
         return "DatingUser/startpage"; // html
     }

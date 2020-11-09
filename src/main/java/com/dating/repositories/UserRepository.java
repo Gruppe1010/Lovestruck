@@ -3,6 +3,7 @@ package com.dating.repositories;
 import com.dating.models.PostalInfo;
 import com.dating.models.users.Admin;
 import com.dating.models.users.DatingUser;
+import com.dating.viewModels.datingUser.PreviewDatingUser;
 import org.springframework.web.context.request.WebRequest;
 
 import java.io.*;
@@ -58,9 +59,9 @@ public class UserRepository
 
 
 
-        } catch(SQLException | FileNotFoundException throwables)
+        } catch(Exception e)
         {
-            throwables.printStackTrace();
+            System.out.println("Error in writePictureToDb: " + e.getMessage());
         }
     }
 
@@ -69,7 +70,8 @@ public class UserRepository
         lovestruckConnection = establishConnection("lovestruck");
 
         try {
-            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement("SELECT profilepicture FROM dating_users WHERE id_dating_user = ?");
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement
+                                   ("SELECT profilepicture FROM dating_users WHERE id_dating_user = ?");
 
             preparedStatement.setInt(1, idDatingUser);
 
@@ -112,14 +114,17 @@ public class UserRepository
      */
     public boolean addDatingUserToDb(DatingUser datingUser)
     {
+        lovestruckConnection = establishConnection("lovestruck");
         try
         {
-            lovestruckConnection = establishConnection("lovestruck");
+            InputStream inputStream = new FileInputStream(datingUser.getImagePath());
             
             // TODO: tilføj: image_path som kolonne i database - og så tilføj den sqlCommanden her
-            String sqlCommand = "INSERT into dating_users(blacklisted, sex, interested_in, age, username, email, " +
+            String sqlCommand = "INSERT into dating_users(blacklisted, sex, interested_in, profile_picture, age, " +
+                                        "username, " +
+                                        "email, " +
                     "password) " +
-                    "values (?,?,?,?,?,?,?);";
+                    "values (?,?,?,?,?,?,?,?);";
             
             // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
             PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
@@ -127,10 +132,11 @@ public class UserRepository
             preparedStatement.setInt(1, datingUser.convertBooleanToInt(datingUser.isBlacklisted()));
             preparedStatement.setInt(2, datingUser.convertBooleanToInt(datingUser.getSex()));
             preparedStatement.setInt(3, datingUser.getInterestedIn());
-            preparedStatement.setInt(4, datingUser.getAge());
-            preparedStatement.setString(5, datingUser.getUsername());
-            preparedStatement.setString(6, datingUser.getEmail());
-            preparedStatement.setString(7, datingUser.getPassword());
+            preparedStatement.setBlob(4, inputStream);
+            preparedStatement.setInt(5, datingUser.getAge());
+            preparedStatement.setString(6, datingUser.getUsername());
+            preparedStatement.setString(7, datingUser.getEmail());
+            preparedStatement.setString(8, datingUser.getPassword());
             
             // user tilføjes til database
             preparedStatement.executeUpdate();
@@ -150,7 +156,7 @@ public class UserRepository
             
             return true;
         }
-        catch(SQLException e)
+        catch(Exception e)
         {
             System.out.println("Error in addDatingUserToDb: " + e.getMessage());
             return false;
@@ -404,7 +410,8 @@ public class UserRepository
                 loggedInDatingUser.setAge(resultSet.getInt(6));
                 loggedInDatingUser.setSex(loggedInDatingUser.convertIntToBoolean(resultSet.getInt(7)));
                 loggedInDatingUser.setInterestedIn(resultSet.getInt(8));
-                //TODO PROFILEPICTURE loggedInDatingUser.setInterestedIn(resultSet.getInt(9));
+                // TODO: FIKS TIL AT DEN HENTER BILLEDE FRA DB
+                loggedInDatingUser.setImagePath("src/main/resources/static/image/profilepictures/genericProfileImage.png");
                 loggedInDatingUser.setDescription(resultSet.getString(10));
                 loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsList(resultSet.getString(11)));
                 loggedInDatingUser.setPostalInfo(findPostalInfoObjectFromIdPostalInfo(resultSet.getInt(12)));
@@ -613,7 +620,15 @@ public class UserRepository
         return postalInfo;
     }
     
-    public ArrayList<DatingUser> createListOfAllDatingUsersFromDb(int idDatingUser)
+    /**
+     * Laver ArrayList med PreviewDatingUser-objekter ud fra ALLE datingUsers i tabel (undtaget
+     * datingUser-obj med idDatingUser)
+     *
+     * @param idDatingUser id som henviser til bruger der IKKE skal gemmes på listen
+     *
+     * @return ArrayList<PreviewDatingUser> Returnerer liste med ALLE PreviewDatingUser's
+     */
+    public ArrayList<PreviewDatingUser> createListOfAllDatingUsersFromDb(int idDatingUser)
     {
         lovestruckConnection = establishConnection("lovestruck");
     
@@ -633,18 +648,39 @@ public class UserRepository
         
             while(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
             {
-                DatingUser datingUser =
-                datingUsersList.add()
+                PreviewDatingUser previewDatingUser = createPreviewDatingUserFromResultSet(resultSet);
+                datingUsersList.add(previewDatingUser);
             }
         }
         catch(SQLException e)
         {
             System.out.println("Error in findPostalInfoObjectFromZipCodeInput: " + e.getMessage());
         }
-    
         return datingUsersList;
-        
-        
+    }
+    
+    /**
+     * Opretter PreviewDatingUser-obj ud fra entitet på resultSet
+     *
+     * @param resultSet ResultSet som PreviewDatingUser-obj dannes ud fra
+     *
+     * @return PreviewDatingUser Returnerer det oprettede PreviewDatingUser-obj
+     */
+    public PreviewDatingUser createPreviewDatingUserFromResultSet(ResultSet resultSet)
+    {
+        PreviewDatingUser previewDatingUser = null;
+        try
+        {
+            // TODO: skal det være noget andet end inputstream??
+            previewDatingUser = new PreviewDatingUser(resultSet.getBinaryStream("profile_picture"),
+                    resultSet.getString(3),
+                    resultSet.getInt(6));
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in createPreviewDatingUserFromResultSet: " + e.getMessage());
+        }
+        return previewDatingUser;
     }
     
 }

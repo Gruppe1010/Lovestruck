@@ -31,9 +31,8 @@ public class DatingUser extends User
         this.sex = sex;
         this.interestedIn = interestedIn;
         this.age = age;
-        
         // sættes til standard-billede
-        imagePath = "https://i.imgur.com/66Dq0AJ.png";
+        imagePath = "src/main/resources/static/image/profilepictures/genericProfileImage.png";
         description = null;
         tagsList = null;
         postalInfo = null;

@@ -55,11 +55,13 @@
             <div class="textbox-container">
 
                 <div class="previewdatinguserbox"
-                     th:each="datingUser : ${datingUsersList}">
-                    <div th:src="${datingUser.getImagePath()}"></div>
+                     th:each="previewDatingUser : ${previewDatingUsersList}">
+                    <div>
+                        <img th:src="${previewDatingUser.getImagePath()}">
+                    </div>
                     <div class="previewdatinguserinfo">
-                        <div th:text="${datingUser.getUsername()}"></div>
-                        <div th:text="${datingUser.getAge()}"></div>
+                        <div th:text="${previewDatingUser.getUsername()}"></div>
+                        <div th:text="${previewDatingUser.getAge()}"></div>
                     </div>
                 </div>
 
