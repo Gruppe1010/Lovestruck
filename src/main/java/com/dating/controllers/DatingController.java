@@ -100,9 +100,9 @@ public class DatingController
     }
     
     @GetMapping("/editProfileConfirmation")
-    public String editProfileConfirmation(Model adminModel, Model datingUserModel)
+    public String editProfileConfirmation(Model datingUserModel)
     {
-        addAttributeToUserModel(adminModel, datingUserModel);
+        datingUserModel.addAttribute("datingUserModel", datingUserModel);
         
         return "editprofileconfirmation"; // html
     }
@@ -148,7 +148,7 @@ public class DatingController
         loggedInDatingUser = userRepository.checkIfUserExistsInDatingUsersTable(dataFromLogInForm);
         
         // hvis brugeren IKKE er null OG IKKE blacklisted
-        if(loggedInDatingUser.getUsername()!=null && loggedInDatingUser.isBlacklisted())
+        if(loggedInDatingUser.getUsername()!=null && !(loggedInDatingUser.isBlacklisted()))
         {
             loggedInAdmin = null;
             return "redirect:/startPage"; // url
@@ -160,7 +160,6 @@ public class DatingController
         return "redirect:/logIn"; // url
     }
     
-    // TODO: ER I GANG MED DENNE
     @PostMapping("/postEditProfile")
     public String postEditProfile(WebRequest dataFromEditProfileForm, Model editDatingUserModel)
     {
@@ -203,23 +202,6 @@ public class DatingController
      *
      * */
     
-    public void addAttributeToUserModel(Model adminModel, Model datingUserModel)
-    {
-        /*
-        loggedInDatingUser = userRepository.retrieveLoggedInDatingUser();
-        loggedInAdmin = userRepository.retrieveLoggedInAdmin();
-         */
-        
-        if(loggedInAdmin != null)
-        {
-            adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
-        }
-       
-        else if(loggedInDatingUser != null)
-        {
-        
-        }
-    }
     
     public void resetLoggedInUsers()
     {

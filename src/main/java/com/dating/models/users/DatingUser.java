@@ -1,21 +1,18 @@
 package com.dating.models.users;
 
 import com.dating.models.PostalInfo;
-import com.dating.models.users.User;
 import com.dating.viewModels.datingUser.EditDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 public class DatingUser extends User
 {
     // det er smart at have denne, fordi så skal vi ikke hente den fra databasen
     // (fx når brugeren skal tilgå sin favoritliste)
     private int idDatingUser;
-    private boolean blacklisted; // 0 == false, 1 == true
+    private boolean isBlacklisted; // 0 == false, 1 == true
     private boolean sex; // false == mænd, true == kvinder
     private int interestedIn; // 0 == mænd, 1 == kvinder, 2 == begge køn
     private int age;
@@ -31,7 +28,7 @@ public class DatingUser extends User
     public DatingUser(boolean sex, int interestedIn, int age, String username, String email, String password)
     {
         super(username, email, password); // den kalder superklassens constructor
-        this.blacklisted = false; // en bruger er aldrig blacklisted til at starte med når de opretter sig
+        this.isBlacklisted = false; // en bruger er aldrig blacklisted til at starte med når de opretter sig
         this.sex = sex;
         this.interestedIn = interestedIn;
         this.age = age;
@@ -80,11 +77,11 @@ public class DatingUser extends User
     }
     public boolean isBlacklisted()
     {
-        return blacklisted;
+        return isBlacklisted;
     }
     public void setBlacklisted(boolean blacklisted)
     {
-        this.blacklisted = blacklisted;
+        this.isBlacklisted = blacklisted;
     }
     public boolean getSex()
     {

@@ -444,13 +444,13 @@ public class UserRepository
             preparedStatement.setString(2, dataFromLogInForm.getParameter("passwordinput"));
             
             resultSet = preparedStatement.executeQuery();
-            /*
+            
             if(!resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
             {
                 resultSet = null;
             }
 
-             */
+            
         }
         catch(SQLException e)
         {
@@ -470,66 +470,6 @@ public class UserRepository
         loggedInDatingUser = null;
     }
     
-    /* TODO : slet metode
-    public boolean checkIfProfileWasEditted(WebRequest dataFromEditProfileForm, DatingUser loggedInUser)
-    {
-        // return værdi
-        boolean wasProfileEditted = false;
-        
-        boolean wasPasswordEditted; //password ændret?
-        boolean wasOtherInfoEditted = false; // andre værdier ændret?
-        
-        // henter værdi der er indtastet i form
-        // hvis INGEN værdi indtastet henter den: ""
-        String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
-        //hvis password IKKE er ændret er det == ""
-        // DERFOR hvis password == "", er det IKKE blevet ændret
-        // wasPasswordEditted skal altså have den omvendte værdi
-        
-        
-        wasPasswordEditted = !(passwordInput == "");
-        
-        
-        // hvis de HAR fået en nye værdi
-        else if(!userService.checkIfPasswordsMatch(passwordInput, confirmPasswordInput))
-        {
-            // hvis de nye værdier IKKE matcher, sker der en fejlmeddelelse
-           String errorMessage = "Dine to adgangskodeinput-matcher ikke";
-            
-            // hvis de nye værdier matcher så fortsætter de med at have samme input
-        }
-        
-        try
-        {
-            // hvis ALT input fra form er HELT det samme, som ligger på en bruger i db, er der IKKE blevet ændret noget
-           
-            String sqlCommand = "SELECT * FROM dating_users WHERE insterested_in = ? AND " +
-                                        "age = ? AND username = ? AND email = ? ";
-        
-            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
-            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
-        
-            preparedStatement.setString(1, dataFromEditProfileForm.getParameter("usernameinput"));
-            preparedStatement.setString(2, dataFromEditProfileForm.getParameter("passwordinput"));
-        
-            ResultSet resultSet = preparedStatement.executeQuery();
-      
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in checkIfProfileWasEditted: " + e.getMessage());
-        }
-        
-        
-        if(wasPasswordEditted || wasOtherInfoEditted)
-        {
-        
-        }
-        
-        return wasProfileEditted;
-     
-    }
-    */
     
     public void updateLoggedInDatingUserInDb(DatingUser loggedInDatingUser)
     {
