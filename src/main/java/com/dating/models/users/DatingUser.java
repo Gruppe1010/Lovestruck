@@ -17,7 +17,6 @@ public class DatingUser extends User
     private int interestedIn; // 0 == mænd, 1 == kvinder, 2 == begge køn
     private int age;
     private String imagePath;
-    // TODO private Image profilePicture;
     private String description;
     private ArrayList<String> tagsList;
     private PostalInfo postalInfo;
@@ -42,31 +41,6 @@ public class DatingUser extends User
     }
     
     // getters + setters
-    public String getUsername()
-    {
-        return super.getUsername();
-    }
-    public void setUsername(String username)
-    {
-        super.setUsername(username);
-    }
-    public String getEmail()
-    {
-        return super.getEmail();
-    }
-    public void setEmail(String email)
-    {
-        super.setEmail(email);
-    }
-    public String getPassword()
-    {
-        return super.getPassword();
-    }
-    public void setPassword(String password)
-    {
-        super.setPassword(password);
-    }
-    
     public int getIdDatingUser()
     {
         return idDatingUser;
@@ -107,6 +81,14 @@ public class DatingUser extends User
     {
         this.age = age;
     }
+    public String getImagePath()
+    {
+        return imagePath;
+    }
+    public void setImagePath(String imagePath)
+    {
+        this.imagePath = imagePath;
+    }
     public String getDescription()
     {
         return description;
@@ -140,16 +122,33 @@ public class DatingUser extends User
         this.favouritesList = favouritesList;
     }
     
-    public String getImagePath()
+    public String getUsername()
     {
-        return imagePath;
+        return super.getUsername();
+    }
+    public void setUsername(String username)
+    {
+        super.setUsername(username);
+    }
+    public String getEmail()
+    {
+        return super.getEmail();
+    }
+    public void setEmail(String email)
+    {
+        super.setEmail(email);
+    }
+    public String getPassword()
+    {
+        return super.getPassword();
+    }
+    public void setPassword(String password)
+    {
+        super.setPassword(password);
     }
     
-    public void setImagePath(String imagePath)
-    {
-        this.imagePath = imagePath;
-    }
-    // andre metoder
+  
+    // ANDRE metoder
     /**
      * Konverterer boolean til integer-værdi
      *
@@ -161,18 +160,31 @@ public class DatingUser extends User
     {
         int convertedBoolean = 0; // convertedBoolean er nu sat til false - 0 == false
         
-        if(booleanInput==true)
+        if(booleanInput)
         {
             convertedBoolean = 1;
         }
         
         return convertedBoolean;
     }
+    
+    /**
+     * Konverterer boolean integer-værdi til bool
+     *
+     * @param intInput Int-værdi som skal konverteres
+     
+     * @return boolean Resultatet af den konverterede int
+     */
     public boolean convertIntToBoolean(int intInput)
     {
         return intInput == 1;
     }
     
+    /**
+     * Siger at et objekt af klassen er en DatingUser - Overskriver superklassen User's metode som siger false
+     *
+     * @return boolean Returns altid true, hvis denne overskrevede metode kaldes - fordi det er en DatingUser
+     */
     @Override
     public boolean isDatingUser()
     {
@@ -180,6 +192,11 @@ public class DatingUser extends User
     }
     
     // TODO: måske overflødig
+    /**
+     * Konverterer interestedIn-attribut til tilsvarende String
+     *
+     * @return String interestedIn-attributtens String-værdi
+     */
     public String convertInterestedInToString()
     {
         if(interestedIn==0)
@@ -194,6 +211,13 @@ public class DatingUser extends User
         return "malesandfemales";
     }
     
+    /**
+     * Splitter String op ved # og lægger på ArrayList-tagsList
+     *
+     * @param tagsString String som splittes og lægges på listen
+     
+     * @return ArrayList<String> ArrayListe bestående af Strings som er dannet via at splitte tagsString ved #
+     */
     public ArrayList<String> convertStringToTagsList(String tagsString)
     {
         ArrayList<String> tagsList = new ArrayList<>();
