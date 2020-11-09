@@ -5,9 +5,7 @@ import com.dating.models.users.Admin;
 import com.dating.models.users.DatingUser;
 import org.springframework.web.context.request.WebRequest;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.sql.*;
 
 public class UserRepository
@@ -42,7 +40,7 @@ public class UserRepository
         return connection;
     }
 
-    public void pictureToDb()
+    public void writePictureToDb()
     {
         lovestruckConnection = establishConnection("lovestruck");
 
@@ -63,6 +61,41 @@ public class UserRepository
         {
             throwables.printStackTrace();
         }
+    }
+
+    public void readPictureFromDb(String fileName)
+    {
+        lovestruckConnection = establishConnection("lovestruck");
+
+        try {
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement("SELECT profilepicture FROM dating_users WHERE id_dating_user = ?");
+
+            preparedStatement.setInt(1, 5);
+
+            ResultSet resultSet = null;
+
+            resultSet = preparedStatement.executeQuery();
+
+            File file = new File(fileName);
+
+            FileOutputStream outputStream = new FileOutputStream(file);
+
+            while (resultSet.next())
+            {
+                InputStream inputStream = resultSet.getBinaryStream("profilepicture");
+                byte[] buffer = new byte[1024];
+                while (inputStream.read(buffer) > 0) {
+                    outputStream.write(buffer);
+                }
+            }
+
+
+            }
+            catch(Exception e)
+            {
+                System.out.println(e);
+            }
+
     }
     
     /**
