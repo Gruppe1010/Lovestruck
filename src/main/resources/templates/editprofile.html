@@ -125,7 +125,7 @@
                                 <!--? == hvis den er null regnes den ikke med-->
                                 <span>Postnummer: </span>
                                 <input type="number" id="zipcode" name="zipcodeinput"
-                                       th:value="${editDatingUser.getZipCode()}"
+                                       th:value="${editDatingUser.displayZipCode()}"
                                        minlength="4" maxlength="4"
                                        oninvalid="this.setCustomValidity('Angiv venligst postnummer i tal')"
                                        oninput="setCustomValidity('')"
@@ -153,10 +153,11 @@
                                        -->
 
                                 <!--description -->
+                                <!-- textarea virker ikke til input rows="4" cols="50"-->
                                 <span>Beskrivelse: </span>
-                                <textarea id="description" name="descriptioninput" rows="4" cols="50"
+                                <input type="text" id="description" name="descriptioninput"
                                           th:value="${editDatingUser.getDescription()}"
-                                          class="color fontsize descriptionbox"></textarea><br><br>
+                                          class="color fontsize descriptionbox"><br><br>
 
                                 <!--tags -->
                                 <!--TODO tilføj liste - noget med th: each something-->
@@ -183,7 +184,7 @@
 
                                 <!--browse filer -->
                                 <label class="browsefiles">Vælg en billede fil
-                                    <input type="file" accept="image/*"/>
+                                    <input type="file" accept="image/*" name="imagepathinput"/>
                                 </label>
 
                             </div>

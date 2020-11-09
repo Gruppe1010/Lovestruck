@@ -136,4 +136,14 @@ public class EditDatingUser
         return null;
     }
     
+    
+    public String displayZipCode()
+    {
+        if(zipCode == 0)
+        {
+            return "";
+        }
+        return Integer.toString(zipCode);
+    }
+    
 }

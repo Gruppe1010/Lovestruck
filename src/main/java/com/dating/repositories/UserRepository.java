@@ -163,9 +163,6 @@ public class UserRepository
      *
      * @return void
      */
-
-
-
     public void createFavouritesListTableDb(int idDatingUser)
     {
         try

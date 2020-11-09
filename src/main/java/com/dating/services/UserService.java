@@ -148,7 +148,7 @@ public class UserService
     
     
     /////////// editDatingUser
-    public boolean checkIfProfileWasEditted(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
+    public boolean checkForProfileAlterations(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
     {
         boolean wasProfileEditted = false;
     
@@ -160,7 +160,7 @@ public class UserService
         int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
         String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
         String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
-        // TODO private String imagePath;
+        String imagePath = dataFromEditProfileForm.getParameter("imagepathinput");
         String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
         String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
         

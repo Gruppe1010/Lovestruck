@@ -251,7 +251,7 @@ public class DatingUser extends User
         {
             zipCode = postalInfo.getZipCode();
         }
-        if(tagsList.size()>0) // hvis der ER noget i tagsList
+        if(tagsList != null) // hvis der ER noget i tagsList
         {
             tagsListString = convertTagsListToString();
         }

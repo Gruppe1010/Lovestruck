@@ -86,6 +86,7 @@ public class DatingController
     @GetMapping("/editProfile")
     public String editProfile(Model editDatingUserModel)
     {
+       
         editDatingUser = loggedInDatingUser.convertDatingUserToEditDatingUser();
         
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
@@ -134,11 +135,11 @@ public class DatingController
     @PostMapping("/postCreateUser")
     public String postCreateUser(WebRequest dataFromCreateUserForm)
     {
-        DatingUser datingUser = userService.createDatingUser(dataFromCreateUserForm);
+        loggedInDatingUser = userService.createDatingUser(dataFromCreateUserForm);
         
-        if(datingUser!=null)
+        if(loggedInDatingUser!=null)
         {
-            userRepository.addDatingUserToDb(datingUser);
+            userRepository.addDatingUserToDb(loggedInDatingUser);
             
             return "redirect:/editProfile";
         }
@@ -176,9 +177,8 @@ public class DatingController
     @PostMapping("/postEditProfile")
     public String postEditProfile(WebRequest dataFromEditProfileForm, Model editDatingUserModel)
     {
-        // TODO: evt nyt navn til metoden: didUserAddChanges()
         // tjekker om brugeren har indtastet ny info
-        boolean userAddedChanges = userService.checkIfProfileWasEditted(dataFromEditProfileForm, editDatingUser);
+        boolean userAddedChanges = userService.checkForProfileAlterations(dataFromEditProfileForm, editDatingUser);
     
         // hvis bruger har indtastet ny info
         if(userAddedChanges)
@@ -187,7 +187,6 @@ public class DatingController
             
             if(isUsernameEmailPasswordValid)
             {
-                // TODO: det er HER der er en fejl
                 loggedInDatingUser = userService.updateLoggedInDatingUser(dataFromEditProfileForm, loggedInDatingUser);
                 userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
                 
