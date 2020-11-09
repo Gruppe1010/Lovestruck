@@ -55,23 +55,29 @@ public class UserService
     
     /////////// datingUser
     /**
-     * Konverterer en sex-værdi repræsenteret som String om til boolsk værdi
+     * Opdaterer (og returner) DatingUser-objekt til at indeholde ny data fra Edit-Profile-Form'en
      *
-     * @return
+     * @param dataFromEditProfileForm WebRequest knyttet til Edit-Profile-Formen som bruges til at hente nye værdie fra
+     * @param loggedInDatingUser DatingUser-objektet som opdateres og returneres
+     *
+     * @return DatingUser Det DatingUser-obj. fra param med opdateret data fra dataFromEditProfileForm
      * */
     public DatingUser updateLoggedInDatingUser(WebRequest dataFromEditProfileForm, DatingUser loggedInDatingUser)
     {
         // TODO: overvej at rykke linjer ud i metode
+        // de attributter som en bruger SKAL have
         int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
         String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
         String emailInput = dataFromEditProfileForm.getParameter("emailinput");
         int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
+        // de attributter som en bruge kan UNDLADE
         int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
         String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
         // TODO private String imagePath;
         String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
         String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
         
+        // setter de attributter som en bruger SKAL have
         loggedInDatingUser.setInterestedIn(interestedInInput);
         loggedInDatingUser.setUsername(usernameInput);
         loggedInDatingUser.setEmail(emailInput);
@@ -82,8 +88,9 @@ public class UserService
             PostalInfo postalInfo = userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput);
             loggedInDatingUser.setPostalInfo(postalInfo);
         }
-   
-        if(!(passwordInput.equals(""))) // hvis nyt password
+    
+        // opdaterer KUN password hvis nyt passwordInput - fordi ellers stilles det til ""
+        if(!(passwordInput.equals("")))
         {
             loggedInDatingUser.setPassword(passwordInput);
         }
@@ -92,8 +99,10 @@ public class UserService
         {
             loggedInDatingUser.setDescription(descriptionInput);
         }
-        
-        if(tagsListInput != null) // hvis der er tags
+    
+        // opdaterer kun tags, hvis input
+        // TODO: Er dette overhovedet nødvendig? Fordi hvis der ikke er noget input, kan det vel bare blive sat til ""?
+        if(tagsListInput != null)
         {
             loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsList(tagsListInput));
         }
@@ -101,6 +110,13 @@ public class UserService
         return loggedInDatingUser;
     }
     
+    /**
+     * Opretter (og returns) nyt DatingUser-obj. ud fra Create-Profile-Form
+     *
+     * @param dataFromCreateUserForm WebRequest knyttet til Create-Profile-Formen - her hentes info til nyt
+     *                                DatingUser-obj.
+     * @return DatingUser Det nye DatingUser-obj. som er blevet oprettet
+     * */
     public DatingUser createDatingUser(WebRequest dataFromCreateUserForm)
     {
         DatingUser datingUser = null;
