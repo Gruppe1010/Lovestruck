@@ -12,14 +12,6 @@
     text-align: center;
 }
 
-.textbox-container
-{
-    position: relative;
-    display: inline-flex;
-    padding-top:20px;
-    margin: auto;
-}
-
 .startpage-bulletpointbox
 {
     padding: 20px 30px 20px 30px;
@@ -36,4 +28,39 @@
 .italic
 {
     font-style: italic;
+}
+
+.textbox-container
+{
+    position: relative;
+    display: inline-flex;
+    padding-top:20px;
+    margin: auto;
+    flex-wrap: wrap;
+}
+
+.previewdatinguserbox
+{
+    position: relative;
+    width: 283px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.previewdatinguserpicture
+{
+    width: 120px;
+    height: 160px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    margin: 8px;
+}
+
+.previewdatinguserinfo
+{
+    position: relative;
+    display: inline-block;
 }
