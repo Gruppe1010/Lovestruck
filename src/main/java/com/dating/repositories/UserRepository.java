@@ -395,22 +395,9 @@ public class UserRepository
     
     public DatingUser checkIfUserExistsInDatingUsersTable(WebRequest dataFromLogInForm)
     {
-        lovestruckConnection = establishConnection("lovestruck");
+        ResultSet resultSet = findUserInDb(dataFromLogInForm, "dating_users");
         
-        try
-        {
-            ResultSet resultSet = findUserInDb(dataFromLogInForm, "dating_users");
-            
-            if(resultSet.next()) // hvis det er en datingUser
-            {
-                loggedInDatingUser = createDatingUserFromResultSet(resultSet);
-            }
-            
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in isEmailAvailable: " + e.getMessage());
-        }
+        loggedInDatingUser = createDatingUserFromResultSet(resultSet);
         
         return loggedInDatingUser;
     }
