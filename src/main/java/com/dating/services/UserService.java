@@ -99,17 +99,17 @@ public class UserService
             loggedInDatingUser.setEmail(input.getEmail());
             loggedInDatingUser.setAge(input.getAge());
             // setter de andre
-            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(input.getZipCode()));
             loggedInDatingUser.setDescription(input.getDescription());
             loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsList(input.getTagsList()));
+            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(input.getZipCode()));
             
-            // opdaterer KUN password hvis nyt passwordInput - fordi ellers stilles det til ""
+            // Hvis NYT passwordInput, opdateres det - fordi ellers stilles det til ""
             if(input.getPassword()!=null)//!(input.getPassword().equals("")))
             {
                 loggedInDatingUser.setPassword(input.getPassword());
             }
             
-            // Hvis NYT billedeinput
+            // Hvis NYT profilePictureInput, opdateres det
             if(!(Arrays.equals(profilePictureFile.getBytes(), loggedInDatingUser.getProfilePictureBytes())))
             {
                 loggedInDatingUser.setProfilePictureBytes(profilePictureFile.getBytes());
@@ -214,11 +214,12 @@ public class UserService
     }
     
     // TODO: test lige denne funktion
-    public boolean checkUsernameEmailPassword(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
+    public boolean checkUsernameEmailPasswordZipCode(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
     {
         boolean isEmailAvailable = true;
         boolean isUsernameAvailable = true;
         boolean doesPasswordInputsMatch = true;
+        boolean isZipCode4Char = true;
         
         // hvis nyt emailinput
         if(!(dataFromEditProfileForm.getParameter("emailinput").equals(editDatingUser.getEmail())))
@@ -244,9 +245,18 @@ public class UserService
             doesPasswordInputsMatch = checkIfPasswordsMatch(dataFromEditProfileForm.getParameter("passwordinput"),
                     dataFromEditProfileForm.getParameter("confirmpasswordinput"));
         }
+        
+        // hvis ny zipCode
+        if(!(dataFromEditProfileForm.getParameter("zipcodeinput").equals(editDatingUser.getZipCode())))
+        {
+            int zipCode = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
+            
+            isZipCode4Char = zipCode > 999 && zipCode < 10000;
+        }
+        
     
         // hvis email + username er ledige OG password inputsmatcher == true
-        return isEmailAvailable && isUsernameAvailable && doesPasswordInputsMatch;
+        return isEmailAvailable && isUsernameAvailable && doesPasswordInputsMatch && isZipCode4Char;
     }
     
     public EditDatingUser updateEditDatingUser(MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,

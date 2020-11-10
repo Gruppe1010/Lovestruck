@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @SpringBootApplication
 public class DatingApplication
 {
-    // 2560 == id_postal_info på NULL postInfo-obj. i db
+    // 2561 == id_postal_info på NULL postInfo-obj. i db
     
     public static void main(String[] args)
     {
