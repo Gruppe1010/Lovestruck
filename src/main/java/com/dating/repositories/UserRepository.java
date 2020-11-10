@@ -487,7 +487,21 @@ public class UserRepository
     {
         lovestruckConnection = establishConnection("lovestruck");
     
-        int postalId = findIdPostalInfoFromPostalInfoObject(loggedInDatingUser.getPostalInfo());
+        // TODO: FIX POSTNUMMER!!!!!!! Hvis man sletter sit postnummer, så skal den opdetere det i databasen UDEN AT
+        //  LAVE FEJL
+        int postalId = 1;
+        
+        // hvis der ER et postalInfoObjekt på brugeren
+        if(loggedInDatingUser.getPostalInfo()!=null)
+        {
+            postalId = findIdPostalInfoFromPostalInfoObject(loggedInDatingUser.getPostalInfo());
+        }
+        else // hvis der IKKE ligger et postalInfo-obj. på loggedInDatingUser
+        {
+        
+        }
+        
+        
         String tagsListString = loggedInDatingUser.convertTagsListToString();
         
         try

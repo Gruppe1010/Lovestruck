@@ -117,8 +117,6 @@
                                 <input type="number" id="age" name="ageinput"
                                        th:value="${editDatingUser.getAge()}"
                                        min="1" max="150"
-                                       oninvalid="this.setCustomValidity('Angiv venligst alder i tal')"
-                                       oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling" required><br><br>
 
                                 <!--postalInfo -->
@@ -127,8 +125,6 @@
                                 <input type="number" id="zipcode" name="zipcodeinput"
                                        th:value="${editDatingUser.displayZipCode()}"
                                        minlength="4" maxlength="4"
-                                       oninvalid="this.setCustomValidity('Angiv venligst postnummer i tal')"
-                                       oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling"><br><br>
 
                                 <!--password -->

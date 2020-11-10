@@ -86,6 +86,31 @@ public class UserService
             System.out.println("Error in updateLoggedInDatingUser: " + e.getMessage());
         }
     
+        // zipCodeInput fra form - kommer ud fra form i String
+        String zipCodeInputString = dataFromEditProfileForm.getParameter("zipcodeinput");
+        
+        // zipCodeInput som vi bruger til at opdatere loggedInDatingUser-obj. med
+        int zipCodeInput = 0;
+        
+        // hvis der ER input i feltet
+        if(!(zipCodeInputString.equals("")))
+        {
+            // parse inputtet til int
+            zipCodeInput = Integer.parseInt(zipCodeInputString);
+            // hvis inputtet IKKE er det samme som det der er gemt på loggedInDatingUser
+            if(zipCodeInput!=loggedInDatingUser.getPostalInfo().getZipCode())
+            {
+                // opdater zipCode på DatingUser-obj.
+                loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput));
+            }
+        }
+        // hvis der IKKE er input i feltet
+        else // if((zipCodeInputString.equals("")))
+        {
+            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput));
+        }
+        
+        
         // TODO: overvej at rykke linjer ud i metode
         // de attributter som en bruger SKAL have
         int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
@@ -94,7 +119,6 @@ public class UserService
         int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
         
         // de attributter som en bruge kan UNDLADE
-        int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
         String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
         String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
         String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
@@ -105,11 +129,7 @@ public class UserService
         loggedInDatingUser.setEmail(emailInput);
         loggedInDatingUser.setAge(ageInput);
       
-        
-        if(zipCodeInput!=0) // hvis der er en zipCode
-        {
-            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput));
-        }
+   
     
         // opdaterer KUN password hvis nyt passwordInput - fordi ellers stilles det til ""
         if(!(passwordInput.equals("")))
@@ -181,12 +201,22 @@ public class UserService
     
         try
         {
+            int zipCodeInput = editDatingUser.getZipCode();
+    
+    
+            String zipCodeInputString = dataFromEditProfileForm.getParameter("zipcodeinput");
+            if(!(zipCodeInputString.equals("")))
+            {
+                zipCodeInput = Integer.parseInt(zipCodeInputString);
+            }
+            
+            
             // TODO måske metode
             int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
             String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
             String emailInput = dataFromEditProfileForm.getParameter("emailinput");
             int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
-            int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
+       
             String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
             String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
             String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
