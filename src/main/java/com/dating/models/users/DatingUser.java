@@ -322,7 +322,7 @@ public class DatingUser extends User
         }
      
         return new ViewProfileDatingUser(super.getUsername(), sexAndAge, zipCodeAndCity,
-                descriptionInput, tagsListString);
+                descriptionInput, tagsListString, profilePictureBytes);
         
     }
     

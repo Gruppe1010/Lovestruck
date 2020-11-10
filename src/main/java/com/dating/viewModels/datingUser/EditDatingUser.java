@@ -2,6 +2,7 @@ package com.dating.viewModels.datingUser;
 
 import com.dating.models.PostalInfo;
 import com.dating.models.users.DatingUser;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ public class EditDatingUser
     private String password;
     private String confirmPassword;
     private byte[] profilePictureBytes;
-    // TODO private String imagePath;
+    private String base64;
     private String description;
     private String tagsList;
     
@@ -34,6 +35,7 @@ public class EditDatingUser
         this.profilePictureBytes = profilePictureBytes;
         this.description = description;
         this.tagsList = tagsList;
+        this.base64 = byteArrayAs64String();
     }
     
     // getters + setters
@@ -89,6 +91,10 @@ public class EditDatingUser
     {
         return confirmPassword;
     }
+    public void setConfirmPassword(String confirmPassword)
+    {
+        this.confirmPassword = confirmPassword;
+    }
     public byte[] getProfilePictureBytes()
     {
         return profilePictureBytes;
@@ -97,9 +103,13 @@ public class EditDatingUser
     {
         this.profilePictureBytes = profilePictureBytes;
     }
-    public void setConfirmPassword(String confirmPassword)
+    public String getBase64()
     {
-        this.confirmPassword = confirmPassword;
+        return base64;
+    }
+    public void setBase64(String base64)
+    {
+        this.base64 = base64;
     }
     public String getDescription()
     {
@@ -119,7 +129,6 @@ public class EditDatingUser
     }
     
     // andre metoder
-    
     public String checkIfInterestedInMales()
     {
         if(interestedIn == 0)
@@ -147,7 +156,6 @@ public class EditDatingUser
         return null;
     }
     
-    
     public String displayZipCode()
     {
         if(zipCode == 0)
@@ -155,6 +163,11 @@ public class EditDatingUser
             return "";
         }
         return Integer.toString(zipCode);
+    }
+    
+    private String byteArrayAs64String()
+    {
+        return Base64.encodeBase64String(this.profilePictureBytes);
     }
     
 }

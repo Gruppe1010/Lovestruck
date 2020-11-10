@@ -1,28 +1,32 @@
 package com.dating.viewModels.datingUser;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+
 public class ViewProfileDatingUser
 {
     // tilføj de attributter som vi skal vise på denne html
     // TODO måske slettes permanent: private boolean isBlacklisted;
    
     private String username;
-    // TODO: private image sex, age år
     private String sexAndAge; // TODO! overvej at sammensmelte sex og age - da det alligevel skal stå samme sted
     private String zipCodeAndCity;
     private String description;
     private String tags;
-    
+    private byte[] profilePictureBytes;
+    private String base64;
     
     // constructor
     public ViewProfileDatingUser(){}
     public ViewProfileDatingUser(String username,String sexAndAge, String zipCodeAndCity, String description,
-                                 String tags)
+                                 String tags, byte[] profilePictureBytes)
     {
         this.username = username;
         this.sexAndAge = sexAndAge;
         this.zipCodeAndCity = zipCodeAndCity;
         this.description = description;
         this.tags = tags;
+        this.base64 = byteArrayAs64String();
+        this.profilePictureBytes = profilePictureBytes;
     }
     
     //getters + setters
@@ -66,6 +70,14 @@ public class ViewProfileDatingUser
     {
         this.tags = tags;
     }
+    public String getBase64()
+    {
+        return base64;
+    }
+    public void setBase64(String base64)
+    {
+        this.base64 = base64;
+    }
     
     // metoder
     /*
@@ -90,5 +102,10 @@ public class ViewProfileDatingUser
     }
     
      */
+    
+    private String byteArrayAs64String()
+    {
+        return Base64.encodeBase64String(this.profilePictureBytes);
+    }
     
 }

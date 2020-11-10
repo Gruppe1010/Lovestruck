@@ -245,13 +245,17 @@ public class UserService
             doesPasswordInputsMatch = checkIfPasswordsMatch(dataFromEditProfileForm.getParameter("passwordinput"),
                     dataFromEditProfileForm.getParameter("confirmpasswordinput"));
         }
+        String zipCodeInput = dataFromEditProfileForm.getParameter("zipcodeinput");
         
         // hvis ny zipCode
-        if(!(dataFromEditProfileForm.getParameter("zipcodeinput").equals(editDatingUser.getZipCode())))
+        if(!(zipCodeInput.equals("")))
         {
-            int zipCode = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
-            
-            isZipCode4Char = zipCode > 999 && zipCode < 10000;
+            if(Integer.parseInt(zipCodeInput) == (editDatingUser.getZipCode()))
+            {
+                int zipCode = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
+    
+                isZipCode4Char = zipCode > 999 && zipCode < 10000;
+            }
         }
         
     

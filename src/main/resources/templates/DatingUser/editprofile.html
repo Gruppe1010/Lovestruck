@@ -168,9 +168,10 @@
                             <!--profil billede -->
                             <div class="profilepicturecontainer">
                                 <div class="profilepicture"> <!--TIL: profilePicture -->
+                                    <img alt="" class="profilepictureimage" th:src="'data:image/jpeg;base64,' + ${editDatingUser.getBase64()}">
+                                    <!--<img src="https://i.imgur.com/66Dq0AJ.png" alt="" class="profilepictureimage">-->
 
-                                    <img src="https://i.imgur.com/66Dq0AJ.png" alt="" class="profilepictureimage">
-                                    <!-- <span th:src="@{loggedInUser.getImagePath()}"></span>
+                                    <!--
                                     <form action="/action_page.php">
                                         <label for="profilepicture">Tilføj profilbillede</label>
                                         <input type="file" id="profilepicture" name="imageinput" accept="image/*"><br><br>
