@@ -5,7 +5,11 @@ import com.dating.models.users.DatingUser;
 import com.dating.repositories.UserRepository;
 import com.dating.viewModels.datingUser.EditDatingUser;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.sql.Blob;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class UserService
@@ -149,33 +153,41 @@ public class UserService
     
     
     /////////// editDatingUser
-    public boolean checkForProfileAlterations(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
+    public boolean checkForProfileAlterations(MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
+                                              EditDatingUser editDatingUser)
     {
         boolean wasProfileAltered = false;
     
-        // TODO måske metode
-        int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
-        String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
-        String emailInput = dataFromEditProfileForm.getParameter("emailinput");
-        int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
-        int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
-        String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
-        String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
-        String imagePath = dataFromEditProfileForm.getParameter("imagepathinput");
-        String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
-        String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
-        
-        if(!(interestedInInput == editDatingUser.getInterestedIn()) ||
-           !(Objects.equals(usernameInput, editDatingUser.getUsername())) ||
-           !(Objects.equals(emailInput, editDatingUser.getEmail())) ||
-           !(ageInput == editDatingUser.getAge()) ||
-           !(zipCodeInput == editDatingUser.getZipCode()) ||
-           !(Objects.equals(passwordInput, editDatingUser.getPassword())) ||
-           !(Objects.equals(confirmPasswordInput, editDatingUser.getConfirmPassword())) ||
-           !(Objects.equals(descriptionInput, editDatingUser.getDescription())) ||
-           !(Objects.equals(tagsListInput, editDatingUser.getTagsList())))
+        try
         {
-            wasProfileAltered = true;
+            // TODO måske metode
+            int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
+            String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
+            String emailInput = dataFromEditProfileForm.getParameter("emailinput");
+            int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
+            int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
+            String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
+            String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
+            String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
+            String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
+            
+            if(!(interestedInInput == editDatingUser.getInterestedIn()) ||
+               !(Objects.equals(usernameInput, editDatingUser.getUsername())) ||
+               !(Objects.equals(emailInput, editDatingUser.getEmail())) ||
+               !(ageInput == editDatingUser.getAge()) ||
+               !(Arrays.equals(profilePictureFile.getBytes(), editDatingUser.getProfilePictureBytes())) ||
+               !(zipCodeInput == editDatingUser.getZipCode()) ||
+               !(Objects.equals(passwordInput, editDatingUser.getPassword())) ||
+               !(Objects.equals(confirmPasswordInput, editDatingUser.getConfirmPassword())) ||
+               !(Objects.equals(descriptionInput, editDatingUser.getDescription())) ||
+               !(Objects.equals(tagsListInput, editDatingUser.getTagsList())))
+            {
+                wasProfileAltered = true;
+            }
+        }
+        catch(IOException e)
+        {
+            System.out.println("Error in checkForProfileAlterations: " + e.getMessage());
         }
       
         return wasProfileAltered;
@@ -217,8 +229,20 @@ public class UserService
         return isEmailAvailable && isUsernameAvailable && doesPasswordInputsMatch;
     }
     
-    public EditDatingUser updateEditDatingUser(WebRequest dataFromEditProfileForm, String oldUsername, String oldEmail)
+    public EditDatingUser updateEditDatingUser(MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
+                                               String oldUsername, String oldEmail)
     {
+        byte[] profilePictureBytes = new byte[0];
+    
+        try
+        {
+            profilePictureBytes = profilePictureFile.getBytes();
+        }
+        catch(IOException e)
+        {
+            System.out.println("Error in updateEditDatingUser: " + e.getMessage());
+        }
+        
         
         // TODO: find ud af om alle de der linjer kan lægges ud i en metode for sig
         int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
@@ -228,7 +252,6 @@ public class UserService
         int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
         String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
         String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
-        // TODO private String imagePath;
         String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
         String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
     
@@ -244,9 +267,8 @@ public class UserService
         }
         
             return new EditDatingUser(interestedInInput, usernameInput, emailInput, ageInput, zipCodeInput, passwordInput,
-                confirmPasswordInput, descriptionInput, tagsListInput);
+                confirmPasswordInput, profilePictureBytes,descriptionInput, tagsListInput);
     }
-    
     
     
     

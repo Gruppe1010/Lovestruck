@@ -21,7 +21,7 @@ public class DatingApplication
         SpringApplication.run(DatingApplication.class, args);
         UserRepository us = new UserRepository();
         //us.writePictureToDb(6);
-        //us.readPictureFromDb(6,"testpicture2.jpg");
+        us.readPictureFromDb(14,"testpicture2.jpg");
         
     }
     

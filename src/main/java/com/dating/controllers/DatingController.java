@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 
@@ -293,10 +294,12 @@ public class DatingController
     }
     
     @PostMapping("/postEditProfile")
-    public String postEditProfile(WebRequest dataFromEditProfileForm, Model editDatingUserModel)
+    public String postEditProfile(@RequestParam("profilepictureinput") MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
+                                  Model editDatingUserModel)
     {
         // tjekker om brugeren har indtastet ny info
-        boolean userAddedChanges = userService.checkForProfileAlterations(dataFromEditProfileForm, editDatingUser);
+        boolean userAddedChanges = userService.checkForProfileAlterations(profilePictureFile, dataFromEditProfileForm,
+                editDatingUser);
     
         // hvis bruger har indtastet ny info
         if(userAddedChanges)
@@ -317,7 +320,7 @@ public class DatingController
         
         // Hvis INGEN ny info ELLER hvis usernameEmailPassword er invalid
         // editDatingUser opdateres fordi viewet skal vise det brugeren skrev ind!!!!!!!!!!!!!!!!
-        editDatingUser = userService.updateEditDatingUser(dataFromEditProfileForm,
+        editDatingUser = userService.updateEditDatingUser(profilePictureFile, dataFromEditProfileForm,
                 loggedInDatingUser.getUsername(),
                 loggedInDatingUser.getEmail());
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
@@ -330,6 +333,7 @@ public class DatingController
     @PostMapping("/postEditProfileAdmin")
     public String postEditProfileAdmin(WebRequest dataFromEditProfileForm, Model editDatingUserModel)
     {
+        /*
         // tjekker om brugeren har indtastet ny info
         boolean userAddedChanges = userService.checkForProfileAlterations(dataFromEditProfileForm, editDatingUser);
         
@@ -357,9 +361,10 @@ public class DatingController
                 loggedInDatingUser.getEmail());
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
         
-        return "DatingUser/editprofile"; // html
+         */
+        
+        return "Admin/editprofileadmin"; // html
     }
-    
     
     //------------------ ANDRE METODER -------------------//
     

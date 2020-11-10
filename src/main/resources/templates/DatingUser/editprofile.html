@@ -55,7 +55,7 @@
                 <div class="col">
                     <!-- Dette er en form
                     Vi laver @PostMapping("/createUser") i Controlleren for at lave et endpoint - pga. denne form -->
-                    <form id="editprofileform" action="/postEditProfile" method="post">
+                    <form id="editprofileform" action="/postEditProfile" method="post" enctype="multipart/form-data">
                         <h3 class="formheadline">Rediger din profil</h3>
 
                         <!--<input> Laver input-felt
@@ -184,7 +184,7 @@
 
                                 <!--browse filer -->
                                 <label class="browsefiles">Vælg en billede fil
-                                    <input type="file" accept="image/*" name="imagepathinput"/>
+                                    <input type="file" accept="image/*" name="profilepictureinput"/>
                                 </label>
 
                             </div>

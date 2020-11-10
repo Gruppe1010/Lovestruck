@@ -13,6 +13,7 @@ public class PreviewDatingUser
     private InputStream imagePath;   // TODO: skal det være noget andet end inputstream??
     private String username;
     private int age;
+    // private String
     
     // Constructor
     public PreviewDatingUser(){}

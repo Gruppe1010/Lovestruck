@@ -15,12 +15,14 @@ public class EditDatingUser
     private int zipCode;
     private String password;
     private String confirmPassword;
+    private byte[] profilePictureBytes;
     // TODO private String imagePath;
     private String description;
     private String tagsList;
     
     // constructor
-    public EditDatingUser(int interestedIn, String username, String email, int age, int zipCode, String password, String confirmPassword, String description, String tagsList)
+    public EditDatingUser(int interestedIn, String username, String email, int age, int zipCode, String password,
+                          String confirmPassword, byte[] profilePictureBytes, String description, String tagsList)
     {
         this.interestedIn = interestedIn;
         this.username = username;
@@ -29,6 +31,7 @@ public class EditDatingUser
         this.zipCode = zipCode;
         this.password = password;
         this.confirmPassword = confirmPassword;
+        this.profilePictureBytes = profilePictureBytes;
         this.description = description;
         this.tagsList = tagsList;
     }
@@ -85,6 +88,14 @@ public class EditDatingUser
     public String getConfirmPassword()
     {
         return confirmPassword;
+    }
+    public byte[] getProfilePictureBytes()
+    {
+        return profilePictureBytes;
+    }
+    public void setProfilePictureBytes(byte[] profilePictureBytes)
+    {
+        this.profilePictureBytes = profilePictureBytes;
     }
     public void setConfirmPassword(String confirmPassword)
     {

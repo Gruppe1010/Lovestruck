@@ -3,7 +3,11 @@ package com.dating.models.users;
 import com.dating.models.PostalInfo;
 import com.dating.viewModels.datingUser.EditDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,7 +20,7 @@ public class DatingUser extends User
     private boolean sex; // false == mænd, true == kvinder
     private int interestedIn; // 0 == mænd, 1 == kvinder, 2 == begge køn
     private int age;
-    private String imagePath;
+    private byte[] profilePictureBytes;
     private String description;
     private ArrayList<String> tagsList;
     private PostalInfo postalInfo;
@@ -32,7 +36,7 @@ public class DatingUser extends User
         this.interestedIn = interestedIn;
         this.age = age;
         // sættes til standard-billede
-        imagePath = "src/main/resources/static/image/profilepictures/genericProfileImage.png";
+        profilePictureBytes = createGenericProfilePictureBytes();
         description = null;
         tagsList = null;
         postalInfo = null;
@@ -80,13 +84,13 @@ public class DatingUser extends User
     {
         this.age = age;
     }
-    public String getImagePath()
+    public byte[] getProfilePictureBytes()
     {
-        return imagePath;
+        return profilePictureBytes;
     }
-    public void setImagePath(String imagePath)
+    public void setProfilePictureBytes(byte[] profilePictureBytes)
     {
-        this.imagePath = imagePath;
+        this.profilePictureBytes = profilePictureBytes;
     }
     public String getDescription()
     {
@@ -278,7 +282,7 @@ public class DatingUser extends User
         }
         
         return new EditDatingUser(interestedIn, super.getUsername(), super.getEmail(), age, zipCode,
-                "", "", description, tagsListString);
+                "", "", profilePictureBytes, description, tagsListString);
     }
     
     // TODO lav denne
@@ -329,6 +333,26 @@ public class DatingUser extends User
             return "Kvinde";
         }
         return "Mand";
+    }
+    
+    public byte[] createGenericProfilePictureBytes()
+    {
+        byte[] genericProfilePictureBytes = new byte[0];
+        
+        try
+        {
+            File genericProfilePictureFile = new File("src\\main\\resources\\static\\image\\profilepictures" +
+                                                              "\\genericProfileImage.png");
+    
+    
+            genericProfilePictureBytes = Files.readAllBytes(genericProfilePictureFile.toPath());
+        }
+        catch(IOException e)
+        {
+            System.out.println("Error in createGenericProfilePictureBytes: " + e.getMessage());
+        }
+        
+        return genericProfilePictureBytes;
     }
     
 }

@@ -7,6 +7,7 @@ import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.sql.rowset.serial.SerialBlob;
 import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
@@ -72,13 +73,13 @@ public class UserRepository
 
         try {
             PreparedStatement preparedStatement = lovestruckConnection.prepareStatement
-                                   ("SELECT profilepicture FROM dating_users WHERE id_dating_user = ?");
+                                   ("SELECT profile_picture FROM dating_users WHERE id_dating_user = ?");
 
             preparedStatement.setInt(1, idDatingUser);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            File file = new File("C:\\Users\\rasmu\\IdeaProjects\\Lovestruck\\src\\main\\resources\\static\\image\\profilepictures\\" +fileName);
+            File file = new File("src\\main\\resources\\static\\image\\profilepictures\\" +fileName);
 
             FileOutputStream outputStream = new FileOutputStream(file);
 
@@ -88,7 +89,7 @@ public class UserRepository
 
             while (resultSet.next())
             {
-                InputStream inputStream = resultSet.getBinaryStream("profilepicture");
+                InputStream inputStream = resultSet.getBinaryStream("profile_picture");
                 byte[] buffer = new byte[128];
                 while (inputStream.read(buffer) > 0)
                 {
@@ -118,9 +119,9 @@ public class UserRepository
         lovestruckConnection = establishConnection("lovestruck");
         try
         {
-            InputStream inputStream = new FileInputStream(datingUser.getImagePath());
+            Blob profilePicture = new SerialBlob(datingUser.getProfilePictureBytes());
             
-            // TODO: tilføj: image_path som kolonne i database - og så tilføj den sqlCommanden her
+         
             String sqlCommand = "INSERT into dating_users(blacklisted, sex, interested_in, profile_picture, age, " +
                                         "username, " +
                                         "email, " +
@@ -133,7 +134,7 @@ public class UserRepository
             preparedStatement.setInt(1, datingUser.convertBooleanToInt(datingUser.isBlacklisted()));
             preparedStatement.setInt(2, datingUser.convertBooleanToInt(datingUser.getSex()));
             preparedStatement.setInt(3, datingUser.getInterestedIn());
-            preparedStatement.setBlob(4, inputStream);
+            preparedStatement.setBlob(4, profilePicture);
             preparedStatement.setInt(5, datingUser.getAge());
             preparedStatement.setString(6, datingUser.getUsername());
             preparedStatement.setString(7, datingUser.getEmail());
@@ -318,7 +319,6 @@ public class UserRepository
         
         return emailIsAvailable;
     }
-    
     
     /**
      * Tjekker om bruger som prøver på at logge ind findes i enten admins eller dating_users tabel i db
@@ -720,6 +720,9 @@ public class UserRepository
         {
             if(resultSet.next())
             {
+                Blob profilePictureBlob = resultSet.getBlob(9);
+                byte[] profilePictureBytes = profilePictureBlob.getBytes(1, (int) profilePictureBlob.length());
+                
                 datingUser.setIdDatingUser(resultSet.getInt(1));
                 datingUser.setBlacklisted(datingUser.convertIntToBoolean(resultSet.getInt(2)));
                 datingUser.setUsername(resultSet.getString(3));
@@ -728,8 +731,7 @@ public class UserRepository
                 datingUser.setAge(resultSet.getInt(6));
                 datingUser.setSex(datingUser.convertIntToBoolean(resultSet.getInt(7)));
                 datingUser.setInterestedIn(resultSet.getInt(8));
-                // TODO: FIKS TIL AT DEN HENTER BILLEDE FRA DB
-                datingUser.setImagePath("src/main/resources/static/image/profilepictures/genericProfileImage.png");
+                datingUser.setProfilePictureBytes(profilePictureBytes);
                 datingUser.setDescription(resultSet.getString(10));
                 datingUser.setTagsList(datingUser.convertStringToTagsList(resultSet.getString(11)));
                 datingUser.setPostalInfo(findPostalInfoObjectFromIdPostalInfo(resultSet.getInt(12)));
