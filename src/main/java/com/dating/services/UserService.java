@@ -1,23 +1,20 @@
 package com.dating.services;
 
-import com.dating.models.PostalInfo;
 import com.dating.models.users.DatingUser;
+import com.dating.models.users.FormDatingUser;
 import com.dating.repositories.UserRepository;
 import com.dating.viewModels.datingUser.EditDatingUser;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Blob;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class UserService
 {
     UserRepository userRepository = new UserRepository();
+    FormDatingUser input = new FormDatingUser();
     
     ///////////  metoder
     /**
@@ -44,6 +41,7 @@ public class UserService
     public static int convertInterestedInStringToInt(String interestedInInput)
     {
         int interestedIn = -1;
+        
         if(interestedInInput.equals("males"))
         {
             interestedIn = 0;
@@ -74,10 +72,46 @@ public class UserService
     {
         try
         {
-            // HVIS der er nye billedeinput
-            if(!(profilePictureFile.getBytes().equals(loggedInDatingUser.getProfilePictureBytes())))
+            // TODO: RYKKET UD
+            setInput(dataFromEditProfileForm);
+            
+            /*
+            int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
+            String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
+            String emailInput = dataFromEditProfileForm.getParameter("emailinput");
+            int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
+            String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
+            String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
+            String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
+        
+            // zipCodeInput
+            int zipCodeInput = 0;
+            String zipCodeInputString = dataFromEditProfileForm.getParameter("zipcodeinput");
+            if(!(zipCodeInputString.equals("")))
             {
-                // SÅ opdaterer den profilePictureBytes-attributten på loggedInDatingUser
+                zipCodeInput = Integer.parseInt(zipCodeInputString);
+            }
+            
+             */
+            // setter de attributter som en bruger SKAL have
+            loggedInDatingUser.setInterestedIn(input.getInterestedIn());
+            loggedInDatingUser.setUsername(input.getUsername());
+            loggedInDatingUser.setEmail(input.getEmail());
+            loggedInDatingUser.setAge(input.getAge());
+            // setter de andre
+            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(input.getZipCode()));
+            loggedInDatingUser.setDescription(input.getDescription());
+            loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsList(input.getTagsList()));
+            
+            // opdaterer KUN password hvis nyt passwordInput - fordi ellers stilles det til ""
+            if(input.getPassword()!=null)//!(input.getPassword().equals("")))
+            {
+                loggedInDatingUser.setPassword(input.getPassword());
+            }
+            
+            // Hvis NYT billedeinput
+            if(!(Arrays.equals(profilePictureFile.getBytes(), loggedInDatingUser.getProfilePictureBytes())))
+            {
                 loggedInDatingUser.setProfilePictureBytes(profilePictureFile.getBytes());
             }
         }
@@ -85,72 +119,6 @@ public class UserService
         {
             System.out.println("Error in updateLoggedInDatingUser: " + e.getMessage());
         }
-    
-        // zipCodeInput fra form - kommer ud fra form i String
-        String zipCodeInputString = dataFromEditProfileForm.getParameter("zipcodeinput");
-        
-        // zipCodeInput som vi bruger til at opdatere loggedInDatingUser-obj. med
-        int zipCodeInput = 0;
-        
-        // hvis der ER input i feltet
-        if(!(zipCodeInputString.equals("")))
-        {
-            // parse inputtet til int
-            zipCodeInput = Integer.parseInt(zipCodeInputString);
-            // hvis inputtet IKKE er det samme som det der er gemt på loggedInDatingUser
-            if(zipCodeInput!=loggedInDatingUser.getPostalInfo().getZipCode())
-            {
-                // opdater zipCode på DatingUser-obj.
-                loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput));
-            }
-        }
-        // hvis der IKKE er input i feltet
-        else // if((zipCodeInputString.equals("")))
-        {
-            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput));
-        }
-        
-        
-        // TODO: overvej at rykke linjer ud i metode
-        // de attributter som en bruger SKAL have
-        int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
-        String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
-        String emailInput = dataFromEditProfileForm.getParameter("emailinput");
-        int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
-        
-        // de attributter som en bruge kan UNDLADE
-        String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
-        String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
-        String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
-        
-        // setter de attributter som en bruger SKAL have
-        loggedInDatingUser.setInterestedIn(interestedInInput);
-        loggedInDatingUser.setUsername(usernameInput);
-        loggedInDatingUser.setEmail(emailInput);
-        loggedInDatingUser.setAge(ageInput);
-      
-   
-    
-        // opdaterer KUN password hvis nyt passwordInput - fordi ellers stilles det til ""
-        if(!(passwordInput.equals("")))
-        {
-            loggedInDatingUser.setPassword(passwordInput);
-        }
-        
-        if(descriptionInput != null) // hvis der er description
-        {
-            loggedInDatingUser.setDescription(descriptionInput);
-        }
-    
-        // opdaterer kun tags, hvis input
-        // TODO: Er dette overhovedet nødvendig? Fordi hvis der ikke er noget input, kan det vel bare blive sat til ""?
-        if(tagsListInput != null)
-        {
-            loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsList(tagsListInput));
-        }
-      
-        
-        
         
         return loggedInDatingUser;
     }
@@ -201,37 +169,38 @@ public class UserService
     
         try
         {
+            // TODO METODE TILFØJET
+            setInput(dataFromEditProfileForm);
+    
+            /*
             int zipCodeInput = editDatingUser.getZipCode();
-    
-    
+            
             String zipCodeInputString = dataFromEditProfileForm.getParameter("zipcodeinput");
             if(!(zipCodeInputString.equals("")))
             {
                 zipCodeInput = Integer.parseInt(zipCodeInputString);
             }
             
-            
-            // TODO måske metode
             int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
             String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
             String emailInput = dataFromEditProfileForm.getParameter("emailinput");
             int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
-       
             String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
             String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
             String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
             String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
             
-            if(!(interestedInInput == editDatingUser.getInterestedIn()) ||
-               !(Objects.equals(usernameInput, editDatingUser.getUsername())) ||
-               !(Objects.equals(emailInput, editDatingUser.getEmail())) ||
-               !(ageInput == editDatingUser.getAge()) ||
+             */
+            if(!(input.getInterestedIn() == editDatingUser.getInterestedIn()) ||
+               !(Objects.equals(input.getUsername(), editDatingUser.getUsername())) ||
+               !(Objects.equals(input.getEmail(), editDatingUser.getEmail())) ||
+               !(input.getAge() == editDatingUser.getAge()) ||
                !(Arrays.equals(profilePictureFile.getBytes(), editDatingUser.getProfilePictureBytes())) ||
-               !(zipCodeInput == editDatingUser.getZipCode()) ||
-               !(Objects.equals(passwordInput, editDatingUser.getPassword())) ||
-               !(Objects.equals(confirmPasswordInput, editDatingUser.getConfirmPassword())) ||
-               !(Objects.equals(descriptionInput, editDatingUser.getDescription())) ||
-               !(Objects.equals(tagsListInput, editDatingUser.getTagsList())))
+               !(input.getZipCode() == editDatingUser.getZipCode()) ||
+               !(Objects.equals(input.getPassword(), editDatingUser.getPassword())) ||
+               !(Objects.equals(input.getConfirmPassword(), editDatingUser.getConfirmPassword())) ||
+               !(Objects.equals(input.getDescription(), editDatingUser.getDescription())) ||
+               !(Objects.equals(input.getTagsList(), editDatingUser.getTagsList())))
             {
                 wasProfileAltered = true;
             }
@@ -283,44 +252,102 @@ public class UserService
     public EditDatingUser updateEditDatingUser(MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
                                                String oldUsername, String oldEmail)
     {
-        byte[] profilePictureBytes = new byte[0];
-    
+        EditDatingUser editDatingUser = null;
         try
         {
-            profilePictureBytes = profilePictureFile.getBytes();
+            byte[] profilePictureBytes = profilePictureFile.getBytes();
+            
+            // TODO METODE TILFØJET
+            setInput(dataFromEditProfileForm);
+            /*
+            int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
+            String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
+            String emailInput = dataFromEditProfileForm.getParameter("emailinput");
+            int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
+            int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
+            String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
+            String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
+            String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
+            String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
+            */
+            
+            // hvis nyt usernameInput IKKE er available
+            if(!(userRepository.isUsernameAvailable(input.getUsername())))
+            {
+                input.setUsername(oldUsername);
+            }
+    
+            if(!(userRepository.isEmailAvailable(input.getEmail())))
+            {
+                input.setEmail(oldEmail);
+            }
+    
+            editDatingUser = new EditDatingUser(input.getInterestedIn(), input.getUsername(), input.getEmail(),
+                    input.getAge(), input.getZipCode(), input.getPassword(), input.getConfirmPassword(),
+                    profilePictureBytes, input.getDescription(), input.getTagsList());
+            
         }
         catch(IOException e)
         {
             System.out.println("Error in updateEditDatingUser: " + e.getMessage());
         }
         
-        
-        // TODO: find ud af om alle de der linjer kan lægges ud i en metode for sig
-        int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
-        String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
-        String emailInput = dataFromEditProfileForm.getParameter("emailinput");
-        int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
-        int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
-        String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
-        String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
-        String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
-        String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
-    
-        // hvis nyt usernameInput IKKE er available
-        if(!(userRepository.isUsernameAvailable(usernameInput)))
-        {
-            usernameInput = oldUsername;
-        }
-    
-        if(!(userRepository.isEmailAvailable(emailInput)))
-        {
-            emailInput = oldEmail;
-        }
-        
-            return new EditDatingUser(interestedInInput, usernameInput, emailInput, ageInput, zipCodeInput, passwordInput,
-                confirmPasswordInput, profilePictureBytes,descriptionInput, tagsListInput);
+        return editDatingUser;
     }
     
+    
+    public void setInput(WebRequest form)
+    {
+        input.setInterestedIn(convertInterestedInStringToInt(form.getParameter("interestedininput")));
+        input.setUsername(form.getParameter("usernameinput"));
+        input.setEmail(form.getParameter("emailinput"));
+        input.setAge(Integer.parseInt(form.getParameter("ageinput")));
+        input.setPassword(form.getParameter("passwordinput"));
+        input.setPassword(form.getParameter("confirmpasswordinput"));
+        input.setDescription(form.getParameter("descriptioninput"));
+        input.setTagsList(form.getParameter("tagslistinput"));
+    
+        int zipCodeInput = 0;
+        String zipCodeInputString = form.getParameter("zipcodeinput");
+        if(!(zipCodeInputString.equals("")))
+        {
+            zipCodeInput = Integer.parseInt(zipCodeInputString);
+        }
+    
+        input.setZipCode(zipCodeInput);
+    }
+    
+    
+    
+    /*
+    public int findZipCodeInput(String zipCodeInputString, DatingUser loggedInDatingUser)
+    {
+        // zipCodeInput zipCode som loggedInDatingUser opdateres med - sæt til 0 som "intet input default"
+        int zipCodeInput = 0;
+    
+        // zipCodeInput fra form - kommer ud fra form i String
+    
+    
+        // hvis der ER input i feltet
+        if(!(zipCodeInputString.equals("")))
+        {
+            // parse inputtet til int
+            zipCodeInput = Integer.parseInt(zipCodeInputString);
+        
+            // hvis inputtet IKKE er det samme som det der er gemt på loggedInDatingUser
+            if(zipCodeInput!=loggedInDatingUser.getPostalInfo().getZipCode())
+            {
+                // opdater zipCode på DatingUser-obj.
+            }
+        }
+        // hvis der IKKE er input i feltet
+        else // if((zipCodeInputString.equals("")))
+        {
+            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput));
+        }
+    }
+    
+     */
     
     
 }

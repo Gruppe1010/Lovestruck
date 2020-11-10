@@ -45,6 +45,8 @@ public class UserRepository
         return connection;
     }
 
+    // billedemetoderne
+    /*
     public void writePictureToDb(int idDatingUser)
     {
         lovestruckConnection = establishConnection("lovestruck");
@@ -67,7 +69,6 @@ public class UserRepository
             System.out.println("Error in writePictureToDb: " + e.getMessage());
         }
     }
-
     public void readPictureFromDb(int idDatingUser, String fileName)
     {
         lovestruckConnection = establishConnection("lovestruck");
@@ -106,28 +107,28 @@ public class UserRepository
 
     }
     
+     */
+    
+    
     /**
      * Tilføjer DatingUser-objekt til dating_users-tabellen i db
      * OG sætter dets id-attribut
      * OG opretter ny favourites_list-tabel i db knyttet til brugeren
      *
-     * @param datingUser
-     *
-     * @return boolean Om det lykkedes eller ej
+     * @param datingUser DatingUser-obj. som skal tilføjes til db
      */
-    public boolean addDatingUserToDb(DatingUser datingUser)
+    public void addDatingUserToDb(DatingUser datingUser)
     {
         lovestruckConnection = establishConnection("lovestruck");
         try
         {
             Blob profilePicture = new SerialBlob(datingUser.getProfilePictureBytes());
+            int idPostalInfo = findIdPostalInfoFromPostalInfoObject(datingUser.getPostalInfo());
             
          
             String sqlCommand = "INSERT into dating_users(blacklisted, sex, interested_in, profile_picture, age, " +
-                                        "username, " +
-                                        "email, " +
-                    "password) " +
-                    "values (?,?,?,?,?,?,?,?);";
+                                        "username, email, password, id_postal_info) " +
+                    "values (?,?,?,?,?,?,?,?,?);";
             
             // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
             PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
@@ -140,6 +141,7 @@ public class UserRepository
             preparedStatement.setString(6, datingUser.getUsername());
             preparedStatement.setString(7, datingUser.getEmail());
             preparedStatement.setString(8, datingUser.getPassword());
+            preparedStatement.setInt(9, idPostalInfo);
             
             // user tilføjes til database
             preparedStatement.executeUpdate();
@@ -156,13 +158,10 @@ public class UserRepository
                 createFavouritesListTableDb(idDatingUser);
                 loggedInDatingUser = datingUser;
             }
-            
-            return true;
         }
         catch(Exception e)
         {
             System.out.println("Error in addDatingUserToDb: " + e.getMessage());
-            return false;
         }
     }
     
@@ -170,8 +169,6 @@ public class UserRepository
      * Opretter ny favourites_list tabel ud fra idDatingUser-int
      *
      * @param idDatingUser id'et som skal være i db-tabellens navn: fx favourites_list_3
-     *
-     * @return void
      */
     public void createFavouritesListTableDb(int idDatingUser)
     {
@@ -370,7 +367,6 @@ public class UserRepository
     
      */
     
-    
     public Admin checkIfUserExistsInAdminsTable(WebRequest dataFromLogInForm)
     {
         lovestruckConnection = establishConnection("lovestruck");
@@ -402,7 +398,6 @@ public class UserRepository
         
         return loggedInDatingUser;
     }
-    
     
     /**
      * Finder en user i valgfri tabel ud fra username og password
@@ -482,31 +477,17 @@ public class UserRepository
     }
     
     
-
+    // TODO HER
     public void updateLoggedInDatingUserInDb(DatingUser loggedInDatingUser)
     {
         lovestruckConnection = establishConnection("lovestruck");
-    
-        // TODO: FIX POSTNUMMER!!!!!!! Hvis man sletter sit postnummer, så skal den opdetere det i databasen UDEN AT
-        //  LAVE FEJL
-        int postalId = 1;
         
-        // hvis der ER et postalInfoObjekt på brugeren
-        if(loggedInDatingUser.getPostalInfo()!=null)
-        {
-            postalId = findIdPostalInfoFromPostalInfoObject(loggedInDatingUser.getPostalInfo());
-        }
-        else // hvis der IKKE ligger et postalInfo-obj. på loggedInDatingUser
-        {
-        
-        }
-        
-        
+        // sætter postalId
+        int idPostalInfo = findIdPostalInfoFromPostalInfoObject(loggedInDatingUser.getPostalInfo());
         String tagsListString = loggedInDatingUser.convertTagsListToString();
         
         try
         {
-            
             Blob profilePictureBlob = new SerialBlob(loggedInDatingUser.getProfilePictureBytes());
             
             // TODO: tilføj: image_path som kolonne i database - og så tilføj den sqlCommanden her
@@ -528,7 +509,7 @@ public class UserRepository
             preparedStatement.setString(2, loggedInDatingUser.getUsername());
             preparedStatement.setString(3, loggedInDatingUser.getEmail());
             preparedStatement.setInt(4, loggedInDatingUser.getAge());
-            preparedStatement.setInt(5, postalId);
+            preparedStatement.setInt(5, idPostalInfo);
             preparedStatement.setString(6, loggedInDatingUser.getPassword());
             preparedStatement.setString(7, loggedInDatingUser.getDescription());
             preparedStatement.setString(8, tagsListString);

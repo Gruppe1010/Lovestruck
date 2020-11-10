@@ -14,18 +14,15 @@ import java.util.ArrayList;
 @SpringBootApplication
 public class DatingApplication
 {
-
+    // 2560 == id_postal_info på NULL postInfo-obj. i db
     
     public static void main(String[] args)
     {
+        
         SpringApplication.run(DatingApplication.class, args);
         UserRepository us = new UserRepository();
         //us.writePictureToDb(6);
         // us.readPictureFromDb(14,"testpicture2.jpg");
-    
-        addPostalInfoToDatabase(new PostalInfo(0, ""), );
-        
-        
     }
     
     // TODO fjern evt.
@@ -1359,31 +1356,6 @@ public class DatingApplication
             
         }
         
-    }
-    
-    
-    private static void addPostnummer()
-    {
-        try
-        {
-            //Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/dummy_lovestruck","gruppe10","gruppe10");
-            System.out.println("TEST1");
-        
-            String sqlCommand = "INSERT into postal_info(zip_code, city) values (?,?);";
-        
-        
-            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlCommand);
-            preparedStatement.setInt(1, postalInfo.getZipCode());
-            preparedStatement.setString(2, postalInfo.getCity());
-            System.out.println(preparedStatement);
-            preparedStatement.executeUpdate();
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in addPostalInfoToDatabase: " + e.getMessage());
-        
-        }
     }
     
     

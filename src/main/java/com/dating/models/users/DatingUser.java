@@ -39,7 +39,7 @@ public class DatingUser extends User
         profilePictureBytes = createGenericProfilePictureBytes();
         description = null;
         tagsList = null;
-        postalInfo = null;
+        postalInfo = new PostalInfo(0,"");
         favouritesList = null;
     }
     
