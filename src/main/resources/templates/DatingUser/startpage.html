@@ -58,7 +58,7 @@
 
                     <a th:href="@{/viewProfile(id=${previewDatingUser.getId()})}">
                         <div class="previewdatinguserbox">
-                            <img class="previewdatinguserpicture" th:src="${previewDatingUser.getImagePath()}">
+                            <img class="previewdatinguserpicture" th:src="'data:image/jpeg;base64,' + ${previewDatingUser.getBase64()}">
                             <div class="previewdatinguserinfo">
                                 <div th:text="${previewDatingUser.getUsername()}"></div>
                                 <div th:text="${previewDatingUser.getAge()}"><p>&nbsp; år</p></div>

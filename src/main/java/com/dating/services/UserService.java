@@ -4,10 +4,13 @@ import com.dating.models.PostalInfo;
 import com.dating.models.users.DatingUser;
 import com.dating.repositories.UserRepository;
 import com.dating.viewModels.datingUser.EditDatingUser;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Blob;
 import java.util.Arrays;
 import java.util.Objects;
@@ -66,8 +69,23 @@ public class UserService
      *
      * @return DatingUser Det DatingUser-obj. fra param med opdateret data fra dataFromEditProfileForm
      * */
-    public DatingUser updateLoggedInDatingUser(WebRequest dataFromEditProfileForm, DatingUser loggedInDatingUser)
+    public DatingUser updateLoggedInDatingUser(MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
+                                               DatingUser loggedInDatingUser)
     {
+        try
+        {
+            // HVIS der er nye billedeinput
+            if(!(profilePictureFile.getBytes().equals(loggedInDatingUser.getProfilePictureBytes())))
+            {
+                // SÅ opdaterer den profilePictureBytes-attributten på loggedInDatingUser
+                loggedInDatingUser.setProfilePictureBytes(profilePictureFile.getBytes());
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Error in updateLoggedInDatingUser: " + e.getMessage());
+        }
+    
         // TODO: overvej at rykke linjer ud i metode
         // de attributter som en bruger SKAL have
         int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
@@ -78,7 +96,6 @@ public class UserService
         // de attributter som en bruge kan UNDLADE
         int zipCodeInput = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
         String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
-        // TODO private String imagePath;
         String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
         String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
         
@@ -87,6 +104,7 @@ public class UserService
         loggedInDatingUser.setUsername(usernameInput);
         loggedInDatingUser.setEmail(emailInput);
         loggedInDatingUser.setAge(ageInput);
+      
         
         if(zipCodeInput!=0) // hvis der er en zipCode
         {
@@ -110,6 +128,9 @@ public class UserService
         {
             loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsList(tagsListInput));
         }
+      
+        
+        
         
         return loggedInDatingUser;
     }

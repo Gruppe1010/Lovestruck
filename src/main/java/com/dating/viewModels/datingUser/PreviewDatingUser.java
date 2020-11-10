@@ -1,5 +1,7 @@
 package com.dating.viewModels.datingUser;
 
+import org.apache.tomcat.util.codec.binary.Base64;
+
 import java.io.InputStream;
 
 /**
@@ -10,19 +12,20 @@ import java.io.InputStream;
 public class PreviewDatingUser
 {
     private int id;
-    private InputStream imagePath;   // TODO: skal det være noget andet end inputstream??
+    private byte[] profilePictureBytes;
     private String username;
     private int age;
-    // private String
+    private String base64;
     
     // Constructor
     public PreviewDatingUser(){}
-    public PreviewDatingUser(int id, InputStream imagePath, String username, int age)
+    public PreviewDatingUser(int id, byte[] profilePictureBytes, String username, int age)
     {
         this.id = id;
-        this.imagePath = imagePath;
+        this.profilePictureBytes = profilePictureBytes;
         this.username = username;
         this.age = age;
+        this.base64 = byteArrayAs64String();
     }
     
     // getters + setters
@@ -34,13 +37,13 @@ public class PreviewDatingUser
     {
         this.id = id;
     }
-    public InputStream getImagePath()
+    public byte[] getProfilePictureBytes()
     {
-        return imagePath;
+        return profilePictureBytes;
     }
-    public void setImagePath(InputStream imagePath)
+    public void setProfilePictureBytes(byte[] profilePictureBytes)
     {
-        this.imagePath = imagePath;
+        this.profilePictureBytes = profilePictureBytes;
     }
     public String getUsername()
     {
@@ -57,5 +60,19 @@ public class PreviewDatingUser
     public void setAge(int age)
     {
         this.age = age;
+    }
+    public String getBase64()
+    {
+        return base64;
+    }
+    public void setBase64(String base64)
+    {
+        this.base64 = base64;
+    }
+    
+    // Andre metoder
+    private String byteArrayAs64String()
+    {
+        return Base64.encodeBase64String(this.profilePictureBytes);
     }
 }

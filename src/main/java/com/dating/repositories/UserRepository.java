@@ -6,6 +6,7 @@ import com.dating.models.users.DatingUser;
 import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
 import java.io.*;
@@ -491,6 +492,9 @@ public class UserRepository
         
         try
         {
+            
+            Blob profilePictureBlob = new SerialBlob(loggedInDatingUser.getProfilePictureBytes());
+            
             // TODO: tilføj: image_path som kolonne i database - og så tilføj den sqlCommanden her
             String sqlCommand = "UPDATE dating_users SET interested_in = ?, " +
                                         "username = ?, " +
@@ -499,7 +503,8 @@ public class UserRepository
                                         "id_postal_info = ?, " +
                                         "password = ?, " +
                                         "description = ?, " +
-                                        "tags = ? " +
+                                        "tags = ?, " +
+                                        "profile_picture = ?" +
                                         "WHERE id_dating_user = ?";
         
             // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
@@ -513,7 +518,8 @@ public class UserRepository
             preparedStatement.setString(6, loggedInDatingUser.getPassword());
             preparedStatement.setString(7, loggedInDatingUser.getDescription());
             preparedStatement.setString(8, tagsListString);
-            preparedStatement.setInt(9, loggedInDatingUser.getIdDatingUser());
+            preparedStatement.setBlob(9, profilePictureBlob);
+            preparedStatement.setInt(10, loggedInDatingUser.getIdDatingUser());
         
             // user tilføjes til database
             preparedStatement.executeUpdate();
@@ -694,8 +700,12 @@ public class UserRepository
         PreviewDatingUser previewDatingUser = null;
         try
         {
+            Blob profilePictureBlob = resultSet.getBlob(9);
+            byte[] profilePictureBytes = profilePictureBlob.getBytes(1, (int) profilePictureBlob.length());
+            
+            
             // TODO: skal det være noget andet end inputstream??
-            previewDatingUser = new PreviewDatingUser(resultSet.getInt(1), resultSet.getBinaryStream("profile_picture"),
+            previewDatingUser = new PreviewDatingUser(resultSet.getInt(1), profilePictureBytes,
                     resultSet.getString(3),
                     resultSet.getInt(6));
         }

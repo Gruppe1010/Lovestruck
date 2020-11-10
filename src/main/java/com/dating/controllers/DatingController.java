@@ -311,7 +311,9 @@ public class DatingController
             
             if(isUsernameEmailPasswordValid)
             {
-                loggedInDatingUser = userService.updateLoggedInDatingUser(dataFromEditProfileForm, loggedInDatingUser);
+                // vi opdaterer loggedInDatingUser til at indeholde de nye opdateringer
+                loggedInDatingUser = userService.updateLoggedInDatingUser(profilePictureFile, dataFromEditProfileForm,
+                        loggedInDatingUser);
                 userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
                 
                 return "redirect:/editProfileConfirmation"; // url
