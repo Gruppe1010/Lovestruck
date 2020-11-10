@@ -40,13 +40,14 @@
     display: inline-flex;
     padding-top:20px;
     margin: auto;
+    /*Denne laver linje skift ved for mange profiler på en linje*/
     flex-wrap: wrap;
 }
 
 .previewdatinguserbox
 {
     position: relative;
-    width: 283px;
+    width: 280px;
     height: 180px;
     background: rgba(255, 255, 255, 0.6);
     border: 2px solid;

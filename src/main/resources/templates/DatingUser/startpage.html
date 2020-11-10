@@ -54,14 +54,16 @@
             <p class="startpageheadline">Her kan du se de nyeste profiler. Måske finder du din favorit?</p>
             <div class="textbox-container">
 
-                <div class="previewdatinguserbox"
-                    th:each="previewDatingUser : ${previewDatingUsersList}">
-                        <img class="previewdatinguserpicture" th:src="${previewDatingUser.getImagePath()}">
-
-                    <div class="previewdatinguserinfo">
-                        <div th:text="${previewDatingUser.getUsername()}"></div>
-                        <div th:text="${previewDatingUser.getAge()}"><p>&nbsp; år</p></div>
-                    </div>
+                <div th:each="previewDatingUser : ${previewDatingUsersList}">
+                    <a href="/viewProfile">
+                        <div class="previewdatinguserbox">
+                            <img class="previewdatinguserpicture" th:src="${previewDatingUser.getImagePath()}">
+                            <div class="previewdatinguserinfo">
+                                <div th:text="${previewDatingUser.getUsername()}"></div>
+                                <div th:text="${previewDatingUser.getAge()}"><p>&nbsp; år</p></div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
 
             </div>
