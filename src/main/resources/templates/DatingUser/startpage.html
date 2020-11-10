@@ -55,7 +55,8 @@
             <div class="textbox-container">
 
                 <div th:each="previewDatingUser : ${previewDatingUsersList}">
-                    <a href="/viewProfile">
+
+                    <a th:href="@{/viewProfile(id=${previewDatingUser.getId()})}">
                         <div class="previewdatinguserbox">
                             <img class="previewdatinguserpicture" th:src="${previewDatingUser.getImagePath()}">
                             <div class="previewdatinguserinfo">

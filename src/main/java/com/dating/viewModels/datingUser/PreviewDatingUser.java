@@ -9,20 +9,30 @@ import java.io.InputStream;
  * */
 public class PreviewDatingUser
 {
+    private int id;
     private InputStream imagePath;   // TODO: skal det være noget andet end inputstream??
     private String username;
     private int age;
     
     // Constructor
     public PreviewDatingUser(){}
-    public PreviewDatingUser(InputStream imagePath, String username, int age)
+    public PreviewDatingUser(int id, InputStream imagePath, String username, int age)
     {
+        this.id = id;
         this.imagePath = imagePath;
         this.username = username;
         this.age = age;
     }
     
     // getters + setters
+    public int getId()
+    {
+        return id;
+    }
+    public void setId(int id)
+    {
+        this.id = id;
+    }
     public InputStream getImagePath()
     {
         return imagePath;

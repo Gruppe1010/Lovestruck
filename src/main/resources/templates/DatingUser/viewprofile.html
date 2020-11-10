@@ -39,7 +39,7 @@
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
             <span class="menubarheadline dropdown">
-                <span th:text="${viewProfileDatingUser.getUsername()}"></span>
+                <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
                     <a href="/viewMyProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
                     <a href="/editProfile" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
@@ -56,7 +56,8 @@
                     <!-- Dette er en form
                     Vi laver @PostMapping("/createUser") i Controlleren for at lave et endpoint - pga. denne form -->
                     <div class="editprofileform">
-                        <h3 class="formheadline" th:text="${viewProfileDatingUser.getUsername()}"></h3>
+
+                        <h3 class="viewprofileformheadline" th:text="${viewProfileDatingUser.getUsername()}"></h3>
                         <!--<input> Laver input-felt
                         type="text" == typen af input der tages imod i inputfeltet
                         id="brugernavn" == Et inputfelt SKAL have et id (man kan evt. tilføje styling på id'et i css)
@@ -81,38 +82,36 @@
 
                                 <!--postalInfo -->
                                 <!--? == hvis den er null regnes den ikke med-->
-                                <span>Postnummer: </span>
                                 <span id="zipcode"
-                                       th:text="${viewProfileDatingUser.getZipCodeAndCity()}"
-                                       class="color fontsize formlinestyling"> </span><br><br>
+                                      th:text="${viewProfileDatingUser.getZipCodeAndCity()}"
+                                      class="color fontsize formlinestyling"> </span><br><br>
 
                                 <!--description -->
                                 <!-- textarea virker ikke til input rows="4" cols="50"-->
-                                <span>Beskrivelse: </span>
+                                <!-- <span>Beskrivelse: </span>-->
                                 <span id="description"
-                                       th:text="${viewProfileDatingUser.getDescription()}"
+                                      th:text="${viewProfileDatingUser.getDescription()}"
                                       class="color fontsize descriptionbox"></span><br><br>
 
                                 <!--tags -->
                                 <!--TODO tilføj liste - noget med th: each something-->
-                                <span>Tags: </span>
+                                <!--<span>Tags: </span>-->
                                 <span type="text" id="tags"
-                                       th:text="${viewProfileDatingUser.getTags()}"
+                                      th:text="${viewProfileDatingUser.getTags()}"
                                       class="color fontsize tagsbox"></span><br><br>
 
-                                <!--TODO: tilføj lille favorit-symbol-->
-
                                 <button class="editprofilesubmit fontsize">Gør til favorit</button>
-
-                                <!--<input type="submit" value="Gør til favorit" class="editprofilesubmit fontsize">-->
-                            </div> <!--TIL: interestedIn, username, email, age, city -->
-
+                            </div>
                             <!--profilbillede -->
                             <div class="profilepicturecontainer">
                                 <div class="profilepicture"> <!--TIL: profilePicture -->
                                     <img src="https://i.imgur.com/66Dq0AJ.png" alt="" class="profilepictureimage">
                                 </div>
+
                             </div>
+
+
+
                         </div>
                     </div>
                 </div>
@@ -133,3 +132,7 @@
 </div>
 </body>
 </html>
+
+
+
+

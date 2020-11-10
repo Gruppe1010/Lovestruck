@@ -9,8 +9,7 @@ import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.ArrayList;
@@ -73,6 +72,8 @@ public class DatingController
     
         previewDatingUsersListModel.addAttribute("previewDatingUsersList", previewDatingUsersList);
         
+        //urlModel.addAttribute("baseurl", "/viewProfile");
+        
         return "DatingUser/startpage"; // html
     }
     
@@ -122,6 +123,22 @@ public class DatingController
         return "DatingUser/viewmyprofile";
     }
     
+    /*
+    @GetMapping("/viewProfile")
+    public String viewProfile(Model viewProfileDatingUserModel, Model loggedInDatingUserModel)
+    {
+        // Vi har sat klasse-variablen viewProfileDatingUser i vores RequestMapping(/viewProfile?{idViewDatingUser})
+        // (så variablen ER opdateret til at indeholde den profil vi skal vise)
+        
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+    
+        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        
+        return "DatingUser/viewprofile";
+    }
+    
+     */
+    
     @GetMapping("/editProfile")
     public String editProfile(Model editDatingUserModel)
     {
@@ -140,6 +157,20 @@ public class DatingController
         return "DatingUser/editprofileconfirmation"; // html
     }
     
+    //------------------ RequestMapping DatingUser -------------------//
+    
+    @RequestMapping("/viewProfile")
+    public String viewProfileIdDatingUser(@RequestParam int id, Model viewProfileDatingUserModel,
+                                          Model loggedInDatingUserModel)
+    {
+        viewProfileDatingUser = userRepository.findDatingUserInDbToView(id);
+        
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+     
+        return "DatingUser/viewprofile";
+    }
+    
     
     //------------------ GET ADMIN -------------------//
     
@@ -150,6 +181,8 @@ public class DatingController
         
         return "Admin/startpageadmin"; // html
     }
+    
+    
     
     /* TODO: probably slet denne
     @GetMapping("/chatPageAdmin")
