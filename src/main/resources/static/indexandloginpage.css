@@ -36,58 +36,5 @@ body
     padding-right: 5px;
 }
 
-/*
-.createuser
-{
-    position: relative;
-    display: inline;
-    float: left;
-    background-color: #FAD4E2;
-    border: 2px solid;
-    border-radius: 5px;
-    padding: 10px 20px;
-    text-decoration: none;
-    margin: 4px 2px;
-    cursor: pointer;
-}
-
- */
-/*
-a.createuser:link
-{
-    color: #333;
-    border-color: #333;
-    text-decoration: none;
-}
-a.createuser:hover
-{
-    background-color: #FA6CA0;
-}
-a.createuser:visited
-{
-    color: #333;
-}
-
- */
-
-
-/* DET VIRKER IKKE
-a.logInButton:link
-{
-    color: #333;
-    border-color: #333;
-    text-decoration: none;
-}
-a.logInButton:hover
-{
-    background-color: #FA6CA0;
-}
-a.logInButton:visited
-{
-    color: #333;
-}
-
- */
-
 
 

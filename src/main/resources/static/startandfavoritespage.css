@@ -69,3 +69,19 @@
     position: relative;
     display: inline-block;
 }
+
+a.previewdatinguserlink:link
+{
+    color: #333;
+    text-decoration: none;
+}
+
+a.previewdatinguserlink:visited
+{
+    color: #333;
+}
+
+a.previewdatinguserlink:hover
+{
+    color: #FA6CA0;
+}

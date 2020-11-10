@@ -8,8 +8,7 @@
     <meta name="description" content="Love struck - tænd gnisten"/>
 
     <!-- css-filer -->
-
-    <link href="/candidatepage.css" type="text/css" rel="stylesheet">
+    <link href="/startandfavoritespage.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
 
@@ -39,7 +38,7 @@
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
-            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
+            <span class="menubarheadline dropdown">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
                     <a href="/viewMyProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
@@ -51,9 +50,24 @@
         </div>
 
         <div class="content-container">
+            <h4 class="startpageheadline">Her finder du alle dine favoritter! <i class="fas fa-heart"></i></h4>
+            <div class="textbox-container">
 
+                <div th:each="previewDatingUser : ${FavouritsList}">
+
+                    <a class="previewdatinguserlink" th:href="@{/viewProfile(id=${previewDatingUser.getId()})}">
+                        <div class="previewdatinguserbox">
+                            <img class="previewdatinguserpicture" th:src="'data:image/jpeg;base64,' + ${previewDatingUser.getBase64()}">
+                            <div class="previewdatinguserinfo">
+                                <div th:text="${previewDatingUser.getUsername()}"></div>
+                                <div th:text="${previewDatingUser.getAge()}"><p>&nbsp; år</p></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
         </div>
-
     </div>
     <footer>
         <div>
@@ -69,3 +83,4 @@
 </div>
 </body>
 </html>
+

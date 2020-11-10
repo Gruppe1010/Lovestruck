@@ -8,7 +8,7 @@
     <meta name="description" content="Love struck - tænd gnisten"/>
 
     <!-- css-filer -->
-    <link href="/startpage.css" type="text/css" rel="stylesheet">
+    <link href="/startandfavoritespage.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
 
@@ -56,7 +56,7 @@
 
                 <div th:each="previewDatingUser : ${previewDatingUsersList}">
 
-                    <a th:href="@{/viewProfile(id=${previewDatingUser.getId()})}">
+                    <a class="previewdatinguserlink" th:href="@{/viewProfile(id=${previewDatingUser.getId()})}">
                         <div class="previewdatinguserbox">
                             <img class="previewdatinguserpicture" th:src="'data:image/jpeg;base64,' + ${previewDatingUser.getBase64()}">
                             <div class="previewdatinguserinfo">
