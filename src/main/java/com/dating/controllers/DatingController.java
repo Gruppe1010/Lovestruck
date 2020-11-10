@@ -307,9 +307,10 @@ public class DatingController
             // TODO NICE lav måske en errorPage som skriver hvilken fejl det er og skifter tilbage til
             //  editProfile-html'en
             // TODO: fix at den siger confirmationPage ved zipcode 0000 - ved ikkesisterende-zipcode
-            boolean isUsernameEmailPasswordValid = userService.checkUsernameEmailPassword(dataFromEditProfileForm, editDatingUser);
+            boolean isUsernameEmailPasswordZipCodeValid =
+                    userService.checkUsernameEmailPasswordZipCode(dataFromEditProfileForm, editDatingUser);
             
-            if(isUsernameEmailPasswordValid)
+            if(isUsernameEmailPasswordZipCodeValid)
             {
                 // vi opdaterer loggedInDatingUser til at indeholde de nye opdateringer
                 loggedInDatingUser = userService.updateLoggedInDatingUser(profilePictureFile, dataFromEditProfileForm,
