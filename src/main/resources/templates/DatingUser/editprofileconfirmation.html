@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title> Love Struck </title>
-    <!-- TODO evt. hvis vi vil have den til at redirecte til editProfile igen
-    <meta http-equiv = "refresh" content = "5; url = /editProfile"/> -->
+    <meta http-equiv = "refresh" content = "3; url = /viewMyProfile"/>
 
     <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
     <meta charset="utf-8"/>
@@ -51,15 +50,17 @@
             </span>
         </div>
 
-        <div class="row">
-            <!-- Kolonne til inputfelt -->
-            <div class="col">
-                <div id="form-container">
-                    <h3 class="formheadline"><br><br><br><i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"><br></i></h3>
-                    <h1 class="formheadline">Dine oplysninger er gemt<br></h1>
-                    <h3 class="formheadline">Du er nu totalt klar til at blive lovestruck!<br><br>
-                    <i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"></i>
-                    </h3>
+        <div id="editprofile-container">
+            <div class="row">
+                <!-- Kolonne til inputfelt -->
+                <div class="col">
+                    <div id="form-container">
+                        <h3 class="formheadline"><br><br><br><i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"><br></i></h3>
+                        <h1 class="formheadline">Dine oplysninger er gemt<br></h1>
+                        <h3 class="formheadline">Du er nu totalt klar til at blive lovestruck!<br><br>
+                        <i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"></i>
+                        </h3>
+                    </div>
                 </div>
             </div>
         </div>

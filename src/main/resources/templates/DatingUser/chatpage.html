@@ -50,11 +50,54 @@
             </span>
         </div>
 
-        <div class="content-container">
+    <div class="content-container font">
+        <div class="row">
+            <!-- Kolonne til inputfelt -->
+            <div class="col">
+                <div id="form-container">
 
+                    <form id="twit-form" action="/postTwit" method="post">
+                        <h5 class="twitformheadline">Make a twit</h5>
+
+                        <!-- Tekst til inputfeltet i browser -->
+                        <label for="author">Title</label>
+                        <!--
+                        <input> Laver input-felt
+                        type="text" == Siger hvilket input der tages imod i inputfeltet
+                        id="catfact" == Kalder bestemt styling vi har i css-filen
+                        name="catfact" == giver inputtet vi får ind referencenavnet, catfact -->
+                        <input type="text" id="author" name="authorinput" class="color"><br><br>
+                        <!-- Laver et inputfelt med boolsk værdi: enten er der trykket submit eller også er der ikke-->
+
+                        <label for="twit-text">Skriv besked</label>
+                        <!--
+                        <input> Laver input-felt
+                        type="text" == Siger hvilket input der tages imod i inputfeltet
+                        id="catfact" == Kalder bestemt styling vi har i css-filen
+                        name="catfact" == giver inputtet vi får ind referencenavnet, catfact -->
+                        <input type="text" id="twit-text" name="twittextinput" class="color"><br><br>
+                        <!-- Laver et inputfelt med boolsk værdi: enten er der trykket submit eller også er der ikke-->
+
+                        <input type="submit" value="Submit" class="submitbutton">
+                    </form>
+                </div>
+            </div>
+                <!-- Ny kolonne til den info jeg vil gerne vil vise - den som brugeren giver mig-->
+            <div class="col">
+                <div class="twitcontainer">
+                    <div class="postedtwits">
+                        <h5 class="twitsheadline">Chat</h5>
+                        <p th:each="twit : ${publicTwitList}" class="twit">
+                            <span th:text="${twit.getTwitTextWithCitation()}" class="twittext"></span><br>
+                            <span th:text="${twit.getAuthorWithAt()}" class="twitauthoranddate"> </span>
+                            <span th:text="${twit.getFormattedCreationDate()}" class="twitauthoranddate"> </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
+
     <footer>
         <div>
             <div class="floatright">
