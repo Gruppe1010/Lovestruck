@@ -44,6 +44,20 @@ public class UserRepository
         return connection;
     }
 
+    public void closeConnections()
+    {
+        try
+        {
+            lovestruckConnection.close();
+            favouriteslistConnection.close();
+        }
+        catch(SQLException throwables)
+        {
+            throwables.printStackTrace();
+        }
+
+    }
+
 
     /**
      * Tilføjer DatingUser-objekt til dating_users-tabellen i db
@@ -52,7 +66,7 @@ public class UserRepository
      *
      * @param datingUser DatingUser-obj. som skal tilføjes til db
      */
-    public void addDatingUserToDb(DatingUser datingUser) throws SQLException
+    public void addDatingUserToDb(DatingUser datingUser)
     {
         lovestruckConnection = establishConnection("lovestruck");
         try
@@ -80,7 +94,6 @@ public class UserRepository
             
             // user tilføjes til database
             preparedStatement.executeUpdate();
-            lovestruckConnection.close();
             
             // nu hvor user er blevet oprettet, tilføjer vi databasens genererede id_dating_user til datingUser-objektet
             int idDatingUser = retrieveDatingUserIdFromDb(datingUser);
@@ -95,7 +108,6 @@ public class UserRepository
                 loggedInDatingUser = datingUser;
             }
         }
-
         catch(Exception e)
         {
             System.out.println("Error in addDatingUserToDb: " + e.getMessage());
@@ -126,7 +138,6 @@ public class UserRepository
             preparedStatement.setInt(1, idDatingUser);
             
             preparedStatement.executeUpdate();
-            favouriteslistConnection.close();
         }
         catch(SQLException e)
         {
@@ -164,8 +175,6 @@ public class UserRepository
                 preparedStatement.setInt(2, idDatingUserToAdd);
         
                 preparedStatement.executeUpdate();
-                favouriteslistConnection.close();
-
         
             }
             catch(SQLException e)
@@ -197,7 +206,6 @@ public class UserRepository
             preparedStatement.setInt(2, datingUserToRemove.getIdDatingUser());
         
             preparedStatement.executeUpdate();
-            favouriteslistConnection.close();
         
         }
         catch(SQLException e)
@@ -237,7 +245,6 @@ public class UserRepository
             {
                 idDatingUser = resultSet.getInt(1);
             }
-            lovestruckConnection.close();
 
 
 
@@ -281,7 +288,6 @@ public class UserRepository
             {
                 usernameIsAvailable = false;
             }
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -321,7 +327,6 @@ public class UserRepository
             {
                 emailIsAvailable = false;
             }
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -403,7 +408,6 @@ public class UserRepository
                 loggedInAdmin.setEmail(resultSet.getString(4));
                 loggedInAdmin.setPassword(resultSet.getString(5));
             }
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -447,7 +451,6 @@ public class UserRepository
             preparedStatement.setString(2, dataFromLogInForm.getParameter("passwordinput"));
             
             resultSet = preparedStatement.executeQuery();
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -472,7 +475,6 @@ public class UserRepository
             preparedStatement.setInt(1, idDatingUser);
     
             resultSet = preparedStatement.executeQuery();
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -550,7 +552,6 @@ public class UserRepository
         
             // user tilføjes til database
             preparedStatement.executeUpdate();
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -589,7 +590,6 @@ public class UserRepository
             {
                 postalInfo = new PostalInfo(resultSet.getInt(2), resultSet.getString(3));
             }
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -608,10 +608,11 @@ public class UserRepository
      */
     public int findIdPostalInfoFromPostalInfoObject(PostalInfo postalInfo)
     {
-        lovestruckConnection = establishConnection("lovestruck");
-
         if(postalInfo != null)
         {
+
+            lovestruckConnection = establishConnection("lovestruck");
+
             int idPostalInfo = 0;
     
             try
@@ -629,7 +630,6 @@ public class UserRepository
                 {
                     idPostalInfo = resultSet.getInt(1);
                 }
-                lovestruckConnection.close();
             }
             catch(SQLException e)
             {
@@ -663,7 +663,6 @@ public class UserRepository
             {
                 postalInfo = new PostalInfo(resultSet.getInt(2), resultSet.getString(3));
             }
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -696,7 +695,6 @@ public class UserRepository
             {
                 doesZipCodeExitsInDb = true;
             }
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -737,7 +735,6 @@ public class UserRepository
                 PreviewDatingUser previewDatingUser = createPreviewDatingUserFromResultSet(resultSet);
                 datingUsersList.add(previewDatingUser);
             }
-            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -845,10 +842,8 @@ public class UserRepository
             preparedStatement.setInt(1, idDatingUser);
         
             resultSet = preparedStatement.executeQuery();
-            favouriteslistConnection.close();
         
         }
-
         catch(SQLException e)
         {
             System.out.println("Error in updateFavouritesListInDb: " + e.getMessage());

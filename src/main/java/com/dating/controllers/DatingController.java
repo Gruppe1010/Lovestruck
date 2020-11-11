@@ -59,6 +59,7 @@ public class DatingController
     {
         // TODO: slet måske denne metode - fordi måske giver det mest mening bare skrive koden her
         resetLoggedInUsers();
+        userRepository.closeConnections();
         
         return "logout"; // html
     }
@@ -427,7 +428,8 @@ public class DatingController
      *
      *
      * */
-    public void resetLoggedInUsers()
+    public void
+    resetLoggedInUsers()
     {
         loggedInAdmin = null;
         loggedInDatingUser = null;
