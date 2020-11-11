@@ -8,6 +8,8 @@
     <meta name="description" content="Love struck - tænd gnisten"/>
 
     <!-- css-filer -->
+
+    <link href="/startchatandfavouritespage.css" type="text/css" rel="stylesheet">
     <link href="/chatpage.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
@@ -35,8 +37,8 @@
         <div class="menubar">
             <!--for at style linkene skulle a have sin egen klasse-->
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/favouritesPage"><i class="fas fa-heart"></i> Favoritter</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
             <span class="menubarheadline dropdown">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
@@ -51,7 +53,9 @@
 
         <div class="content-container">
             <h4 class="startpageheadline">Her finder du alle dem du har chattet med!<i class="fas fa-heart"></i></h4>
+            <p class="startpageheadline">Måske skal I føre snakken videre?</p>
             <div class="textbox-container">
+
 
                 <div th:each="previewDatingUser : ${previewDatingUsersToShowOnChatPage}">
                     <a class="previewdatinguserlink" th:href="@{/viewChat(id=${previewDatingUser.getId()})}">

@@ -4,7 +4,8 @@
     border: 2px solid;
     border-radius: 5px;
     padding: 20px;
-    margin: 20px;
+    width: 950px;
+    margin: 20px auto 20px auto;
 }
 
 .startpageheadline
@@ -25,15 +26,6 @@
     padding-bottom: 20px;
 }
 
-.italic
-{
-    font-style: italic;
-}
-
-.font15
-{
-    font-size: 15px;
-}
 .textbox-container
 {
     position: relative;
@@ -52,7 +44,7 @@
     background: rgba(255, 255, 255, 0.6);
     border: 2px solid;
     border-radius: 5px;
-    margin: 10px;
+    margin: 11px;
 }
 
 .previewdatinguserpicture
@@ -85,3 +77,48 @@ a.previewdatinguserlink:hover
 {
     color: #FA6CA0;
 }
+
+/*---------------CHAT STYLING---------------*/
+
+/*Styling af selve textarea besked boksen*/
+.inputmessagebox
+{
+    position: relative;
+    width: 400px;
+    height: 250px;
+    background-color: #FAD4E2;
+    border: 2px solid #333;
+    border-radius: 5px;
+    line-height: 40px;
+    padding: 10px;
+}
+
+.inputmessage-container
+{
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px;
+}
+
+.message-container
+{
+    display: inline-block;
+    float: right;
+}
+
+.viewmessage
+{
+    position: relative;
+    float: right;
+    width: 400px;
+    height: 250px;
+    background-color: #FAD4E2;
+    border: 2px solid #333;
+    border-radius: 5px;
+    line-height: 40px;
+    padding: 10px;
+}
+
+

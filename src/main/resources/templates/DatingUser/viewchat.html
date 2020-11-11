@@ -9,6 +9,7 @@
 
     <!-- css-filer -->
 
+    <link href="/startchatandfavouritespage.css" type="text/css" rel="stylesheet">
     <link href="/chatpage.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
@@ -37,7 +38,7 @@
             <!--for at style linkene skulle a have sin egen klasse-->
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadline" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/favouritesPage"><i class="fas fa-heart"></i> Favoritter</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
             <span class="menubarheadline dropdown linkmenubarheadlinelogout">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
@@ -54,46 +55,60 @@
             <div class="row">
                 <!-- Kolonne til inputfelt -->
                 <div class="col">
-                    <div id="form-container">
+                    <div id="inputmessage-container">
 
-                        <form id="twit-form" action="/postTwit" method="post">
-                            <h5 class="twitformheadline">Skriv en besked</h5>
+                        <form id="inputmessage-form" action="/postMessage" method="post">
 
-                            <!-- Tekst til inputfeltet i browser -->
-                            <label for="author">Title</label>
-                            <!--
-                            <input> Laver input-felt
-                            type="text" == Siger hvilket input der tages imod i inputfeltet
-                            id="catfact" == Kalder bestemt styling vi har i css-filen
-                            name="catfact" == giver inputtet vi får ind referencenavnet, catfact -->
-                            <input type="text" id="author" name="authorinput" class="color"><br><br>
-                            <!-- Laver et inputfelt med boolsk værdi: enten er der trykket submit eller også er der ikke-->
+                            <textarea name="messageinput" class="color fontsize inputmessagebox" placeholder="Skriv din besked her"></textarea><br><br>
 
-                            <label for="twit-text">Skriv besked</label>
-                            <!--
-                            <input> Laver input-felt
-                            type="text" == Siger hvilket input der tages imod i inputfeltet
-                            id="catfact" == Kalder bestemt styling vi har i css-filen
-                            name="catfact" == giver inputtet vi får ind referencenavnet, catfact -->
-                            <input type="text" id="twit-text" name="twittextinput" class="color"><br><br>
-                            <!-- Laver et inputfelt med boolsk værdi: enten er der trykket submit eller også er der ikke-->
+                            <input type="submit" value="Send besked" class="submitmessagebutton">
 
-                            <input type="submit" value="Send besked" class="submitbutton">
                         </form>
                     </div>
                 </div>
-                <!-- Ny kolonne til den info jeg vil gerne vil vise - den som brugeren giver mig-->
+
+                <div class="col">
+                    <div class="message-container">
+
+                        <form id="message-form" action="/postMessage" method="post">
+
+
+                            <!--TODO indsæt rigtige messages. Stylingen i viewpmessage burde kunne overføres til dem.-->
+                            <div>
+                                <span id="messagefromdatinguser"
+                                      class="color fontsize viewmessage">Hej med dig. Hvordan går det?</span><br>
+                                <span>Dig</span><br><br>
+                            </div>
+
+                            <!--TODO indsæt rigtige messages. Stylingen i viewmessage burde kunne overføres til dem.-->
+                            <div>
+                                <span id="messagefromloggedinuser"
+                                      class="color fontsize viewmessage">Jo ser du, det går sku meget godt. Hvad med dig?</span><br>
+                                <span th:text="${viewProfileDatingUser.getUsername()}"></span><br><br>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+
+
+
+
+                <!-- GAMMEL TWIT VISER
                 <div class="col">
                     <div class="twitcontainer">
                         <div class="postedtwits">
                             <h5 class="twitsheadline">Chat</h5>
-                            <p th:each="twit : ${publicTwitList}" class="twit">
+                            <p th:each="message : ${publicTwitList}" class="twit">
                                 <span th:text="${twit.getTwitTextWithCitation()}" class="twittext"></span><br>
                                 <span th:text="${twit.getAuthorWithAt()}" class="twitauthoranddate"> </span>
                             </p>
                         </div>
                     </div>
                 </div>
+                -->
+
             </div>
         </div>
 
