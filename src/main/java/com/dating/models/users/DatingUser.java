@@ -328,11 +328,7 @@ public class DatingUser extends User
         {
             zipCodeAndCity = "Postnummer ikke angivet";
         }
-        else
-        {
-            zipCodeAndCity = "By ukendt";
-        }
-    
+  
         String descriptionInput;
         if(description != null) // hvis der ER noget i postInfo
         {
@@ -353,8 +349,8 @@ public class DatingUser extends User
         }
         
         
-            return new ViewProfileDatingUser(idDatingUser, super.getUsername(), sexAndAge, zipCodeAndCity,
-                descriptionInput, tagsListString, profilePictureBytes);
+        return new ViewProfileDatingUser(idDatingUser, super.getUsername(), sexAndAge, zipCodeAndCity,
+            descriptionInput, tagsListString, profilePictureBytes);
         
     }
     

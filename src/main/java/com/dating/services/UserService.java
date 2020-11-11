@@ -154,33 +154,25 @@ public class UserService
     
         try
         {
-            // TODO METODE TILFØJET
             setInput(dataFromEditProfileForm);
-    
-            /*
-            int zipCodeInput = editDatingUser.getZipCode();
             
-            String zipCodeInputString = dataFromEditProfileForm.getParameter("zipcodeinput");
-            if(!(zipCodeInputString.equals("")))
+            boolean profilePictureAltered = false;
+            
+            // Hvis der ER profilePictureInput
+            if(profilePictureFile.getBytes().length > 0)
             {
-                zipCodeInput = Integer.parseInt(zipCodeInputString);
+                // Hvis NYT profilePictureInput, opdateres det
+                if(!(Arrays.equals(profilePictureFile.getBytes(), editDatingUser.getProfilePictureBytes())))
+                {
+                    profilePictureAltered = true;
+                }
             }
             
-            int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
-            String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
-            String emailInput = dataFromEditProfileForm.getParameter("emailinput");
-            int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
-            String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
-            String confirmPasswordInput = dataFromEditProfileForm.getParameter("confirmpasswordinput");
-            String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
-            String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
-            
-             */
             if(!(input.getInterestedIn() == editDatingUser.getInterestedIn()) ||
                !(Objects.equals(input.getUsername(), editDatingUser.getUsername())) ||
                !(Objects.equals(input.getEmail(), editDatingUser.getEmail())) ||
                !(input.getAge() == editDatingUser.getAge()) ||
-               !(Arrays.equals(profilePictureFile.getBytes(), editDatingUser.getProfilePictureBytes())) ||
+               profilePictureAltered ||
                !(input.getZipCode() == editDatingUser.getZipCode()) ||
                !(Objects.equals(input.getPassword(), editDatingUser.getPassword())) ||
                !(Objects.equals(input.getConfirmPassword(), editDatingUser.getConfirmPassword())) ||
@@ -198,7 +190,6 @@ public class UserService
         return wasProfileAltered;
     }
     
-    // TODO: test lige denne funktion
     public boolean checkUsernameEmailPasswordZipCode(WebRequest dataFromEditProfileForm, EditDatingUser editDatingUser)
     {
         boolean isEmailAvailable = true;

@@ -308,14 +308,6 @@ public class DatingController
         return "DatingUser/editprofile"; // html
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
     //------------------ GET ADMIN -------------------//
     
     @GetMapping("/startPageAdmin")
@@ -325,7 +317,6 @@ public class DatingController
         
         return "Admin/startpageadmin"; // html
     }
-    
     
     
     /* TODO: probably slet denne

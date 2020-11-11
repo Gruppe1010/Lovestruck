@@ -28,8 +28,8 @@ public class ViewProfileDatingUser
         this.zipCodeAndCity = zipCodeAndCity;
         this.description = description;
         this.tags = tags;
-        this.base64 = byteArrayAs64String();
         this.profilePictureBytes = profilePictureBytes;
+        this.base64 = byteArrayAs64String();
         this.isOnFavouritesList = false;
     }
     
