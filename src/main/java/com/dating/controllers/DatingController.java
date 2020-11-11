@@ -21,6 +21,7 @@ public class DatingController
 {
     Admin loggedInAdmin = null;
     //DatingUser loggedInDatingUser = null; // TODO det er denne som skal kopieres ind når vi ikke tester
+  
     DatingUser loggedInDatingUser = new DatingUser(true, 2, 24, "tester", "tester@hotmail.com", "hej");
     
     ViewProfileDatingUser viewProfileDatingUser = null;
@@ -29,6 +30,7 @@ public class DatingController
     Error error = null;
     UserService userService = new UserService();
     UserRepository userRepository = new UserRepository();
+    //DatingUser loggedInDatingUser = userRepository.retrieveDatingUserFromDb(2);
     
     /*TODO: overvej at dele Controlleren op i flere controllers!!! -
     //  fx GenerelController, AdminController, DatingUserController*/

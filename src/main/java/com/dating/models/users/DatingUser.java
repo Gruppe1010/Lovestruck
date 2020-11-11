@@ -151,8 +151,42 @@ public class DatingUser extends User
         super.setPassword(password);
     }
     
-  
-    // ANDRE metoder
+    
+    // -----------------------ANDRE METODER----------------------//
+    
+    /**
+     * Siger at et objekt af klassen er en DatingUser - Overskriver superklassen User's metode som siger false
+     *
+     * @return boolean Returns altid true, hvis denne overskrevede metode kaldes - fordi det er en DatingUser
+     */
+    @Override
+    public boolean isDatingUser()
+    {
+        return true;
+    }
+    
+    // -------------------CONVERTERE-----------------//
+    
+    // TODO: måske overflødig
+    /**
+     * Konverterer interestedIn-attribut til tilsvarende String
+     *
+     * @return String interestedIn-attributtens String-værdi
+     */
+    public String convertInterestedInToString()
+    {
+        if(interestedIn==0)
+        {
+            return "males";
+        }
+        else if(interestedIn==1)
+        {
+            return "females";
+        }
+        
+        return "malesandfemales";
+    }
+    
     /**
      * Konverterer boolean til integer-værdi
      *
@@ -185,34 +219,17 @@ public class DatingUser extends User
     }
     
     /**
-     * Siger at et objekt af klassen er en DatingUser - Overskriver superklassen User's metode som siger false
+     * Konverterer sex-boolean til String (false == Mand, true == Kvinde)
      *
-     * @return boolean Returns altid true, hvis denne overskrevede metode kaldes - fordi det er en DatingUser
+     * @return String Konverteret sex-bool
      */
-    @Override
-    public boolean isDatingUser()
+    public String convertSexToString()
     {
-        return true;
-    }
-    
-    // TODO: måske overflødig
-    /**
-     * Konverterer interestedIn-attribut til tilsvarende String
-     *
-     * @return String interestedIn-attributtens String-værdi
-     */
-    public String convertInterestedInToString()
-    {
-        if(interestedIn==0)
+        if(sex)
         {
-            return "males";
+            return "Kvinde";
         }
-        else if(interestedIn==1)
-        {
-            return "females";
-        }
-        
-        return "malesandfemales";
+        return "Mand";
     }
     
     /**
@@ -226,7 +243,7 @@ public class DatingUser extends User
     {
         ArrayList<String> tagsList = new ArrayList<>();
         
-        if(tagsString!=null)
+        if(tagsString != null)
         {
             // splitter tagsString ved # og laver til String-array
             String[] stringArray = tagsString.split("#");
@@ -241,21 +258,8 @@ public class DatingUser extends User
             // TODO: find evt på en anden løsning end split"#" hvor den ikke sletter #'et
             addHashTag(tagsList);
         }
-    
+        
         return tagsList;
-    }
-    
-    /**
-     * Sætter hver String i tagsList til at have # foran sig
-     *
-     * @param tagsList Den liste som skal String's skal modificeres i
-     */
-    public void addHashTag(ArrayList<String> tagsList)
-    {
-        for(int i = 0; i < tagsList.size(); i++)
-        {
-            tagsList.set(i, "#" + tagsList.get(i));
-        }
     }
     
     /**
@@ -274,7 +278,7 @@ public class DatingUser extends User
                 tagsString += tag;
             }
         }
-       return tagsString;
+        return tagsString;
     }
     
     /**
@@ -323,12 +327,12 @@ public class DatingUser extends User
         String tagsListString;
         String sexAndAge = convertSexToString() + ", " + age + " år";
         zipCodeAndCity = postalInfo.getZipCode() + ", " + postalInfo.getCity();
-    
+        
         if(postalInfo.getZipCode() == 0) // hvis der ER noget i postInfo
         {
             zipCodeAndCity = "Postnummer ikke angivet";
         }
-  
+        
         String descriptionInput;
         if(description != null) // hvis der ER noget i postInfo
         {
@@ -350,9 +354,11 @@ public class DatingUser extends User
         
         
         return new ViewProfileDatingUser(idDatingUser, super.getUsername(), sexAndAge, zipCodeAndCity,
-            descriptionInput, tagsListString, profilePictureBytes);
+                descriptionInput, tagsListString, profilePictureBytes);
         
     }
+    
+    // -------------------FAVOURITESLIST-----------------//
     
     /**
      * Tilføjer et datingUser-obj. til favouritesList
@@ -405,22 +411,43 @@ public class DatingUser extends User
         {
             previewDatingUserArrayList.add(datingUser.convertDatingUserToPreviewDatingUser());
         }
-    
+        
         return previewDatingUserArrayList;
     }
     
     /**
-     * Konverterer sex-boolean til String (false == Mand, true == Kvinde)
+     * Tjekker om bruger er på favouritesList (via id)
      *
-     * @return String Konverteret sex-bool
+     * @param idViewProfileDatingUser id'et som tjekkes om er på favouritesList
+     *
+     * @return boolean Svaret på om en bruger med id'et er på favouritesList'en
      */
-    public String convertSexToString()
+    public boolean isViewProfileDatingUserOnFavouritesList(int idViewProfileDatingUser)
     {
-        if(sex)
+        for(DatingUser datingUser : favouritesList)
         {
-            return "Kvinde";
+            if(datingUser.idDatingUser == idViewProfileDatingUser)
+            {
+                return true;
+            }
         }
-        return "Mand";
+        
+        return false;
+    }
+    
+    // -------------------ANDRE-----------------//
+    
+    /**
+     * Sætter hver String i tagsList til at have # foran sig
+     *
+     * @param tagsList Den liste som skal String's skal modificeres i
+     */
+    public void addHashTag(ArrayList<String> tagsList)
+    {
+        for(int i = 0; i < tagsList.size(); i++)
+        {
+            tagsList.set(i, "#" + tagsList.get(i));
+        }
     }
     
     /**
@@ -450,57 +477,5 @@ public class DatingUser extends User
         
         return genericProfilePictureBytes;
     }
-    
-    /**
-     * Tjekker om bruger er på favouritesList (via id)
-     *
-     * @param idViewProfileDatingUser id'et som tjekkes om er på favouritesList
-     *
-     * @return boolean Svaret på om en bruger med id'et er på favouritesList'en
-     */
-    public boolean isViewProfileDatingUserOnFavouritesList(int idViewProfileDatingUser)
-    {
-        for(DatingUser datingUser : favouritesList)
-        {
-            if(datingUser.idDatingUser == idViewProfileDatingUser)
-            {
-                return true;
-            }
-        }
-        
-        return false;
-    }
 }
 
-
-
-
-
-/*
-// lav seperate metoder til at finde relevant == username, email, password
-
-
-
-
-public void opretKandidatListe(int idDatingUser)
-{
-    // sql-command: "create table kandidatList" + idDatingUser
-}
-
-public void tilføjBrugerTilKandidatListe(int idDatingUser, User targetUser)
-{
-    // findUserId(targetUser)
-    // sql: "insert ? into ?"
-    
-    // 1.? == idTargetUser
-    // 2.? == KandidatList+idDatingUser (== navnet på kandidatlisten)
-
-public int findUserId(User user)
-{
-    // find idDatingUser på user-objekt
-    // return
-}
-
- */
-
- 

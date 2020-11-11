@@ -8,6 +8,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -81,7 +82,13 @@ public class UserService
             loggedInDatingUser.setAge(input.getAge());
             // setter de andre
             loggedInDatingUser.setDescription(input.getDescription());
+            
+            String test1 = input.getTagsList();
+            ArrayList<String> test2 = loggedInDatingUser.convertStringToTagsList(input.getTagsList());
+            
+            
             loggedInDatingUser.setTagsList(loggedInDatingUser.convertStringToTagsList(input.getTagsList()));
+            
             loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(input.getZipCode()));
             
             // Hvis NYT passwordInput, opdateres det - fordi ellers stilles det til ""

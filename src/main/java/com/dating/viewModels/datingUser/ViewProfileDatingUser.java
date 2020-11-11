@@ -108,29 +108,7 @@ public class ViewProfileDatingUser
         this.isOnFavouritesList = onFavouritesList;
     }
     
-    // metoder
-    /*
-    public boolean isMale()
-    {
-        // male: sex == false OG female: sex == true
-        // DERFOR:
-        // hvis sex == true, er den female, og metoden skal altså returnere false (fordi den tjekker om den er male)
-        // hvis sex == false er den male, og metoden skal returne true
-        // == derfor skal isMale ALTID returnere den omvendte værdi af sex
-        return !sex;
-    }
-    
-    public boolean isFemale()
-    {
-        // male: sex == false OG female: sex == true
-        // DERFOR:
-        // hvis sex == true, er den female, og metoden skal returne true (fordi den tjekker om den er female)
-        // hvis sex == fale, er den male, og metoden skal returne false
-        // == derfor skal isFemale ALTID returnere samme værdi som sex
-        return sex;
-    }
-    
-     */
+    // andre metoder
     private String byteArrayAs64String()
     {
         return Base64.encodeBase64String(this.profilePictureBytes);
