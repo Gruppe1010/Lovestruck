@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <title> Love Struck </title>
+    <meta http-equiv = "refresh" content = "10; url = /startPage"/>
 
     <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
     <meta charset="utf-8"/>
     <meta name="description" content="Love struck - tænd gnisten"/>
 
     <!-- css-filer -->
-    <link href="/searchpage.css" type="text/css" rel="stylesheet">
+    <link href="/editprofile.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
 
@@ -28,8 +30,8 @@
     <!--content der inkapsler hele siden undtagen footer-->
     <div class="content">
         <div class="logo">
-            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
-            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
         </div>
 
         <div class="menubar">
@@ -48,11 +50,12 @@
                 <i class="fas fa-caret-down"></i>
             </span>
         </div>
-
-        <div class="content-container">
-
+        <div id="editprofile-container">
+                <!-- Kolonne til inputfelt -->
+                    <div id="form-container">
+                        <h3 class="formheadline"><br><br><i class="fas fa-tools"></i> Søgefunktionen er desværre ikke færdig endnu <i class="fas fa-tools"></i></h3>
+                    </div>
         </div>
-
     </div>
     <footer>
         <div>
@@ -68,4 +71,3 @@
 </div>
 </body>
 </html>
-
