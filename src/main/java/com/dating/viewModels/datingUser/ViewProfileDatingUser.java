@@ -15,12 +15,12 @@ public class ViewProfileDatingUser
     private String tags;
     private byte[] profilePictureBytes;
     private String base64;
+    private boolean isOnFavouritesList;
     
     // constructor
     public ViewProfileDatingUser(){}
     public ViewProfileDatingUser(int idViewProfileDatingUser, String username,String sexAndAge, String zipCodeAndCity,
-                                 String description,
-                                 String tags, byte[] profilePictureBytes)
+                                 String description, String tags, byte[] profilePictureBytes)
     {
         this.idViewProfileDatingUser = idViewProfileDatingUser;
         this.username = username;
@@ -30,7 +30,9 @@ public class ViewProfileDatingUser
         this.tags = tags;
         this.base64 = byteArrayAs64String();
         this.profilePictureBytes = profilePictureBytes;
+        this.isOnFavouritesList = false;
     }
+    
     
     //getters + setters
     public int getIdViewProfileDatingUser()
@@ -96,6 +98,14 @@ public class ViewProfileDatingUser
     public void setBase64(String base64)
     {
         this.base64 = base64;
+    }
+    public boolean isOnFavouritesList()
+    {
+        return isOnFavouritesList;
+    }
+    public void setIsOnFavouritesList(boolean onFavouritesList)
+    {
+        this.isOnFavouritesList = onFavouritesList;
     }
     
     // metoder

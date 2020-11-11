@@ -196,7 +196,7 @@ public class UserRepository
         
     }
     
-    public void updateFavouritesListInDb(DatingUser datingUser)
+    public void addDatingUserToFavouritesListInDb(DatingUser datingUser)
     {
         favouriteslistConnection = establishConnection("lovestruck_favourites_list");
         
@@ -223,10 +223,33 @@ public class UserRepository
             }
             catch(SQLException e)
             {
-                System.out.println("Error in updateFavouritesListInDb: " + e.getMessage());
+                System.out.println("Error in addDatingUserToFavouritesListInDb: " + e.getMessage());
             }
         }
         
+    }
+    
+    public void removeDatingUserToFavouritesListInDb(DatingUser datingUserTableToUpdate,
+                                                     DatingUser datingUserToRemove)
+    {
+        favouriteslistConnection = establishConnection("lovestruck_favourites_list");
+        
+        try
+        {
+            String sqlCommand = "DELETE from favourites_list_? WHERE id_dating_user = ?";
+        
+            PreparedStatement preparedStatement = favouriteslistConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, datingUserTableToUpdate.getIdDatingUser());
+            preparedStatement.setInt(2, datingUserToRemove.getIdDatingUser());
+        
+            preparedStatement.executeUpdate();
+        
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in removeDatingUserToFavouritesListInDb: " + e.getMessage());
+        }
     }
     
     /**
@@ -558,8 +581,6 @@ public class UserRepository
         
             // user tilføjes til database
             preparedStatement.executeUpdate();
-            
-            updateFavouritesListInDb(loggedInDatingUser);
         }
         catch(SQLException e)
         {

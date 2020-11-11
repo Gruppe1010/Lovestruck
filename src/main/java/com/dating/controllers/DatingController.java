@@ -190,13 +190,40 @@ public class DatingController
         // gemmer viewProfileDatingUser på loggedInDatingUsers attribut favouritesList
         loggedInDatingUser.addDatingUserToFavouritesList(datingUserToAddToList);
         
-        // opdaterer loggedInDatingUser i db
-        userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
+        // tilføjer bruger til loggedInDatingUser's favouritesList i db
+        userRepository.addDatingUserToFavouritesListInDb(loggedInDatingUser);
+        
+        // vi sætter atributten isOnFavouritesList på viewProfileDatingUser-obj. til tre,
+        // da det er tilføjet til favouritesList
+        viewProfileDatingUser.setIsOnFavouritesList(true);
         
         loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         
         return "/DatingUser/favouritesconfirmation";
+    }
+    
+    @GetMapping("/favouriteRemovedConfirmation")
+    public String favouriteRemovedConfirmation(Model viewProfileDatingUserModel, Model loggedInDatingUserModel)
+    {
+        // henter viewProfileDatingUser-obj. som skal SLETTES fra listen op fra db
+        DatingUser datingUserToRemoveFromList =
+                userRepository.retrieveDatingUserFromDb(viewProfileDatingUser.getIdViewProfileDatingUser());
+    
+        // sletter viewProfileDatingUser fra loggedInDatingUsers attribut, favouritesList
+        loggedInDatingUser.removeDatingUserFromFavouritesList(datingUserToRemoveFromList);
+    
+        // sletter datingUser fra loggedInDatingUser's favouritesList i db
+        userRepository.removeDatingUserToFavouritesListInDb(loggedInDatingUser, datingUserToRemoveFromList);
+        
+        // vi sætter atributten isOnFavouritesList på viewProfileDatingUser-obj. til false,
+        // da det er slettet til favouritesList
+        viewProfileDatingUser.setIsOnFavouritesList(false);
+        
+        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+    
+        return "/DatingUser/favouriteremovedconfirmation";
     }
     
     //------------------ RequestMapping DatingUser -------------------//
@@ -209,7 +236,19 @@ public class DatingController
         
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
-     
+        
+        // tjekker om viewProfileDatingUser'en (hvis profil skal vises) er på loggedInDatingUser's favList
+        boolean isOnFaveList =
+                loggedInDatingUser.isViewProfileDatingUserOnFavouritesList(viewProfileDatingUser.getIdViewProfileDatingUser());
+        
+        
+        // Hvis profil som skal vises ER på favouritesList (skal den have en anden knap nemlig)
+        if(isOnFaveList)
+        {
+            return "DatingUser/viewprofilefav";
+           
+        }
+        // else if profilen som skal vises IKKE er på favouritesList
         return "DatingUser/viewprofile";
     }
     

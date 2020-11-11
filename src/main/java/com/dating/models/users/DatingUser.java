@@ -288,7 +288,7 @@ public class DatingUser extends User
     
     public PreviewDatingUser convertDatingUserToPreviewDatingUser()
     {
-        return new PreviewDatingUser(idDatingUser, profilePictureBytes, super.getUsername(), age);
+        return new PreviewDatingUser(idDatingUser, profilePictureBytes, super.getUsername(), age, true);
         
     }
     
@@ -343,6 +343,24 @@ public class DatingUser extends User
         favouritesList.add(datingUser);
     }
     
+    public void removeDatingUserFromFavouritesList(DatingUser datingUserToRemove)
+    {
+        
+        for(int i = 0; i < favouritesList.size(); i++)
+        {
+            if(favouritesList.get(i).idDatingUser == datingUserToRemove.idDatingUser)
+            {
+                favouritesList.remove(i);
+                break;
+            }
+        }
+        
+        
+        /*// TODO: måske er det her den fejler
+        favouritesList.remove(datingUser);
+         */
+    }
+    
     
     public ArrayList<PreviewDatingUser> getFavouritesListAsPreviewDatingUsers()
     {
@@ -355,7 +373,6 @@ public class DatingUser extends User
     
         return previewDatingUserArrayList;
     }
-    
     
     
     public String convertSexToString()
@@ -385,6 +402,19 @@ public class DatingUser extends User
         }
         
         return genericProfilePictureBytes;
+    }
+    
+    public boolean isViewProfileDatingUserOnFavouritesList(int IdViewProfileDatingUser)
+    {
+        for(DatingUser datingUser : favouritesList)
+        {
+            if(datingUser.idDatingUser == IdViewProfileDatingUser)
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
     
 }

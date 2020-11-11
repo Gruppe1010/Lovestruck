@@ -16,6 +16,7 @@ public class PreviewDatingUser
     private String username;
     private int age;
     private String base64;
+    private boolean isOnFavouritesList;
     
     // Constructor
     public PreviewDatingUser(){}
@@ -26,6 +27,15 @@ public class PreviewDatingUser
         this.username = username;
         this.age = age;
         this.base64 = byteArrayAs64String();
+    }
+    public PreviewDatingUser(int id, byte[] profilePictureBytes, String username, int age, boolean isOnFavouritesList)
+    {
+        this.id = id;
+        this.profilePictureBytes = profilePictureBytes;
+        this.username = username;
+        this.age = age;
+        this.base64 = byteArrayAs64String();
+        this.isOnFavouritesList = isOnFavouritesList;
     }
     
     // getters + setters
