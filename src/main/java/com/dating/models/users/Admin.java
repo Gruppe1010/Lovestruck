@@ -19,20 +19,20 @@ public class Admin extends User
     
     // getters + setters
     
-    // andre metoder
+    /**
+     * Siger at et objekt af klassen er en Admin - Overskriver superklassen User's metode som siger false
+     *
+     * @return boolean Returns altid true, hvis denne overskrevede metode kaldes - fordi det er en Admin
+     */
     @Override
     public boolean isAdmin()
     {
         return true;
     }
     
-    
+    // TODO: slet??
     public User createAdmin()
     {
-        // lav user-objekt
-        // tilføj user-obj til database
-        // findUserId(user-objekt) == finder lige id'et på det nye user-objekt
-        // opretKandidatliste(idDatingUser);
         
         return new Admin("hej", "hej", "hej");
     }

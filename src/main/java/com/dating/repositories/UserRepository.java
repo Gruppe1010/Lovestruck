@@ -45,7 +45,7 @@ public class UserRepository
         return connection;
     }
 
-    // billedemetoderne
+    // TODO: skal vi bruge billedmetoderne?
     /*
     public void writePictureToDb(int idDatingUser)
     {
@@ -197,6 +197,12 @@ public class UserRepository
         
     }
     
+    /**
+     * Tilføjer DatingUser-obj.til datingUser's favouritesList
+     * DatingUser-obj. som tilføjes hentes fra den sidste plads i loggedInDatingUser's favouritesList
+     *
+     * @param datingUser Den bruger som skal tilføje anden bruger til sin favouritesList
+     */
     public void addDatingUserToFavouritesListInDb(DatingUser datingUser)
     {
         favouriteslistConnection = establishConnection("lovestruck_favourites_list");
@@ -230,6 +236,12 @@ public class UserRepository
         
     }
     
+    /**
+     * Fjerner DatingUser-obj.fra datingUser's favouritesList
+     *
+     * @param datingUserTableToUpdate Den bruger som skal fjerne anden bruger til sin favouritesList
+     * @param datingUserToRemove Den bruger som skal fjernes fra listen
+     */
     public void removeDatingUserToFavouritesListInDb(DatingUser datingUserTableToUpdate,
                                                      DatingUser datingUserToRemove)
     {
@@ -424,6 +436,15 @@ public class UserRepository
     
      */
     
+    /**
+     * Tjekker via data fra dataFromLogInForm om der er en tilsvarende Admin-bruger i admin-db
+     *
+     * @param dataFromLogInForm Den form som indeholde log ind dataen som skal bruges
+     *
+     * @return Admin Returnerer et Admin-obj. som enten (hvis den ikke fandtes i db) har ingen værdier eller ()
+     * er blevet
+     * tildelt væri
+     */
     public Admin checkIfUserExistsInAdminsTable(WebRequest dataFromLogInForm)
     {
         lovestruckConnection = establishConnection("lovestruck");

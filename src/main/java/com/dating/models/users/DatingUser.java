@@ -322,10 +322,11 @@ public class DatingUser extends User
         String zipCodeAndCity;
         String tagsListString;
         String sexAndAge = convertSexToString() + ", " + age + " år";
+        zipCodeAndCity = postalInfo.getZipCode() + ", " + postalInfo.getCity();
     
-        if(postalInfo!=null) // hvis der ER noget i postInfo
+        if(postalInfo.getZipCode() == 0) // hvis der ER noget i postInfo
         {
-            zipCodeAndCity = postalInfo.getZipCode() + ", " + postalInfo.getCity();
+            zipCodeAndCity = "Postnummer ikke angivet";
         }
         else
         {
@@ -350,8 +351,9 @@ public class DatingUser extends User
         {
             tagsListString = "Ingen tags";
         }
-     
-        return new ViewProfileDatingUser(idDatingUser, super.getUsername(), sexAndAge, zipCodeAndCity,
+        
+        
+            return new ViewProfileDatingUser(idDatingUser, super.getUsername(), sexAndAge, zipCodeAndCity,
                 descriptionInput, tagsListString, profilePictureBytes);
         
     }

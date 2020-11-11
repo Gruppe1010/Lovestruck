@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class DatingApplication
 {
     // 2561 == id_postal_info på NULL postInfo-obj. i db
+    //
     // /Users/tobias/IdeaProjects/Lovestruck/src/main/resources/static/image/profilepictures/genericProfileImage.png mac sti til generic
     
     public static void main(String[] args)

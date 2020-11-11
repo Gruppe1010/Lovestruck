@@ -253,6 +253,8 @@ public class UserService
             if(Integer.parseInt(zipCodeInput) == (editDatingUser.getZipCode()))
             {
                 int zipCode = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
+                
+                // hvis den passer
     
                 isZipCode4Char = zipCode > 999 && zipCode < 10000;
             }

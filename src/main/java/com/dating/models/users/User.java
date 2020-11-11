@@ -43,11 +43,23 @@ public class User
     
     
     // andre metoder
-    
+    /**
+     * Siger at et objekt af klassen IKKE er en Admin - denne overskrives inde i Admin(hvor den returnerer true i
+     * stedet)
+     *
+     * @return boolean Returns altid false
+     */
     public boolean isAdmin()
     {
         return false;
     }
+    /**
+     * Siger at et objekt af klassen IKKE er en DatingUser - denne overskrives inde i DatingUser(hvor den returnerer
+     * true i
+     * stedet)
+     *
+     * @return boolean Returns altid false
+     */
     public boolean isDatingUser()
     {
         return false;
