@@ -1,5 +1,6 @@
 package com.dating.controllers;
 
+import com.dating.models.chat.Chat;
 import com.dating.models.users.Admin;
 import com.dating.models.users.DatingUser;
 import com.dating.repositories.UserRepository;
@@ -113,8 +114,17 @@ public class DatingController
     }
     
     @GetMapping("/chatPage")
-    public String chatPage(Model datingUserModel)
+    public String chatPage(Model datingUserModel, Model datingUserListModel)
     {
+    
+        ArrayList<DatingUser> datingUsersToShowOnChatPage =
+                userRepository.retrieveDatingUsersThatLoggedInUserChattedWithListFromDb(loggedInDatingUser);
+        
+        ArrayList<PreviewDatingUser> previewDatingUsersToShowOnChatPage =
+                loggedInDatingUser.convertDatingUserListToPreviewDatingUserList(datingUsersToShowOnChatPage);
+        
+        datingUserListModel.addAttribute("previewDatingUsersToShowOnChatPage", previewDatingUsersToShowOnChatPage);
+        
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
         return "DatingUser/chatpage"; // html
@@ -249,10 +259,58 @@ public class DatingController
         if(isOnFaveList)
         {
             return "DatingUser/viewprofilefav";
-           
         }
         // else if profilen som skal vises IKKE er på favouritesList
         return "DatingUser/viewprofile";
+    }
+    
+    @RequestMapping("/viewChat")
+    public String viewChatIdDatingUser(@RequestParam int idDatingUserToChatWith, Model viewProfileDatingUserModel,
+                                          Model loggedInDatingUserModel, Model chatModel)
+    {
+        // hente tabellen som stemmer overens med 2 id'er
+        Chat chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+        
+        // hvis der ikke findes tabel der hedder: chat_idLoggedInDatingUser_idDatingUserToChatWith
+        if(chat == null)
+        {
+            // så tjekker vi om der findes en tabel som hedder: chat_idDatingUserToChatWith_idLoggedInDatingUser
+            chat = userRepository.findChatTable(idDatingUserToChatWith, loggedInDatingUser.getIdDatingUser());
+            
+            // hvis den tabel HELLER IKKE findes - så OPRETTER vi den
+            if(chat == null)
+            {
+                // opretter ny chat_id_id-tabel
+                userRepository.createChatTableInDb(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+                
+                chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+            }
+        }
+        
+        chatModel.addAttribute("chat", chat);
+        
+        /*
+        viewProfileDatingUser = userRepository.findDatingUserInDbToView(id);
+        
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        
+        // tjekker om viewProfileDatingUser'en (hvis profil skal vises) er på loggedInDatingUser's favList
+        boolean isOnFaveList =
+                loggedInDatingUser.isViewProfileDatingUserOnFavouritesList(viewProfileDatingUser.getIdViewProfileDatingUser());
+        
+        
+        // Hvis profil som skal vises ER på favouritesList (skal den have en anden knap nemlig)
+        if(isOnFaveList)
+        {
+            return "DatingUser/viewprofilefav";
+        }
+        // else if profilen som skal vises IKKE er på favouritesList
+        return "DatingUser/viewprofile";
+        
+         */
+        
+        return "DatingUser/viewchat";
     }
     
     //------------------ POST DATINGUSER -------------------//

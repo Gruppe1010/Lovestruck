@@ -96,12 +96,11 @@
                                 <!--TODO tilføj liste - noget med th: each something-->
                                 <!--<span>Tags: </span>-->
                                 <div class="viewprofiletags">
-                                <span id="tags"
-                                      th:text="${viewProfileDatingUser.getTags()}"
+                                    <span id="tags" th:text="${viewProfileDatingUser.getTags()}"
                                       class="color fontsize"></span>
                                 </div>
 
-                                <a href="/chatPage"> <!--TODO ret til brugers chatside-->
+                                <a href="/viewChat"> <!--TODO ret til brugers chatside-->
                                     <button class="chatbutton fontsize">Chat</button>
                                 </a>
 

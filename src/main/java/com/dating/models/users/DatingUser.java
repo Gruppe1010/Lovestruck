@@ -1,6 +1,7 @@
 package com.dating.models.users;
 
 import com.dating.models.PostalInfo;
+import com.dating.models.chat.Chat;
 import com.dating.viewModels.datingUser.EditDatingUser;
 import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
@@ -26,6 +27,8 @@ public class DatingUser extends User
     private ArrayList<String> tagsList;
     private PostalInfo postalInfo;
     private ArrayList<DatingUser> favouritesList;
+    private ArrayList<Chat> chatList; // chatPage-html
+    private Chat currentChat; // currentChat-html
     
     // constructors
     public DatingUser(){}
@@ -42,6 +45,7 @@ public class DatingUser extends User
         tagsList = new ArrayList<>();
         postalInfo = new PostalInfo(0,"");
         favouritesList = new ArrayList<>();
+        ArrayList<Chat> chatList = new ArrayList<>();
     }
     
     // getters + setters
@@ -358,6 +362,20 @@ public class DatingUser extends User
         
     }
     
+    
+    public ArrayList<PreviewDatingUser> convertDatingUserListToPreviewDatingUserList(ArrayList<DatingUser> list)
+    {
+        ArrayList<PreviewDatingUser> previewDatingUserList = new ArrayList<>();
+        
+        for(DatingUser datingUser : list)
+        {
+            previewDatingUserList.add(datingUser.convertDatingUserToPreviewDatingUser());
+        }
+        
+        return previewDatingUserList;
+    }
+    
+    
     // -------------------FAVOURITESLIST-----------------//
     
     /**
@@ -477,5 +495,6 @@ public class DatingUser extends User
         
         return genericProfilePictureBytes;
     }
+    
 }
 

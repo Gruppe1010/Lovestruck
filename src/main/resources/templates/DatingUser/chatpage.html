@@ -8,8 +8,7 @@
     <meta name="description" content="Love struck - tænd gnisten"/>
 
     <!-- css-filer -->
-
-    <link href="/chatpage.css" type="text/css" rel="stylesheet">
+    <link href="/startandfavoritespage.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
 
@@ -36,10 +35,10 @@
         <div class="menubar">
             <!--for at style linkene skulle a have sin egen klasse-->
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadline" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
-            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
+            <span class="menubarheadline dropdown">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
                     <a href="/viewMyProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
@@ -50,53 +49,27 @@
             </span>
         </div>
 
-    <div class="content-container font">
-        <div class="row">
-            <!-- Kolonne til inputfelt -->
-            <div class="col">
-                <div id="form-container">
+        <div class="content-container">
+            <h4 class="startpageheadline">Her finder du alle dem du har chattet med!<i class="fas fa-heart"></i></h4>
+            <div class="textbox-container">
 
-                    <form id="twit-form" action="/postTwit" method="post">
-                        <h5 class="twitformheadline">Make a twit</h5>
-
-                        <!-- Tekst til inputfeltet i browser -->
-                        <label for="author">Title</label>
-                        <!--
-                        <input> Laver input-felt
-                        type="text" == Siger hvilket input der tages imod i inputfeltet
-                        id="catfact" == Kalder bestemt styling vi har i css-filen
-                        name="catfact" == giver inputtet vi får ind referencenavnet, catfact -->
-                        <input type="text" id="author" name="authorinput" class="color"><br><br>
-                        <!-- Laver et inputfelt med boolsk værdi: enten er der trykket submit eller også er der ikke-->
-
-                        <label for="twit-text">Skriv besked</label>
-                        <!--
-                        <input> Laver input-felt
-                        type="text" == Siger hvilket input der tages imod i inputfeltet
-                        id="catfact" == Kalder bestemt styling vi har i css-filen
-                        name="catfact" == giver inputtet vi får ind referencenavnet, catfact -->
-                        <input type="text" id="twit-text" name="twittextinput" class="color"><br><br>
-                        <!-- Laver et inputfelt med boolsk værdi: enten er der trykket submit eller også er der ikke-->
-
-                        <input type="submit" value="Submit" class="submitbutton">
-                    </form>
+                <div th:each="previewDatingUser : ${previewDatingUsersToShowOnChatPage}">
+                    <a class="previewdatinguserlink" th:href="@{/viewChat(id=${previewDatingUser.getId()})}">
+                        <div class="previewdatinguserbox">
+                            <img class="previewdatinguserpicture" th:src="'data:image/jpeg;base64,' + ${previewDatingUser.getBase64()}">
+                            <div class="previewdatinguserinfo">
+                                <div th:text="${previewDatingUser.getUsername()}"></div>
+                                <div th:text="${previewDatingUser.getAge()}"><p>&nbsp; år</p></div>
+                            </div>
+                        </div>
+                    </a>
                 </div>
-            </div>
-                <!-- Ny kolonne til den info jeg vil gerne vil vise - den som brugeren giver mig-->
-            <div class="col">
-                <div class="twitcontainer">
-                    <div class="postedtwits">
-                        <h5 class="twitsheadline">Chat</h5>
-                        <p th:each="twit : ${publicTwitList}" class="twit">
-                            <span th:text="${twit.getTwitTextWithCitation()}" class="twittext"></span><br>
-                            <span th:text="${twit.getAuthorWithAt()}" class="twitauthoranddate"> </span>
-                            <span th:text="${twit.getFormattedCreationDate()}" class="twitauthoranddate"> </span>
-                        </p>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>
+
+
 
     <footer>
         <div>

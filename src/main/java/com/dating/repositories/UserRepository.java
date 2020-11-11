@@ -1,6 +1,8 @@
 package com.dating.repositories;
 
 import com.dating.models.PostalInfo;
+import com.dating.models.chat.Chat;
+import com.dating.models.chat.Message;
 import com.dating.models.users.Admin;
 import com.dating.models.users.DatingUser;
 import com.dating.viewModels.datingUser.PreviewDatingUser;
@@ -17,6 +19,8 @@ public class UserRepository
 {
     Connection lovestruckConnection = null;
     Connection favouriteslistConnection = null;
+    Connection chatslistConnection = null;
+    Connection chatConnection = null;
 
     DatingUser loggedInDatingUser = new DatingUser();
     Admin loggedInAdmin = new Admin();
@@ -50,6 +54,8 @@ public class UserRepository
         {
             lovestruckConnection.close();
             favouriteslistConnection.close();
+            chatslistConnection.close();
+            chatConnection.close();
         }
         catch(SQLException throwables)
         {
@@ -98,13 +104,16 @@ public class UserRepository
             // nu hvor user er blevet oprettet, tilføjer vi databasens genererede id_dating_user til datingUser-objektet
             int idDatingUser = retrieveDatingUserIdFromDb(datingUser);
             
-            if(idDatingUser!=-1)
+            if(idDatingUser != -1)
             {
                 // setter id'et, hvis det er genereret korrekt
                 datingUser.setIdDatingUser(idDatingUser);
                 // genererer en favourites_list tabel i databasen - knyttet til user-entitet via id_dating_user
                 // fx til en user med id_dating_user 3 oprettes tabellen: favourites_list_3
                 createFavouritesListTableDb(idDatingUser);
+                
+                createChatsListTableDb(idDatingUser);
+                
                 loggedInDatingUser = datingUser;
             }
         }
@@ -122,10 +131,10 @@ public class UserRepository
      */
     public void createFavouritesListTableDb(int idDatingUser)
     {
+        favouriteslistConnection = establishConnection("lovestruck_favourites_list");
+        
         try
         {
-            favouriteslistConnection = establishConnection("lovestruck_favourites_list");
-            
             // lovestruc_favourites_list == den database som vi laver tabellen i
             // favourites_list_? == navnet på tabellen
             // id_dating_user INT NOT NULL,== navn på ny kolonne og hvilke bokse der er krydset af
@@ -742,6 +751,7 @@ public class UserRepository
         }
         return datingUsersList;
     }
+  
     
     //------------------ IKKE DB-METODER -------------------//
     
@@ -868,6 +878,194 @@ public class UserRepository
         
         return favouritesList;
     }
+    
+    
+    
+    //------------------ CHAT -------------------//
+    
+    public ArrayList<DatingUser> retrieveDatingUsersThatLoggedInUserChattedWithListFromDb(DatingUser loggedInDatingUser)
+    {
+        // resultSet som indeholder alle idDatingUser's på chat_list_idDatingUser
+        ResultSet resultSet = retrieveChatsList(loggedInDatingUser.getIdDatingUser());
+        
+        // TODO: HER er den liste som vi skal vise på chatPage
+       return createDatingUserArrayListFromResultSet(resultSet);
+    }
+    
+    public Chat findChatTable(int idLoggedInDatingUser, int idDatingUserToChatWith)
+    {
+        Chat chat = null;
+    
+        chatConnection = establishConnection("lovestruck_chat");
+    
+        try
+        {
+            // find tabellen i chats_list-db'en som hedder: chats_list_id_id
+            String sqlCommand = "SELECT * FROM lovestruck_chat.chat_?_?;";
+        
+            PreparedStatement preparedStatement = chatConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, idLoggedInDatingUser);
+            preparedStatement.setInt(1, idDatingUserToChatWith);
+        
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            chat = createChatFromResultSet(resultSet);
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in updateFavouritesListInDb: " + e.getMessage());
+        }
+        return chat;
+    }
+    
+    public Chat createChatFromResultSet(ResultSet resultSet)
+    {
+        Chat chat = null;
+        
+        try
+        {
+            if(resultSet.next())
+            {
+                ArrayList<Message> messagesList = new ArrayList<Message>();
+                
+                while(resultSet.next())
+                {
+                    messagesList.add(new Message(resultSet.getString("message"),
+                            resultSet.getString("author")));
+                }
+                
+                chat = new Chat(messagesList);
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in createChatFromResultSet: " + e.getMessage());
+        }
+        
+        return chat;
+    }
+    
+    
+    
+    // therDatingUserInChat
+    
+    // ChatFromIds()
+    
+    // metode som laver et Chat-objekt ud fra resultSet som indeholder chat_?_?
+    
+    
+    
+    public ArrayList<DatingUser> createDatingUserArrayListFromResultSet(ResultSet resultSet)
+    {
+        ArrayList<DatingUser> allDatingUsersThatLoggedInDatingUserHasChattedWith = new ArrayList<>();
+        try
+        {
+            while(resultSet.next())
+            {
+                allDatingUsersThatLoggedInDatingUserHasChattedWith.add
+                   (retrieveDatingUserFromDb(resultSet.getInt(1)));
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in createDatingUserArrayListFromResultSet: " + e.getMessage());
+        }
+    
+        return allDatingUsersThatLoggedInDatingUserHasChattedWith;
+        
+        
+    }
+    
+    
+    public ResultSet retrieveChatsList(int idDatingUser)
+    {
+        ResultSet resultSet = null;
+        
+        chatslistConnection = establishConnection("lovestruck_chats_list");
+        
+        try
+        {
+            String sqlCommand = "SELECT * FROM lovestruck_chats_list.chats_list_?;";
+            
+            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
+            
+            preparedStatement.setInt(1, idDatingUser);
+            
+            resultSet = preparedStatement.executeQuery();
+            
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in retrieveChatsList: " + e.getMessage());
+        }
+        return resultSet;
+    }
+    
+    
+    
+    public void createChatsListTableDb(int idDatingUser)
+    {
+        chatslistConnection = establishConnection("lovestruck_chats_list");
+        
+        try
+        {
+            // lovestruc_favourites_list == den database som vi laver tabellen i
+            // favourites_list_? == navnet på tabellen
+            // id_dating_user INT NOT NULL,== navn på ny kolonne og hvilke bokse der er krydset af
+            // PRIMARY KEY(id_dating_user) == siger at det er kolonnen id_dating_user som er primary key
+            String sqlCommand = "CREATE TABLE lovestruck_chats_list.chats_list_? (id_dating_user INT NOT NULL, " +
+                                        "PRIMARY " +
+                                        "KEY (id_dating_user));";
+            
+            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
+            
+            preparedStatement.setInt(1, idDatingUser);
+            
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in createChatsListTableDb: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Laver ny chat_id_id-tabel
+     *
+     * @param idLoggedInDatingUser id som skal bruges til at oprette tabel-navn
+     *
+     * @param idDatingUserToChatWith id som skal bruges til at oprette tabel-navn
+     *
+     * @return Chat Returnerer den nye chat vi har oprettet i db
+     * */
+    public void createChatTableInDb(int idLoggedInDatingUser, int idDatingUserToChatWith)
+    {
+        chatConnection = establishConnection("lovestruck_chat");
+    
+        try
+        {
+            // lovestruc_favourites_list == den database som vi laver tabellen i
+            // favourites_list_? == navnet på tabellen
+            // id_dating_user INT NOT NULL,== navn på ny kolonne og hvilke bokse der er krydset af
+            // PRIMARY KEY(id_dating_user) == siger at det er kolonnen id_dating_user som er primary key
+            String sqlCommand = "CREATE TABLE lovestruck_chat.chat_?_? (id_chat INT NOT NULL, message VARCHAR(14000) " +
+                                        "NOT NULL, author VARCHAR(45) NOT NULL" +
+                                        "PRIMARY KEY (id_chat));";
+        
+            PreparedStatement preparedStatement = chatConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, idLoggedInDatingUser);
+            preparedStatement.setInt(1, idDatingUserToChatWith);
+        
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in createChatsListTableDb: " + e.getMessage());
+        }
+    }
+    
     
     
 }
