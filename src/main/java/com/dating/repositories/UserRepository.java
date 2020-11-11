@@ -611,6 +611,8 @@ public class UserRepository
         }
     }
     
+    //------------------ POSTALINFO METODER -------------------//
+    
     /**
      * Finder PostalInfo-entitet knyttet til bestemt idPostalInfo
      *
@@ -657,33 +659,38 @@ public class UserRepository
      */
     public int findIdPostalInfoFromPostalInfoObject(PostalInfo postalInfo)
     {
-        lovestruckConnection = establishConnection("lovestruck");
-        
-        int idPostalInfo = 0;
-    
-        try
+        if(postalInfo != null)
         {
-            String sqlCommand = "SELECT * FROM postal_info WHERE zip_code = ?";
-        
-            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
-            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
-        
-            preparedStatement.setInt(1, postalInfo.getZipCode());
-        
-            ResultSet resultSet = preparedStatement.executeQuery();
-        
-            if(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+    
+            lovestruckConnection = establishConnection("lovestruck");
+    
+            int idPostalInfo = 0;
+    
+            try
             {
-                idPostalInfo = resultSet.getInt(1);
+                String sqlCommand = "SELECT * FROM postal_info WHERE zip_code = ?";
+        
+                // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+                PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+        
+                preparedStatement.setInt(1, postalInfo.getZipCode());
+        
+                ResultSet resultSet = preparedStatement.executeQuery();
+        
+                if(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+                {
+                    idPostalInfo = resultSet.getInt(1);
+                }
             }
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in findIdPostalInfoFromPostalInfoObject: " + e.getMessage());
-        }
+            catch(SQLException e)
+            {
+                System.out.println("Error in findIdPostalInfoFromPostalInfoObject: " + e.getMessage());
+            }
     
-        return idPostalInfo;
     
+            return idPostalInfo;
+        }
+        return -1;
     }
     
     public PostalInfo findPostalInfoObjectFromZipCodeInput(int zipCode)
@@ -714,6 +721,38 @@ public class UserRepository
         }
     
         return postalInfo;
+    }
+    
+    public boolean checkIfValidZipCode(int zipCodeInput)
+    {
+        boolean doesZipCodeExitsInDb = false;
+    
+        lovestruckConnection = establishConnection("lovestruck");
+    
+        PostalInfo postalInfo = null;
+    
+        try
+        {
+            String sqlCommand = "SELECT * FROM postal_info WHERE zip_code = ?";
+        
+            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, zipCodeInput);
+        
+            ResultSet resultSet = preparedStatement.executeQuery();
+        
+            if(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+            {
+                doesZipCodeExitsInDb = true;
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in checkIfValidZipCode: " + e.getMessage());
+        }
+    
+        return doesZipCodeExitsInDb;
     }
     
     /**

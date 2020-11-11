@@ -219,7 +219,7 @@ public class UserService
         boolean isEmailAvailable = true;
         boolean isUsernameAvailable = true;
         boolean doesPasswordInputsMatch = true;
-        boolean isZipCode4Char = true;
+        boolean isZipCodeValid = true;
         
         // hvis nyt emailinput
         if(!(dataFromEditProfileForm.getParameter("emailinput").equals(editDatingUser.getEmail())))
@@ -253,16 +253,14 @@ public class UserService
             if(Integer.parseInt(zipCodeInput) == (editDatingUser.getZipCode()))
             {
                 int zipCode = Integer.parseInt(dataFromEditProfileForm.getParameter("zipcodeinput"));
-                
-                // hvis den passer
     
-                isZipCode4Char = zipCode > 999 && zipCode < 10000;
+                isZipCodeValid = userRepository.checkIfValidZipCode(zipCode);
             }
         }
         
     
         // hvis email + username er ledige OG password inputsmatcher == true
-        return isEmailAvailable && isUsernameAvailable && doesPasswordInputsMatch && isZipCode4Char;
+        return isEmailAvailable && isUsernameAvailable && doesPasswordInputsMatch && isZipCodeValid;
     }
     
     public EditDatingUser updateEditDatingUser(MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
