@@ -72,27 +72,8 @@ public class UserService
     {
         try
         {
-            // TODO: RYKKET UD
             setInput(dataFromEditProfileForm);
-            
-            /*
-            int interestedInInput = convertInterestedInStringToInt(dataFromEditProfileForm.getParameter("interestedininput"));
-            String usernameInput = dataFromEditProfileForm.getParameter("usernameinput");
-            String emailInput = dataFromEditProfileForm.getParameter("emailinput");
-            int ageInput = Integer.parseInt(dataFromEditProfileForm.getParameter("ageinput"));
-            String passwordInput = dataFromEditProfileForm.getParameter("passwordinput");
-            String descriptionInput = dataFromEditProfileForm.getParameter("descriptioninput");
-            String tagsListInput = dataFromEditProfileForm.getParameter("tagslistinput");
-        
-            // zipCodeInput
-            int zipCodeInput = 0;
-            String zipCodeInputString = dataFromEditProfileForm.getParameter("zipcodeinput");
-            if(!(zipCodeInputString.equals("")))
-            {
-                zipCodeInput = Integer.parseInt(zipCodeInputString);
-            }
-            
-             */
+     
             // setter de attributter som en bruger SKAL have
             loggedInDatingUser.setInterestedIn(input.getInterestedIn());
             loggedInDatingUser.setUsername(input.getUsername());
@@ -109,10 +90,14 @@ public class UserService
                 loggedInDatingUser.setPassword(input.getPassword());
             }
             
-            // Hvis NYT profilePictureInput, opdateres det
-            if(!(Arrays.equals(profilePictureFile.getBytes(), loggedInDatingUser.getProfilePictureBytes())))
+            // Hvis der ER profilePictureInput
+            if(profilePictureFile.getBytes().length > 0)
             {
-                loggedInDatingUser.setProfilePictureBytes(profilePictureFile.getBytes());
+                // Hvis NYT profilePictureInput, opdateres det
+                if(!(Arrays.equals(profilePictureFile.getBytes(), loggedInDatingUser.getProfilePictureBytes())))
+                {
+                    loggedInDatingUser.setProfilePictureBytes(profilePictureFile.getBytes());
+                }
             }
         }
         catch(Exception e)

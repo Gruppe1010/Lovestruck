@@ -21,7 +21,6 @@ public class UserRepository
     DatingUser loggedInDatingUser = new DatingUser();
     Admin loggedInAdmin = new Admin();
     
-    
     /**
      * Laver en connection til lovestruck-databasen
      *
