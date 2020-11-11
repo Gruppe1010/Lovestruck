@@ -245,15 +245,24 @@ public class DatingUser extends User
         return tagsList;
     }
     
+    /**
+     * Sætter hver String i tagsList til at have # foran sig
+     *
+     * @param tagsList Den liste som skal String's skal modificeres i
+     */
     public void addHashTag(ArrayList<String> tagsList)
     {
         for(int i = 0; i < tagsList.size(); i++)
         {
             tagsList.set(i, "#" + tagsList.get(i));
-            System.out.println("#" + tagsList.get(i));
         }
     }
     
+    /**
+     * Konverterer tagsList-attributten til en String
+     *
+     * @return String String'en dannet ud fra tagsList-ArrayListen
+     */
     public String convertTagsListToString()
     {
         String tagsString = "";
@@ -268,6 +277,11 @@ public class DatingUser extends User
        return tagsString;
     }
     
+    /**
+     * Konverterer et DatingUser-obj til et EditDatingUser-obj
+     *
+     * @return EditDatingUser EditDatingUser-obj. som er blevet oprettet ud fra DatingUser-obj.
+     */
     public EditDatingUser convertDatingUserToEditDatingUser()
     {
         int zipCode = 0;
@@ -286,13 +300,22 @@ public class DatingUser extends User
                 "", "", profilePictureBytes, description, tagsListString);
     }
     
+    /**
+     * Konverterer et DatingUser-obj til et PreviewDatingUser-obj
+     *
+     * @return PreviewDatingUser PreviewDatingUser-obj. som er blevet oprettet ud fra DatingUser-obj.
+     */
     public PreviewDatingUser convertDatingUserToPreviewDatingUser()
     {
         return new PreviewDatingUser(idDatingUser, profilePictureBytes, super.getUsername(), age, true);
         
     }
     
-    // TODO lav denne
+    /**
+     * Konverterer et DatingUser-obj til et ViewProfileDatingUser-obj
+     *
+     * @return ViewProfileDatingUser ViewProfileDatingUser-obj. som er blevet oprettet ud fra DatingUser-obj.
+     */
     public ViewProfileDatingUser convertDatingUserToViewProfileDatingUser()
     {
         
@@ -333,6 +356,11 @@ public class DatingUser extends User
         
     }
     
+    /**
+     * Tilføjer et datingUser-obj. til favouritesList
+     *
+     * @param datingUser DatingUser-obj. som skal tilføjes til listen
+     */
     public void addDatingUserToFavouritesList(DatingUser datingUser)
     {
         if(favouritesList == null)
@@ -343,6 +371,11 @@ public class DatingUser extends User
         favouritesList.add(datingUser);
     }
     
+    /**
+     * Fjerner et datingUser-obj. fra favouritesList
+     *
+     * @param datingUserToRemove DatingUser-obj. som skal fjernes fra listen
+     */
     public void removeDatingUserFromFavouritesList(DatingUser datingUserToRemove)
     {
         
@@ -361,7 +394,11 @@ public class DatingUser extends User
          */
     }
     
-    
+    /**
+     * Konverterer favouritesList-attribut til ArrayList der indeholder PreviewDatingUser-obj.
+     *
+     * @return ArrayList<PreviewDatingUser> Konverteret ArrayListe med PreviewDatingUsers på
+     */
     public ArrayList<PreviewDatingUser> getFavouritesListAsPreviewDatingUsers()
     {
         ArrayList<PreviewDatingUser> previewDatingUserArrayList = new ArrayList<>();
@@ -374,16 +411,25 @@ public class DatingUser extends User
         return previewDatingUserArrayList;
     }
     
-    
+    /**
+     * Konverterer sex-boolean til String (false == Mand, true == Kvinde)
+     *
+     * @return String Konverteret sex-bool
+     */
     public String convertSexToString()
     {
-        if(sex == true)
+        if(sex)
         {
             return "Kvinde";
         }
         return "Mand";
     }
     
+    /**
+     * Opretter et byte[] ud fra genericProfilePicture (det som tildeles automatisk ved oprettelse af user)
+     *
+     * @return byte[] ByteArray'et der indeholder genericProfilePicture
+     */
     public byte[] createGenericProfilePictureBytes()
     {
         byte[] genericProfilePictureBytes = new byte[0];
@@ -404,11 +450,18 @@ public class DatingUser extends User
         return genericProfilePictureBytes;
     }
     
-    public boolean isViewProfileDatingUserOnFavouritesList(int IdViewProfileDatingUser)
+    /**
+     * Tjekker om bruger er på favouritesList (via id)
+     *
+     * @param idViewProfileDatingUser id'et som tjekkes om er på favouritesList
+     *
+     * @return boolean Svaret på om en bruger med id'et er på favouritesList'en
+     */
+    public boolean isViewProfileDatingUserOnFavouritesList(int idViewProfileDatingUser)
     {
         for(DatingUser datingUser : favouritesList)
         {
-            if(datingUser.idDatingUser == IdViewProfileDatingUser)
+            if(datingUser.idDatingUser == idViewProfileDatingUser)
             {
                 return true;
             }
@@ -416,7 +469,6 @@ public class DatingUser extends User
         
         return false;
     }
-    
 }
 
 
