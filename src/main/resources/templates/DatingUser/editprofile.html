@@ -124,14 +124,12 @@
                                 <span>Postnummer: </span>
                                 <input type="number" id="zipcode" name="zipcodeinput"
                                        th:value="${editDatingUser.displayZipCode()}"
-                                       minlength="4" maxlength="4"
+                                       min="1000" maxlength="9999"
                                        class="color fontsize formlinestyling"><br><br>
 
                                 <!--password -->
                                 <span>Ændre adgangskode: </span>
                                 <input type="password" id="password" name="passwordinput"
-                                       oninvalid="this.setCustomValidity('Indtast venligst adgangskode på mindst 8 tegn')"
-                                       oninput="setCustomValidity('')"
                                        class="color fontsize formlinestyling password"><br><br>
 
                                 <span>Bekræft adgangskode: </span>
