@@ -7,6 +7,7 @@ public class ViewProfileDatingUser
     // tilføj de attributter som vi skal vise på denne html
     // TODO måske slettes permanent: private boolean isBlacklisted;
    
+    private int idViewProfileDatingUser;
     private String username;
     private String sexAndAge; // TODO! overvej at sammensmelte sex og age - da det alligevel skal stå samme sted
     private String zipCodeAndCity;
@@ -17,9 +18,11 @@ public class ViewProfileDatingUser
     
     // constructor
     public ViewProfileDatingUser(){}
-    public ViewProfileDatingUser(String username,String sexAndAge, String zipCodeAndCity, String description,
+    public ViewProfileDatingUser(int idViewProfileDatingUser, String username,String sexAndAge, String zipCodeAndCity,
+                                 String description,
                                  String tags, byte[] profilePictureBytes)
     {
+        this.idViewProfileDatingUser = idViewProfileDatingUser;
         this.username = username;
         this.sexAndAge = sexAndAge;
         this.zipCodeAndCity = zipCodeAndCity;
@@ -30,6 +33,22 @@ public class ViewProfileDatingUser
     }
     
     //getters + setters
+    public int getIdViewProfileDatingUser()
+    {
+        return idViewProfileDatingUser;
+    }
+    public void setIdViewProfileDatingUser(int idViewProfileDatingUser)
+    {
+        this.idViewProfileDatingUser = idViewProfileDatingUser;
+    }
+    public byte[] getProfilePictureBytes()
+    {
+        return profilePictureBytes;
+    }
+    public void setProfilePictureBytes(byte[] profilePictureBytes)
+    {
+        this.profilePictureBytes = profilePictureBytes;
+    }
     public String getUsername()
     {
         return username;
@@ -102,10 +121,11 @@ public class ViewProfileDatingUser
     }
     
      */
-    
     private String byteArrayAs64String()
     {
         return Base64.encodeBase64String(this.profilePictureBytes);
     }
+    
+    
     
 }

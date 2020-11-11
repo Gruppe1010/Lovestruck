@@ -103,15 +103,18 @@
                                       th:text="${viewProfileDatingUser.getTags()}"
                                       class="color fontsize"></span>
                                 </div>
-
-                                <button class="favouriteuserbutton fontsize">Gør til favorit</button>
+                                <a href="/favouritesConfirmation">
+                                    <button class="favouriteuserbutton fontsize">Gør til favorit</button>
+                                </a>
                             </div>
 
                             <!--profilbillede -->
-                            <div class="profilepicture"> <!--TIL: profilePicture -->
-                                <img alt="" class="profilepictureimage" th:src="'data:image/jpeg;base64,' + ${viewProfileDatingUser.getBase64()}">
-                                <!--<img src="https://i.imgur.com/66Dq0AJ.png" alt="" class="profilepictureimage">-->
-                            </div>
+
+                                <div class="profilepicture"> <!--TIL: profilePicture -->
+                                    <img alt="" class="profilepictureimage" th:src="'data:image/jpeg;base64,' + ${viewProfileDatingUser.getBase64()}">
+                                    <!--<img src="https://i.imgur.com/66Dq0AJ.png" alt="" class="profilepictureimage">-->
+                                </div>
+
 
                         </div>
                     </div>

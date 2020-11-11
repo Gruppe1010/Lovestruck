@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <title> Love Struck </title>
+    <!-- TODO evt. hvis vi vil have den til at redirecte til editProfile igen
+    <meta http-equiv = "refresh" content = "5; url = /editProfile"/> -->
 
     <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
     <meta charset="utf-8"/>
     <meta name="description" content="Love struck - tænd gnisten"/>
 
     <!-- css-filer -->
-    <link href="/startandfavoritespage.css" type="text/css" rel="stylesheet">
+    <link href="/editprofile.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
 
@@ -28,17 +31,17 @@
     <!--content der inkapsler hele siden undtagen footer-->
     <div class="content">
         <div class="logo">
-            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
-            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
         </div>
 
         <div class="menubar">
             <!--for at style linkene skulle a have sin egen klasse-->
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
-            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
             <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
-            <span class="menubarheadline dropdown">
+            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
                 <span th:text="${loggedInDatingUser.getUsername()}"></span>
                 <div class="dropdown-content">
                     <a href="/viewMyProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
@@ -49,28 +52,18 @@
             </span>
         </div>
 
-        <div class="content-container">
-            <h4 class="startpageheadline">Her finder du alle dine favoritter! <i class="fas fa-heart"></i></h4>
-            <div class="textbox-container">
-
-                <div th:each="previewDatingUser : ${favouritesList}">
-                    <a class="previewdatinguserlink" th:href="@{/viewProfile(id=${previewDatingUser.getId()})}">
-                        <div class="previewdatinguserbox">
-                            <img class="previewdatinguserpicture" th:src="'data:image/jpeg;base64,' + ${previewDatingUser.getBase64()}">
-                            <div class="previewdatinguserinfo">
-                                <div th:text="${previewDatingUser.getUsername()}"></div>
-                                <div th:text="${previewDatingUser.getAge()}"><p>&nbsp; år</p></div>
-                            </div>
-                        </div>
-                    </a>
+        <div class="row">
+            <!-- Kolonne til inputfelt -->
+            <div class="col">
+                <div id="form-container">
+                    <h3 class="formheadline"><br><br><br> <i class="fas fa-heart"></i> <i class="fas fa-heart"></i> <i class="fas fa-heart"><br></i></h3>
+                    <h1 class="formheadline" th:text="${viewProfileDatingUser.getUsername()}"></h1>
+                    <h1 class="formheadline">&nbsp; blev tilføjet til din favoritliste</h1>
+                    <h3 class="formheadline"><i class="fas fa-heart"></i><i class="fas fa-heart"></i><i class="fas fa-heart"><br></i></h3>
                 </div>
-
             </div>
         </div>
     </div>
-
-
-
     <footer>
         <div>
             <div class="floatright">
@@ -85,4 +78,3 @@
 </div>
 </body>
 </html>
-

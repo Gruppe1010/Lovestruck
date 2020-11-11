@@ -2,6 +2,7 @@ package com.dating.models.users;
 
 import com.dating.models.PostalInfo;
 import com.dating.viewModels.datingUser.EditDatingUser;
+import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 
@@ -38,9 +39,9 @@ public class DatingUser extends User
         // sættes til standard-billede
         profilePictureBytes = createGenericProfilePictureBytes();
         description = null;
-        tagsList = null;
+        tagsList = new ArrayList<>();
         postalInfo = new PostalInfo(0,"");
-        favouritesList = null;
+        favouritesList = new ArrayList<>();
     }
     
     // getters + setters
@@ -257,7 +258,7 @@ public class DatingUser extends User
     {
         String tagsString = "";
         
-        if(tagsList.size()>0)
+        if(tagsList.size() > 0)
         {
             for(String tag : tagsList)
             {
@@ -283,6 +284,12 @@ public class DatingUser extends User
         
         return new EditDatingUser(interestedIn, super.getUsername(), super.getEmail(), age, zipCode,
                 "", "", profilePictureBytes, description, tagsListString);
+    }
+    
+    public PreviewDatingUser convertDatingUserToPreviewDatingUser()
+    {
+        return new PreviewDatingUser(idDatingUser, profilePictureBytes, super.getUsername(), age);
+        
     }
     
     // TODO lav denne
@@ -321,10 +328,35 @@ public class DatingUser extends User
             tagsListString = "Ingen tags";
         }
      
-        return new ViewProfileDatingUser(super.getUsername(), sexAndAge, zipCodeAndCity,
+        return new ViewProfileDatingUser(idDatingUser, super.getUsername(), sexAndAge, zipCodeAndCity,
                 descriptionInput, tagsListString, profilePictureBytes);
         
     }
+    
+    public void addDatingUserToFavouritesList(DatingUser datingUser)
+    {
+        if(favouritesList == null)
+        {
+            favouritesList = new ArrayList<>();
+        }
+        
+        favouritesList.add(datingUser);
+    }
+    
+    
+    public ArrayList<PreviewDatingUser> getFavouritesListAsPreviewDatingUsers()
+    {
+        ArrayList<PreviewDatingUser> previewDatingUserArrayList = new ArrayList<>();
+        
+        for(DatingUser datingUser : favouritesList)
+        {
+            previewDatingUserArrayList.add(datingUser.convertDatingUserToPreviewDatingUser());
+        }
+    
+        return previewDatingUserArrayList;
+    }
+    
+    
     
     public String convertSexToString()
     {

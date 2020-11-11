@@ -61,6 +61,37 @@ public class DatingController
         return "logout"; // html
     }
     
+    //------------------ POST GENEREL -------------------//
+    
+    // TODO: denne her gør det tricky at dele Controlleren op i flere Controller-klasser
+    @PostMapping("/postLogIn")
+    public String postLogIn(WebRequest dataFromLogInForm)
+    {
+        // vi tjekker admin-tabellen først fordi den er kortest (selvom det nok oftere er en datingUser som vil logge
+        // ind)
+        loggedInAdmin = userRepository.checkIfUserExistsInAdminsTable(dataFromLogInForm);
+        
+        if(loggedInAdmin.getUsername()!=null) // hvis den har fundet en admin
+        {
+            return "redirect:/startPageAdmin"; // url
+        }
+        // ellers tjekker vi om det er en datingUser
+        loggedInDatingUser = userRepository.checkIfUserExistsInDatingUsersTable(dataFromLogInForm);
+        
+        // hvis brugeren IKKE er null OG IKKE blacklisted
+        if(loggedInDatingUser.getUsername()!=null && !(loggedInDatingUser.isBlacklisted()))
+        {
+            loggedInAdmin = null;
+            return "redirect:/startPage"; // url
+        }
+        // TODO: evt. skriv metode som sætter begge user-ting til null - fordi lige nu har de fået tildelt tomme brugere
+        // brugeren er ikke fundet
+        loggedInAdmin = null;
+        loggedInDatingUser = null;
+        return "redirect:/logIn"; // url
+    }
+    
+    
     //------------------ GET DATINGUSER -------------------//
     
     @GetMapping("/startPage")
@@ -87,21 +118,13 @@ public class DatingController
     }
     
     @GetMapping("/favouritesPage")
-    public String favouritesPage(Model datingUserModel)
+    public String favouritesPage(Model datingUserModel, Model favouritesListModel)
     {
-        /*
-        Possibly noget ala:
-        tager som param:
-             - Model favouritesListModel
-        
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
-        favouritesListModel.addAttribute("favouritesList", loggedInUser.getFavouritesList());
+    
+        ArrayList<PreviewDatingUser> favouritesList = loggedInDatingUser.getFavouritesListAsPreviewDatingUsers();
         
-       og så thymeleafer vi en array på favouritespage-html'en
-         */
-        
-        
-        datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        favouritesListModel.addAttribute("favouritesList", favouritesList);
         
         return "DatingUser/favouritespage"; // html
     }
@@ -158,6 +181,24 @@ public class DatingController
         return "DatingUser/editprofileconfirmation"; // html
     }
     
+    @GetMapping("/favouritesConfirmation")
+    public String favouritesConfirmation(Model viewProfileDatingUserModel, Model loggedInDatingUserModel)
+    {
+        // henter viewProfileDatingUser-obj. som skal tilføjes til listen op fra db
+        DatingUser datingUserToAddToList =
+                userRepository.retrieveDatingUserFromDb(viewProfileDatingUser.getIdViewProfileDatingUser());
+        // gemmer viewProfileDatingUser på loggedInDatingUsers attribut favouritesList
+        loggedInDatingUser.addDatingUserToFavouritesList(datingUserToAddToList);
+        
+        // opdaterer loggedInDatingUser i db
+        userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
+        
+        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        
+        return "/DatingUser/favouritesconfirmation";
+    }
+    
     //------------------ RequestMapping DatingUser -------------------//
     
     @RequestMapping("/viewProfile")
@@ -171,6 +212,69 @@ public class DatingController
      
         return "DatingUser/viewprofile";
     }
+    
+    //------------------ POST DATINGUSER -------------------//
+    
+    // I PostMappingens "/" SKAL der stå "post" FØRST! : fx IKKE "/createUser" men "/postCreateUser"
+    @PostMapping("/postCreateUser")
+    public String postCreateUser(WebRequest dataFromCreateUserForm)
+    {
+        loggedInDatingUser = userService.createDatingUser(dataFromCreateUserForm);
+        
+        if(loggedInDatingUser!=null)
+        {
+            userRepository.addDatingUserToDb(loggedInDatingUser);
+            
+            return "redirect:/editProfile";
+        }
+        
+        return "redirect:/";
+    }
+    
+    @PostMapping("/postEditProfile")
+    public String postEditProfile(@RequestParam("profilepictureinput") MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
+                                  Model editDatingUserModel)
+    {
+        // tjekker om brugeren har indtastet ny info
+        boolean userAddedChanges = userService.checkForProfileAlterations(profilePictureFile, dataFromEditProfileForm,
+                editDatingUser);
+        
+        // hvis bruger har indtastet ny info
+        if(userAddedChanges)
+        {
+            // TODO NICE lav måske en errorPage som skriver hvilken fejl det er og skifter tilbage til
+            //  editProfile-html'en
+            // TODO: fix at den siger confirmationPage ved zipcode 0000 - ved ikkesisterende-zipcode
+            boolean isUsernameEmailPasswordZipCodeValid =
+                    userService.checkUsernameEmailPasswordZipCode(dataFromEditProfileForm, editDatingUser);
+            
+            if(isUsernameEmailPasswordZipCodeValid)
+            {
+                // vi opdaterer loggedInDatingUser til at indeholde de nye opdateringer
+                loggedInDatingUser = userService.updateLoggedInDatingUser(profilePictureFile, dataFromEditProfileForm,
+                        loggedInDatingUser);
+                userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
+                
+                return "redirect:/editProfileConfirmation"; // url
+            }
+        }
+        
+        // Hvis INGEN ny info ELLER hvis usernameEmailPassword er invalid
+        // editDatingUser opdateres fordi viewet skal vise det brugeren skrev ind!!!!!!!!!!!!!!!!
+        editDatingUser = userService.updateEditDatingUser(profilePictureFile, dataFromEditProfileForm,
+                loggedInDatingUser.getUsername(),
+                loggedInDatingUser.getEmail());
+        editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
+        
+        return "DatingUser/editprofile"; // html
+    }
+    
+    
+    
+    
+    
+    
+    
     
     
     //------------------ GET ADMIN -------------------//
@@ -245,92 +349,8 @@ public class DatingController
     }
     
     
-    //------------------ POST GENEREL -------------------//
-    
-    // TODO: denne her gør det tricky at dele Controlleren op i flere Controller-klasser
-    @PostMapping("/postLogIn")
-    public String postLogIn(WebRequest dataFromLogInForm)
-    {
-        // vi tjekker admin-tabellen først fordi den er kortest (selvom det nok oftere er en datingUser som vil logge
-        // ind)
-        loggedInAdmin = userRepository.checkIfUserExistsInAdminsTable(dataFromLogInForm);
-        
-        if(loggedInAdmin.getUsername()!=null) // hvis den har fundet en admin
-        {
-            return "redirect:/startPageAdmin"; // url
-        }
-        // ellers tjekker vi om det er en datingUser
-        loggedInDatingUser = userRepository.checkIfUserExistsInDatingUsersTable(dataFromLogInForm);
-        
-        // hvis brugeren IKKE er null OG IKKE blacklisted
-        if(loggedInDatingUser.getUsername()!=null && !(loggedInDatingUser.isBlacklisted()))
-        {
-            loggedInAdmin = null;
-            return "redirect:/startPage"; // url
-        }
-        // TODO: evt. skriv metode som sætter begge user-ting til null - fordi lige nu har de fået tildelt tomme brugere
-        // brugeren er ikke fundet
-        loggedInAdmin = null;
-        loggedInDatingUser = null;
-        return "redirect:/logIn"; // url
-    }
-    
-    //------------------ POST DATINGUSER -------------------//
-    
-    // I PostMappingens "/" SKAL der stå "post" FØRST! : fx IKKE "/createUser" men "/postCreateUser"
-    @PostMapping("/postCreateUser")
-    public String postCreateUser(WebRequest dataFromCreateUserForm)
-    {
-        loggedInDatingUser = userService.createDatingUser(dataFromCreateUserForm);
-        
-        if(loggedInDatingUser!=null)
-        {
-            userRepository.addDatingUserToDb(loggedInDatingUser);
-            
-            return "redirect:/editProfile";
-        }
-        
-        return "redirect:/";
-    }
-    
-    @PostMapping("/postEditProfile")
-    public String postEditProfile(@RequestParam("profilepictureinput") MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
-                                  Model editDatingUserModel)
-    {
-        // tjekker om brugeren har indtastet ny info
-        boolean userAddedChanges = userService.checkForProfileAlterations(profilePictureFile, dataFromEditProfileForm,
-                editDatingUser);
-    
-        // hvis bruger har indtastet ny info
-        if(userAddedChanges)
-        {
-            // TODO NICE lav måske en errorPage som skriver hvilken fejl det er og skifter tilbage til
-            //  editProfile-html'en
-            // TODO: fix at den siger confirmationPage ved zipcode 0000 - ved ikkesisterende-zipcode
-            boolean isUsernameEmailPasswordZipCodeValid =
-                    userService.checkUsernameEmailPasswordZipCode(dataFromEditProfileForm, editDatingUser);
-            
-            if(isUsernameEmailPasswordZipCodeValid)
-            {
-                // vi opdaterer loggedInDatingUser til at indeholde de nye opdateringer
-                loggedInDatingUser = userService.updateLoggedInDatingUser(profilePictureFile, dataFromEditProfileForm,
-                        loggedInDatingUser);
-                userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
-                
-                return "redirect:/editProfileConfirmation"; // url
-            }
-        }
-        
-        // Hvis INGEN ny info ELLER hvis usernameEmailPassword er invalid
-        // editDatingUser opdateres fordi viewet skal vise det brugeren skrev ind!!!!!!!!!!!!!!!!
-        editDatingUser = userService.updateEditDatingUser(profilePictureFile, dataFromEditProfileForm,
-                loggedInDatingUser.getUsername(),
-                loggedInDatingUser.getEmail());
-        editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
-        
-        return "DatingUser/editprofile"; // html
-    }
-    
+ 
+  
     //------------------ POST ADMIN -------------------//
     
     @PostMapping("/postEditProfileAdmin")

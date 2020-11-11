@@ -196,6 +196,39 @@ public class UserRepository
         
     }
     
+    public void updateFavouritesListInDb(DatingUser datingUser)
+    {
+        favouriteslistConnection = establishConnection("lovestruck_favourites_list");
+        
+        // hvis der ER noget på datingUser-obj.s favouritesList
+        if(datingUser.getFavouritesList() != null)
+        {
+            // find sidste index plads' nummer
+            int lastIndex = datingUser.getFavouritesList().size() - 1;
+    
+            // find favouritesList -- find datingUser-obj. på sidste index -- find id'et på denne
+            int idDatingUserToAdd = datingUser.getFavouritesList().get(lastIndex).getIdDatingUser();
+    
+            try
+            {
+                String sqlCommand = "INSERT into favourites_list_? (id_dating_user) values(?)";
+        
+                PreparedStatement preparedStatement = favouriteslistConnection.prepareStatement(sqlCommand);
+        
+                preparedStatement.setInt(1, datingUser.getIdDatingUser());
+                preparedStatement.setInt(2, idDatingUserToAdd);
+        
+                preparedStatement.executeUpdate();
+        
+            }
+            catch(SQLException e)
+            {
+                System.out.println("Error in updateFavouritesListInDb: " + e.getMessage());
+            }
+        }
+        
+    }
+    
     /**
      * Finder id_dating_user-værdien gemt i database på et givent user-objekt
      *
@@ -456,6 +489,13 @@ public class UserRepository
         return resultSet;
     }
     
+    public DatingUser retrieveDatingUserFromDb(int idDatingUser)
+    {
+        ResultSet resultSet = findUserInDb(idDatingUser);
+    
+        return createDatingUserFromResultSet(resultSet);
+    }
+    
     
     public ViewProfileDatingUser findDatingUserInDbToView(int idDatingUser)
     {
@@ -518,6 +558,8 @@ public class UserRepository
         
             // user tilføjes til database
             preparedStatement.executeUpdate();
+            
+            updateFavouritesListInDb(loggedInDatingUser);
         }
         catch(SQLException e)
         {
@@ -727,6 +769,8 @@ public class UserRepository
             {
                 Blob profilePictureBlob = resultSet.getBlob(9);
                 byte[] profilePictureBytes = profilePictureBlob.getBytes(1, (int) profilePictureBlob.length());
+                ArrayList<DatingUser> favouritesList =
+                        convertResultSetToFavouritesList(retrieveFavouritesList(resultSet.getInt(1)));
                 
                 datingUser.setIdDatingUser(resultSet.getInt(1));
                 datingUser.setBlacklisted(datingUser.convertIntToBoolean(resultSet.getInt(2)));
@@ -740,6 +784,7 @@ public class UserRepository
                 datingUser.setDescription(resultSet.getString(10));
                 datingUser.setTagsList(datingUser.convertStringToTagsList(resultSet.getString(11)));
                 datingUser.setPostalInfo(findPostalInfoObjectFromIdPostalInfo(resultSet.getInt(12)));
+                datingUser.setFavouritesList(favouritesList);
             }
         }
         catch(SQLException e)
@@ -749,5 +794,49 @@ public class UserRepository
         
         return datingUser;
     }
+ 
+    
+    public ResultSet retrieveFavouritesList(int idDatingUser)
+    {
+        ResultSet resultSet = null;
+    
+        favouriteslistConnection = establishConnection("lovestruck_favourites_list");
+        
+        try
+        {
+            String sqlCommand = "SELECT * FROM lovestruck_favourites_list.favourites_list_?;";
+        
+            PreparedStatement preparedStatement = favouriteslistConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, idDatingUser);
+        
+            resultSet = preparedStatement.executeQuery();
+        
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in updateFavouritesListInDb: " + e.getMessage());
+        }
+        return resultSet;
+    }
+    
+    public ArrayList<DatingUser> convertResultSetToFavouritesList(ResultSet resultSet)
+    {
+        ArrayList<DatingUser> favouritesList = new ArrayList<>();
+        try
+        {
+            while(resultSet.next())
+            {
+                favouritesList.add(retrieveDatingUserFromDb(resultSet.getInt(1)));
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in convertResultSetToFavouritesList: " + e.getMessage());
+        }
+        
+        return favouritesList;
+    }
+    
     
 }
