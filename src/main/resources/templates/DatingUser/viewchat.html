@@ -1,10 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title> Love Struck </title>
+
+    <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Love struck - tænd gnisten"/>
+
+    <!-- css-filer -->
+
+    <link href="/chatpage.css" type="text/css" rel="stylesheet">
+    <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
+    <link href="/formtemplate.css" type="text/css" rel="stylesheet">
+
+    <!-- bootstraaaaap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!--Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&display=swap" rel="stylesheet">
+    <!-- font-family: 'Bitter', sans-serif; -->
+
+    <!--Icon-->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
 </head>
 <body>
+<!--pagecontainer der tager footer med-->
+<div class="pagecontainer">
+    <!--content der inkapsler hele siden undtagen footer-->
+    <div class="content">
+        <div class="logo">
+            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
+            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
+        </div>
 
+        <div class="menubar">
+            <!--for at style linkene skulle a have sin egen klasse-->
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/startPage"> <i class="fas fa-home"></i> Start</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/favouritesPage"><i class="fas fa-heart"></i> Kandidater</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPage"><i class="fas fa-search"></i> Søg</a></span>
+            <span class="menubarheadline dropdown linkmenubarheadlinelogout">
+                <span th:text="${loggedInDatingUser.getUsername()}"></span>
+                <div class="dropdown-content">
+                    <a href="/viewMyProfile" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Vis min profil</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/editProfile" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
+                    <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
+                </div>
+                <i class="fas fa-caret-down"></i>
+            </span>
+        </div>
+
+        <div class="content-container font">
+            <div class="row">
+                <!-- Kolonne til inputfelt -->
+                <div class="col">
+                    <div id="form-container">
+
+                        <form id="twit-form" action="/postTwit" method="post">
+                            <h5 class="twitformheadline">Skriv en besked</h5>
+
+                            <!-- Tekst til inputfeltet i browser -->
+                            <label for="author">Title</label>
+                            <!--
+                            <input> Laver input-felt
+                            type="text" == Siger hvilket input der tages imod i inputfeltet
+                            id="catfact" == Kalder bestemt styling vi har i css-filen
+                            name="catfact" == giver inputtet vi får ind referencenavnet, catfact -->
+                            <input type="text" id="author" name="authorinput" class="color"><br><br>
+                            <!-- Laver et inputfelt med boolsk værdi: enten er der trykket submit eller også er der ikke-->
+
+                            <label for="twit-text">Skriv besked</label>
+                            <!--
+                            <input> Laver input-felt
+                            type="text" == Siger hvilket input der tages imod i inputfeltet
+                            id="catfact" == Kalder bestemt styling vi har i css-filen
+                            name="catfact" == giver inputtet vi får ind referencenavnet, catfact -->
+                            <input type="text" id="twit-text" name="twittextinput" class="color"><br><br>
+                            <!-- Laver et inputfelt med boolsk værdi: enten er der trykket submit eller også er der ikke-->
+
+                            <input type="submit" value="Send besked" class="submitbutton">
+                        </form>
+                    </div>
+                </div>
+                <!-- Ny kolonne til den info jeg vil gerne vil vise - den som brugeren giver mig-->
+                <div class="col">
+                    <div class="twitcontainer">
+                        <div class="postedtwits">
+                            <h5 class="twitsheadline">Chat</h5>
+                            <p th:each="twit : ${publicTwitList}" class="twit">
+                                <span th:text="${twit.getTwitTextWithCitation()}" class="twittext"></span><br>
+                                <span th:text="${twit.getAuthorWithAt()}" class="twitauthoranddate"> </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div>
+                <div class="floatright">
+                <span><a class="footertext" href="https://www.google.com/maps/place/Lygten+37,+2400+K%C3%B8benhavn/data=!4m2!3m1!1s0x465252496d687ed3:0xab513417c1575967?sa=X&ved=2ahUKEwj9ya6NqJHsAhUPzqQKHYjIAKoQ8gEwAHoECAwQAQ">
+                    Lygten 37, 2400 København</a></span>
+                    <span><a class="footertext" href="mailto:kontakt@lovestruck.dk">kontakt@lovestruck.dk</a></span>
+                    <span><a class="footertext" href="tel:+45 0000 1010">+45 0000 1010</a></span>
+                </div>
+            </div>
+
+        </footer>
+    </div>
 </body>
 </html>
+
