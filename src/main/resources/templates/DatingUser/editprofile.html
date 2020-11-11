@@ -124,6 +124,8 @@
                                 <span>Postnummer: </span>
                                 <input type="number" id="zipcode" name="zipcodeinput"
                                        th:value="${editDatingUser.displayZipCode()}"
+                                       oninvalid="this.setCustomValidity('Indtast venligst et gyldigt postnummer')"
+                                       oninput="setCustomValidity('')"
                                        min="1000" maxlength="9999"
                                        class="color fontsize formlinestyling"><br><br>
 

@@ -352,8 +352,6 @@ public class DatingController
         
        og så thymeleafer vi en array på favouritespage-html'en
          */
-        
-        
         return "Admin/blacklisteduserspageadmin"; // html
     }
     
