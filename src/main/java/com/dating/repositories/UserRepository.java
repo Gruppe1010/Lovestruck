@@ -44,72 +44,7 @@ public class UserRepository
         return connection;
     }
 
-    // TODO: skal vi bruge billedmetoderne?
-    /*
-    public void writePictureToDb(int idDatingUser)
-    {
-        lovestruckConnection = establishConnection("lovestruck");
 
-        try
-        {
-            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement("UPDATE dating_users SET profilepicture = ? WHERE id_dating_user = ?");
-
-            InputStream inputStream = new FileInputStream("C:\\Users\\rasmu\\IdeaProjects\\Lovestruck\\src\\main\\resources\\static\\image\\textLogo.png");
-
-            preparedStatement.set
-            preparedStatement.setBlob(1, inputStream);
-            preparedStatement.setInt(2, idDatingUser);
-
-            preparedStatement.executeUpdate();
-
-
-
-        } catch(Exception e)
-        {
-            System.out.println("Error in writePictureToDb: " + e.getMessage());
-        }
-    }
-    public void readPictureFromDb(int idDatingUser, String fileName)
-    {
-        lovestruckConnection = establishConnection("lovestruck");
-
-        try {
-            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement
-                                   ("SELECT profile_picture FROM dating_users WHERE id_dating_user = ?");
-
-            preparedStatement.setInt(1, idDatingUser);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            File file = new File("src\\main\\resources\\static\\image\\profilepictures\\" +fileName);
-
-            FileOutputStream outputStream = new FileOutputStream(file);
-
-
-            //String filePath = "" + file.getAbsolutePath(); gemmer fils path
-            System.out.println("Writing to file: " + file.getAbsolutePath());
-
-            while (resultSet.next())
-            {
-                InputStream inputStream = resultSet.getBinaryStream("profile_picture");
-                byte[] buffer = new byte[128];
-                while (inputStream.read(buffer) > 0)
-                {
-                    outputStream.write(buffer);
-                }
-            }
-
-            }
-            catch(Exception exception)
-            {
-                System.out.println("Error in readPictureFromDb: " + exception.getMessage());
-            }
-
-    }
-    
-     */
-    
-    
     /**
      * Tilføjer DatingUser-objekt til dating_users-tabellen i db
      * OG sætter dets id-attribut
@@ -117,7 +52,7 @@ public class UserRepository
      *
      * @param datingUser DatingUser-obj. som skal tilføjes til db
      */
-    public void addDatingUserToDb(DatingUser datingUser)
+    public void addDatingUserToDb(DatingUser datingUser) throws SQLException
     {
         lovestruckConnection = establishConnection("lovestruck");
         try
@@ -145,6 +80,7 @@ public class UserRepository
             
             // user tilføjes til database
             preparedStatement.executeUpdate();
+            lovestruckConnection.close();
             
             // nu hvor user er blevet oprettet, tilføjer vi databasens genererede id_dating_user til datingUser-objektet
             int idDatingUser = retrieveDatingUserIdFromDb(datingUser);
@@ -159,10 +95,12 @@ public class UserRepository
                 loggedInDatingUser = datingUser;
             }
         }
+
         catch(Exception e)
         {
             System.out.println("Error in addDatingUserToDb: " + e.getMessage());
         }
+
     }
     
     /**
@@ -188,6 +126,7 @@ public class UserRepository
             preparedStatement.setInt(1, idDatingUser);
             
             preparedStatement.executeUpdate();
+            favouriteslistConnection.close();
         }
         catch(SQLException e)
         {
@@ -225,6 +164,8 @@ public class UserRepository
                 preparedStatement.setInt(2, idDatingUserToAdd);
         
                 preparedStatement.executeUpdate();
+                favouriteslistConnection.close();
+
         
             }
             catch(SQLException e)
@@ -256,6 +197,7 @@ public class UserRepository
             preparedStatement.setInt(2, datingUserToRemove.getIdDatingUser());
         
             preparedStatement.executeUpdate();
+            favouriteslistConnection.close();
         
         }
         catch(SQLException e)
@@ -288,16 +230,17 @@ public class UserRepository
             preparedStatement.setString(1, "%" + datingUser.getUsername() + "%");
             
             ResultSet resultSet = preparedStatement.executeQuery();
-            
+
             
             // TODO Find ud af hvorfor vi skal skrive next
             if(resultSet.next())
             {
                 idDatingUser = resultSet.getInt(1);
             }
-            
-            
-            
+            lovestruckConnection.close();
+
+
+
             //System.out.println(idDatingUser);
         }
         catch(SQLException e)
@@ -338,6 +281,7 @@ public class UserRepository
             {
                 usernameIsAvailable = false;
             }
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -377,6 +321,7 @@ public class UserRepository
             {
                 emailIsAvailable = false;
             }
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -458,6 +403,7 @@ public class UserRepository
                 loggedInAdmin.setEmail(resultSet.getString(4));
                 loggedInAdmin.setPassword(resultSet.getString(5));
             }
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -501,6 +447,7 @@ public class UserRepository
             preparedStatement.setString(2, dataFromLogInForm.getParameter("passwordinput"));
             
             resultSet = preparedStatement.executeQuery();
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -525,6 +472,7 @@ public class UserRepository
             preparedStatement.setInt(1, idDatingUser);
     
             resultSet = preparedStatement.executeQuery();
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -602,6 +550,7 @@ public class UserRepository
         
             // user tilføjes til database
             preparedStatement.executeUpdate();
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -640,6 +589,7 @@ public class UserRepository
             {
                 postalInfo = new PostalInfo(resultSet.getInt(2), resultSet.getString(3));
             }
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -658,11 +608,10 @@ public class UserRepository
      */
     public int findIdPostalInfoFromPostalInfoObject(PostalInfo postalInfo)
     {
+        lovestruckConnection = establishConnection("lovestruck");
+
         if(postalInfo != null)
         {
-    
-            lovestruckConnection = establishConnection("lovestruck");
-    
             int idPostalInfo = 0;
     
             try
@@ -680,6 +629,7 @@ public class UserRepository
                 {
                     idPostalInfo = resultSet.getInt(1);
                 }
+                lovestruckConnection.close();
             }
             catch(SQLException e)
             {
@@ -713,6 +663,7 @@ public class UserRepository
             {
                 postalInfo = new PostalInfo(resultSet.getInt(2), resultSet.getString(3));
             }
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -745,6 +696,7 @@ public class UserRepository
             {
                 doesZipCodeExitsInDb = true;
             }
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -785,6 +737,7 @@ public class UserRepository
                 PreviewDatingUser previewDatingUser = createPreviewDatingUserFromResultSet(resultSet);
                 datingUsersList.add(previewDatingUser);
             }
+            lovestruckConnection.close();
         }
         catch(SQLException e)
         {
@@ -892,8 +845,10 @@ public class UserRepository
             preparedStatement.setInt(1, idDatingUser);
         
             resultSet = preparedStatement.executeQuery();
+            favouriteslistConnection.close();
         
         }
+
         catch(SQLException e)
         {
             System.out.println("Error in updateFavouritesListInDb: " + e.getMessage());
