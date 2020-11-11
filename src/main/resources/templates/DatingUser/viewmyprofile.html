@@ -81,14 +81,11 @@
                                       th:text="${viewProfileDatingUser.getSexAndAge()}"></span><br><br>
 
                                 <!--postalInfo -->
-                                <!--? == hvis den er null regnes den ikke med-->
                                 <span id="zipcode"
                                       th:text="${viewProfileDatingUser.getZipCodeAndCity()}"
                                       class="color fontsize viewprofileinfo"> </span><br><br>
 
                                 <!--description -->
-                                <!-- textarea virker ikke til input rows="4" cols="50"-->
-                                <!-- <span>Beskrivelse: </span>-->
                                 <div class="viewprofiledescription">
                                 <span id="description"
                                       th:text="${viewProfileDatingUser.getDescription()}"
@@ -97,19 +94,16 @@
 
                                 <!--tags -->
                                 <!--TODO tilføj liste - noget med th: each something-->
-                                <!--<span>Tags: </span>-->
                                 <div class="viewprofiletags">
                                 <span id="tags"
                                       th:text="${viewProfileDatingUser.getTags()}"
                                       class="color fontsize"></span>
                                 </div>
 
-
                             </div>
                             <!--profilbillede -->
                             <div class="profilepicture"> <!--TIL: profilePicture -->
                                 <img alt="" class="profilepictureimage" th:src="'data:image/jpeg;base64,' + ${viewProfileDatingUser.getBase64()}">
-                                <!--<img src="https://i.imgur.com/66Dq0AJ.png" alt="" class="profilepictureimage">-->
                             </div>
 
                         </div>
