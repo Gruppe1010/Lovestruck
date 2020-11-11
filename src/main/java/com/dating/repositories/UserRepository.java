@@ -57,6 +57,7 @@ public class UserRepository
 
             InputStream inputStream = new FileInputStream("C:\\Users\\rasmu\\IdeaProjects\\Lovestruck\\src\\main\\resources\\static\\image\\textLogo.png");
 
+            preparedStatement.set
             preparedStatement.setBlob(1, inputStream);
             preparedStatement.setInt(2, idDatingUser);
 

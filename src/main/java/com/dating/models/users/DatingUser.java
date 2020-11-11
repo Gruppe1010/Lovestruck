@@ -436,8 +436,16 @@ public class DatingUser extends User
         
         try
         {
-            File genericProfilePictureFile = new File("src\\main\\resources\\static\\image\\profilepictures" +
+
+
+            //TODO: Mac stil til GenericProfilePicture
+            File genericProfilePictureFile = new File("src/main/resources/static/image/profilepictures/genericProfileImage.png");
+
+
+            //TODO: Windows Sti til GenericProfilePicture
+            /*File genericProfilePictureFile = new File("src\\main\\resources\\static\\image\\profilepictures" +
                                                               "\\genericProfileImage.png");
+             */
     
     
             genericProfilePictureBytes = Files.readAllBytes(genericProfilePictureFile.toPath());
