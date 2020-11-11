@@ -127,8 +127,18 @@ public class DatingController
         
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "DatingUser/chatpage"; // html
+        return "DatingUser/chatPage"; // html
     }
+    
+    /*
+    @GetMapping("/viewChat")
+    public String viewChat(Model datingUserModel, Model chatModel)
+    {
+        
+        return "DatingUser/viewchat"; // html
+    }
+    
+     */
     
     @GetMapping("/favouritesPage")
     public String favouritesPage(Model datingUserModel, Model favouritesListModel)
@@ -283,10 +293,15 @@ public class DatingController
                 // opretter ny chat_id_id-tabel
                 userRepository.createChatTableInDb(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
                 
+                userRepository.addDatingUserToChatsListTable(loggedInDatingUser.getIdDatingUser(),
+                        idDatingUserToChatWith);
+                
                 chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
             }
         }
-        
+    
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         chatModel.addAttribute("chat", chat);
         
         /*

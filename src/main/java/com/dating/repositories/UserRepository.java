@@ -52,10 +52,22 @@ public class UserRepository
     {
         try
         {
-            lovestruckConnection.close();
-            favouriteslistConnection.close();
-            chatslistConnection.close();
-            chatConnection.close();
+            if(lovestruckConnection != null)
+            {
+                lovestruckConnection.close();
+            }
+            if(favouriteslistConnection != null)
+            {
+                favouriteslistConnection.close();
+            }
+            if(chatslistConnection != null)
+            {
+                chatslistConnection.close();
+            }
+            if(chatConnection != null)
+            {
+                chatConnection.close();
+            }
         }
         catch(SQLException throwables)
         {
@@ -856,7 +868,7 @@ public class UserRepository
         }
         catch(SQLException e)
         {
-            System.out.println("Error in updateFavouritesListInDb: " + e.getMessage());
+            System.out.println("Error in retrieveFavouritesList: " + e.getMessage());
         }
         return resultSet;
     }
@@ -906,7 +918,7 @@ public class UserRepository
             PreparedStatement preparedStatement = chatConnection.prepareStatement(sqlCommand);
         
             preparedStatement.setInt(1, idLoggedInDatingUser);
-            preparedStatement.setInt(1, idDatingUserToChatWith);
+            preparedStatement.setInt(2, idDatingUserToChatWith);
         
             ResultSet resultSet = preparedStatement.executeQuery();
             
@@ -914,7 +926,7 @@ public class UserRepository
         }
         catch(SQLException e)
         {
-            System.out.println("Error in updateFavouritesListInDb: " + e.getMessage());
+            System.out.println("Error in findChatTable: " + e.getMessage());
         }
         return chat;
     }
@@ -1049,20 +1061,44 @@ public class UserRepository
             // favourites_list_? == navnet på tabellen
             // id_dating_user INT NOT NULL,== navn på ny kolonne og hvilke bokse der er krydset af
             // PRIMARY KEY(id_dating_user) == siger at det er kolonnen id_dating_user som er primary key
-            String sqlCommand = "CREATE TABLE lovestruck_chat.chat_?_? (id_chat INT NOT NULL, message VARCHAR(14000) " +
-                                        "NOT NULL, author VARCHAR(45) NOT NULL" +
+            String sqlCommand = "CREATE TABLE lovestruck_chat.chat_?_? (id_chat INT NOT NULL AUTO_INCREMENT, message " +
+                                        "VARCHAR" +
+                                        "(14000) " +
+                                        "NOT NULL, author VARCHAR(45) NOT NULL, " +
                                         "PRIMARY KEY (id_chat));";
         
             PreparedStatement preparedStatement = chatConnection.prepareStatement(sqlCommand);
         
             preparedStatement.setInt(1, idLoggedInDatingUser);
-            preparedStatement.setInt(1, idDatingUserToChatWith);
+            preparedStatement.setInt(2, idDatingUserToChatWith);
         
             preparedStatement.executeUpdate();
         }
         catch(SQLException e)
         {
             System.out.println("Error in createChatsListTableDb: " + e.getMessage());
+        }
+    }
+    
+    public void addDatingUserToChatsListTable(int idLoggedInDatingUser, int idDatingUserToChatWith)
+    {
+        chatslistConnection = establishConnection("lovestruck_chats_list");
+    
+        try
+        {
+            String sqlCommand = "INSERT into chats_list_?(id_dating_user) values(?)";
+            // String sqlCommand = "UPDATE chats_list_? SET id_dating_user = ?";
+        
+            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, idLoggedInDatingUser);
+            preparedStatement.setInt(2, idDatingUserToChatWith);
+        
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in addDatingUserToChatsListTable: " + e.getMessage());
         }
     }
     

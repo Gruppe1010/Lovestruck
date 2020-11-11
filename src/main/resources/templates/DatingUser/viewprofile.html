@@ -100,7 +100,7 @@
                                       class="color fontsize"></span>
                                 </div>
 
-                                <a href="/viewChat"> <!--TODO ret til brugers chatside-->
+                                <a th:href="@{/viewChat(idDatingUserToChatWith=${viewProfileDatingUser.getIdViewProfileDatingUser()})}"> <!--TODO ret til brugers chatside-->
                                     <button class="chatbutton fontsize">Chat</button>
                                 </a>
 
