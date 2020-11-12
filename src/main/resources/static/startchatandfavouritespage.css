@@ -113,7 +113,7 @@ a.previewdatinguserlink:hover
     position: relative;
     float: right;
     width: 400px;
-    height: 250px;
+    /*height: 100px;*/
     background-color: #FAD4E2;
     border: 2px solid #333;
     border-radius: 5px;

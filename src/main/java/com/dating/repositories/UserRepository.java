@@ -969,18 +969,16 @@ public class UserRepository
         
         try
         {
-            if(resultSet.next())
+            ArrayList<Message> messagesList = new ArrayList<>();
+        
+            while(resultSet.next())
             {
-                ArrayList<Message> messagesList = new ArrayList<Message>();
-                
-                while(resultSet.next())
-                {
-                    messagesList.add(new Message(resultSet.getString("message"),
-                            resultSet.getString("author")));
-                }
-                
-                chat = new Chat(messagesList);
+                messagesList.add(0,  new Message(resultSet.getString("message"),
+                        resultSet.getString("author")));
             }
+            
+            chat = new Chat(messagesList);
+        
         }
         catch(SQLException e)
         {

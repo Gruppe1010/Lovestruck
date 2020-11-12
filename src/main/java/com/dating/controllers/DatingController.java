@@ -279,7 +279,7 @@ public class DatingController
     
     @RequestMapping("/viewChat")
     public String viewChatIdDatingUser(@RequestParam int idDatingUserToChatWith, Model viewProfileDatingUserModel,
-                                          Model loggedInDatingUserModel, Model chatModel)
+                                          Model loggedInDatingUserModel, Model chatModel) //, Model colorConditionModel)
     {
         // opdaterer attributten idDatingUserToChatWith til at være den person man currently er inde på chatten med
         // bruges i postMapping("/postMessage")
@@ -336,6 +336,7 @@ public class DatingController
         ArrayList<Message> messageList = new ArrayList<>();
         messageList.add(new Message("Der er ingen beskeder i chatten endnu", "LoveStruck"));
         
+        // TODO: HEROMKRING
         if(chat != null)
         {
             messageList = chat.getMessageList();

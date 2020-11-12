@@ -81,6 +81,14 @@
                                 <span th:text="${message.getAuthor()}"></span><br><br>
                             </div>
 
+                            <!--
+                            th:class="'color'+${condition ? 'condition-true' : 'condition-false'}"
+                            th:class="'base '+${condition ? 'condition-true' : 'condition-false'}">
+
+                            <span th:attr="class=${condition ? 'base condition-true' : 'base condition-false'}">
+   This HTML is consolidated, which is good, but the Thymeleaf attribute still has some redundancy in it.
+</span> -->
+
 
                             <!--TODO indsæt rigtige messages. Stylingen i viewmessage burde kunne overføres til dem.
                             <div>
