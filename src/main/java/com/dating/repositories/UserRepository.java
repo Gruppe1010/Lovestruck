@@ -8,18 +8,16 @@ import com.dating.models.users.DatingUser;
 import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.rowset.serial.SerialBlob;
-import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 
 public class UserRepository
 {
     Connection lovestruckConnection = null;
-    Connection favouriteslistConnection = null;
-    Connection chatslistConnection = null;
+    Connection favouritesListConnection = null;
+    Connection chatsListConnection = null;
     Connection chatConnection = null;
 
     DatingUser loggedInDatingUser = new DatingUser();
@@ -56,13 +54,13 @@ public class UserRepository
             {
                 lovestruckConnection.close();
             }
-            if(favouriteslistConnection != null)
+            if(favouritesListConnection != null)
             {
-                favouriteslistConnection.close();
+                favouritesListConnection.close();
             }
-            if(chatslistConnection != null)
+            if(chatsListConnection != null)
             {
-                chatslistConnection.close();
+                chatsListConnection.close();
             }
             if(chatConnection != null)
             {
@@ -123,7 +121,7 @@ public class UserRepository
                 // genererer en favourites_list tabel i databasen - knyttet til user-entitet via id_dating_user
                 // fx til en user med id_dating_user 3 oprettes tabellen: favourites_list_3
                 createFavouritesListTableDb(idDatingUser);
-                
+                // genererer chatsList-tabel i db
                 createChatsListTableDb(idDatingUser);
                 
                 loggedInDatingUser = datingUser;
@@ -143,7 +141,7 @@ public class UserRepository
      */
     public void createFavouritesListTableDb(int idDatingUser)
     {
-        favouriteslistConnection = establishConnection("lovestruck_favourites_list");
+        favouritesListConnection = establishConnection("lovestruck_favourites_list");
         
         try
         {
@@ -154,7 +152,7 @@ public class UserRepository
             String sqlCommand = "CREATE TABLE lovestruck_favourites_list.favourites_list_? (id_dating_user INT NOT NULL, PRIMARY " +
                     "KEY (id_dating_user));";
             
-            PreparedStatement preparedStatement = favouriteslistConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = favouritesListConnection.prepareStatement(sqlCommand);
             
             preparedStatement.setInt(1, idDatingUser);
             
@@ -175,7 +173,7 @@ public class UserRepository
      */
     public void addDatingUserToFavouritesListInDb(DatingUser datingUser)
     {
-        favouriteslistConnection = establishConnection("lovestruck_favourites_list");
+        favouritesListConnection = establishConnection("lovestruck_favourites_list");
         
         // hvis der ER noget på datingUser-obj.s favouritesList
         if(datingUser.getFavouritesList() != null)
@@ -190,7 +188,7 @@ public class UserRepository
             {
                 String sqlCommand = "INSERT into favourites_list_? (id_dating_user) values(?)";
         
-                PreparedStatement preparedStatement = favouriteslistConnection.prepareStatement(sqlCommand);
+                PreparedStatement preparedStatement = favouritesListConnection.prepareStatement(sqlCommand);
         
                 preparedStatement.setInt(1, datingUser.getIdDatingUser());
                 preparedStatement.setInt(2, idDatingUserToAdd);
@@ -212,16 +210,16 @@ public class UserRepository
      * @param datingUserTableToUpdate Den bruger som skal fjerne anden bruger til sin favouritesList
      * @param datingUserToRemove Den bruger som skal fjernes fra listen
      */
-    public void removeDatingUserToFavouritesListInDb(DatingUser datingUserTableToUpdate,
+    public void removeDatingUserFromFavouritesListInDb(DatingUser datingUserTableToUpdate,
                                                      DatingUser datingUserToRemove)
     {
-        favouriteslistConnection = establishConnection("lovestruck_favourites_list");
+        favouritesListConnection = establishConnection("lovestruck_favourites_list");
         
         try
         {
             String sqlCommand = "DELETE from favourites_list_? WHERE id_dating_user = ?";
         
-            PreparedStatement preparedStatement = favouriteslistConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = favouritesListConnection.prepareStatement(sqlCommand);
         
             preparedStatement.setInt(1, datingUserTableToUpdate.getIdDatingUser());
             preparedStatement.setInt(2, datingUserToRemove.getIdDatingUser());
@@ -853,13 +851,13 @@ public class UserRepository
     {
         ResultSet resultSet = null;
     
-        favouriteslistConnection = establishConnection("lovestruck_favourites_list");
+        favouritesListConnection = establishConnection("lovestruck_favourites_list");
         
         try
         {
             String sqlCommand = "SELECT * FROM lovestruck_favourites_list.favourites_list_?;";
         
-            PreparedStatement preparedStatement = favouriteslistConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = favouritesListConnection.prepareStatement(sqlCommand);
         
             preparedStatement.setInt(1, idDatingUser);
         
@@ -902,6 +900,40 @@ public class UserRepository
         
         // TODO: HER er den liste som vi skal vise på chatPage
        return createDatingUserArrayListFromResultSet(resultSet);
+    }
+    
+    /**
+     * Tjekker om en chat_id_id-tabel findes i lovestruck_chat-db
+     *
+     * @param idDatingUserToChatWith første tal i tabel-navn
+     * @param idLoggedInDatingUser anden tal i tabel-navn
+     *
+     * @return boolean Svaret på om tabellen eksisterer i db'en
+     * */
+    public boolean checkIfChatsListTableExists(int idLoggedInDatingUser, int idDatingUserToChatWith)
+    {
+        boolean doesTableExist = false;
+        
+        chatsListConnection = establishConnection("lovestruck_chat");
+        
+        try
+        {
+            DatabaseMetaData dbm = chatsListConnection.getMetaData();
+            
+            // check om tabellen er der
+            ResultSet tables = dbm.getTables(null, null,
+                    "chat_" + idLoggedInDatingUser + "_" + idDatingUserToChatWith, null);
+            if(tables.next())
+            {
+                doesTableExist = true;
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in checkIfChatsListTableExists: " + e.getMessage());
+        }
+        
+        return doesTableExist;
     }
     
     public Chat findChatTable(int idLoggedInDatingUser, int idDatingUserToChatWith)
@@ -994,13 +1026,13 @@ public class UserRepository
     {
         ResultSet resultSet = null;
         
-        chatslistConnection = establishConnection("lovestruck_chats_list");
+        chatsListConnection = establishConnection("lovestruck_chats_list");
         
         try
         {
             String sqlCommand = "SELECT * FROM lovestruck_chats_list.chats_list_?;";
             
-            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = chatsListConnection.prepareStatement(sqlCommand);
             
             preparedStatement.setInt(1, idDatingUser);
             
@@ -1018,7 +1050,7 @@ public class UserRepository
     
     public void createChatsListTableDb(int idDatingUser)
     {
-        chatslistConnection = establishConnection("lovestruck_chats_list");
+        chatsListConnection = establishConnection("lovestruck_chats_list");
         
         try
         {
@@ -1030,17 +1062,51 @@ public class UserRepository
                                         "PRIMARY " +
                                         "KEY (id_dating_user));";
             
-            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = chatsListConnection.prepareStatement(sqlCommand);
             
             preparedStatement.setInt(1, idDatingUser);
             
             preparedStatement.executeUpdate();
+            
+            // adder dummy-datingUser til chatsList-tabellen for at ResultSettet senere ikke er tomt, når vi tjekker
+            // for om det eksisterer
+            // addDummyDatingUserToChatsList(idDatingUser, chatsListConnection);
+            
         }
         catch(SQLException e)
         {
             System.out.println("Error in createChatsListTableDb: " + e.getMessage());
         }
     }
+    
+    
+    /**
+     * Tilføjer dummy-datingUser til chatsList-tabellen for at ResultSettet senere ikke er tomt, når vi tjekker
+     * for om det eksisterer
+     *
+     * @param idDatingUser tallet til tabellen som dummy-DatingUser-obj. skal tilføjes til
+     * @param chatslistConnection connection til chats_list-db
+     * */
+    public void addDummyDatingUserToChatsList(int idDatingUser, Connection chatslistConnection)
+    {
+        try
+        {
+            String sqlCommand = "INSERT into chats_list_?(id_dating_user) values(?)";
+        
+            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, idDatingUser);
+            preparedStatement.setInt(2, 0);
+        
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in addDatingUserToChatsListTable: " + e.getMessage());
+        }
+    }
+    
+    
     
     /**
      * Laver ny chat_id_id-tabel
@@ -1080,19 +1146,28 @@ public class UserRepository
         }
     }
     
-    public void addDatingUserToChatsListTable(int idLoggedInDatingUser, int idDatingUserToChatWith)
+    public void addDatingUsersToEachOthersChatsListsInDb(int idLoggedInDatingUser, int idDatingUserToChatWith)
     {
-        chatslistConnection = establishConnection("lovestruck_chats_list");
+        // tilføjer datingUser-obj til loggedInDatingUser's tabel (liste over chats)
+        addDatingUserToChatsListTable(idLoggedInDatingUser, idDatingUserToChatWith);
+    
+        // tilføjer datingUser-obj til datingUserToChatWith's tabel (liste over chats)
+        addDatingUserToChatsListTable(idDatingUserToChatWith, idLoggedInDatingUser);
+    }
+    
+    public void addDatingUserToChatsListTable(int chatsListId, int idDatingUserToAdd)
+    {
+        chatsListConnection = establishConnection("lovestruck_chats_list");
     
         try
         {
             String sqlCommand = "INSERT into chats_list_?(id_dating_user) values(?)";
             // String sqlCommand = "UPDATE chats_list_? SET id_dating_user = ?";
         
-            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = chatsListConnection.prepareStatement(sqlCommand);
         
-            preparedStatement.setInt(1, idLoggedInDatingUser);
-            preparedStatement.setInt(2, idDatingUserToChatWith);
+            preparedStatement.setInt(1, chatsListId);
+            preparedStatement.setInt(2, idDatingUserToAdd);
         
             preparedStatement.executeUpdate();
         }
@@ -1101,6 +1176,8 @@ public class UserRepository
             System.out.println("Error in addDatingUserToChatsListTable: " + e.getMessage());
         }
     }
+    
+   
     
     
     

@@ -58,7 +58,7 @@
 
 
                 <div th:each="previewDatingUser : ${previewDatingUsersToShowOnChatPage}">
-                    <a class="previewdatinguserlink" th:href="@{/viewChat(id=${previewDatingUser.getId()})}">
+                    <a class="previewdatinguserlink" th:href="@{/viewChat(idDatingUserToChatWith=${previewDatingUser.getId()})}">
                         <div class="previewdatinguserbox">
                             <img class="previewdatinguserpicture" th:src="'data:image/jpeg;base64,' + ${previewDatingUser.getBase64()}">
                             <div class="previewdatinguserinfo">

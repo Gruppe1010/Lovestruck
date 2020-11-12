@@ -1,6 +1,7 @@
 package com.dating.controllers;
 
 import com.dating.models.chat.Chat;
+import com.dating.models.chat.Message;
 import com.dating.models.users.Admin;
 import com.dating.models.users.DatingUser;
 import com.dating.repositories.UserRepository;
@@ -237,7 +238,7 @@ public class DatingController
         loggedInDatingUser.removeDatingUserFromFavouritesList(datingUserToRemoveFromList);
     
         // sletter datingUser fra loggedInDatingUser's favouritesList i db
-        userRepository.removeDatingUserToFavouritesListInDb(loggedInDatingUser, datingUserToRemoveFromList);
+        userRepository.removeDatingUserFromFavouritesListInDb(loggedInDatingUser, datingUserToRemoveFromList);
         
         // vi sætter atributten isOnFavouritesList på viewProfileDatingUser-obj. til false,
         // da det er slettet til favouritesList
@@ -278,6 +279,54 @@ public class DatingController
     public String viewChatIdDatingUser(@RequestParam int idDatingUserToChatWith, Model viewProfileDatingUserModel,
                                           Model loggedInDatingUserModel, Model chatModel)
     {
+        // check om tabellen chat_id1_id2 eksisterer
+        boolean doesTableExist = userRepository.checkIfChatsListTableExists(loggedInDatingUser.getIdDatingUser(),
+            idDatingUserToChatWith);
+    
+        // hvis doesTableExist == false, bliver denne chat == null
+        Chat chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+    
+        // hvis der ikke findes tabel der hedder: chat_id1_id2
+        if(!doesTableExist)
+        {
+            // tjekker om tabellen chat_id2_id1 findes
+            doesTableExist = userRepository.checkIfChatsListTableExists(idDatingUserToChatWith,
+                    loggedInDatingUser.getIdDatingUser());
+    
+            // hvis doesTableExist == false, bliver denne chat == null
+            chat = userRepository.findChatTable(idDatingUserToChatWith, loggedInDatingUser.getIdDatingUser());
+        
+            // hvis den tabel (chat_id2_id1) HELLER IKKE findes - så OPRETTER vi den
+            if(!doesTableExist)
+            {
+                // opretter ny chat_id_id-tabel
+                userRepository.createChatTableInDb(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+            
+                // sætter chat-variablen til at indeholde den ny-oprettede chat
+                chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+            
+                // tilfjer loggedInDatingUser-obj. til idDatingUserToChatWith's til hinandens chats_list_?-tabeller
+                userRepository.addDatingUsersToEachOthersChatsListsInDb(loggedInDatingUser.getIdDatingUser(),
+                        idDatingUserToChatWith);
+            }
+        }
+    
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
+    
+        ArrayList<Message> messageList = new ArrayList<>();
+        messageList.add(new Message("Der er ingen beskeder i chatten endnu", "LoveStruck"));
+        
+        if(chat != null)
+        {
+            messageList = chat.getMessageList();
+        }
+        
+        chatModel.addAttribute("messageList", messageList);
+    
+        
+        return "DatingUser/viewchat";
+        /*
         // hente tabellen som stemmer overens med 2 id'er
         Chat chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
         
@@ -287,16 +336,18 @@ public class DatingController
             // så tjekker vi om der findes en tabel som hedder: chat_idDatingUserToChatWith_idLoggedInDatingUser
             chat = userRepository.findChatTable(idDatingUserToChatWith, loggedInDatingUser.getIdDatingUser());
             
-            // hvis den tabel HELLER IKKE findes - så OPRETTER vi den
+            // hvis den tabel (chat_?_?) HELLER IKKE findes - så OPRETTER vi den
             if(chat == null)
             {
                 // opretter ny chat_id_id-tabel
                 userRepository.createChatTableInDb(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
-                
-                userRepository.addDatingUserToChatsListTable(loggedInDatingUser.getIdDatingUser(),
-                        idDatingUserToChatWith);
-                
+    
+                // sætter chat-variablen til at indeholde den ny-oprettede chat
                 chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+                
+                // tilfjer loggedInDatingUser-obj. til idDatingUserToChatWith's til hinandens chats_list_?-tabeller
+                userRepository.addDatingUsersToEachOthersChatsListsInDb(loggedInDatingUser.getIdDatingUser(),
+                        idDatingUserToChatWith);
             }
         }
     
@@ -304,28 +355,11 @@ public class DatingController
         loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         chatModel.addAttribute("chat", chat);
         
-        /*
-        viewProfileDatingUser = userRepository.findDatingUserInDbToView(id);
-        
-        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
-        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
-        
-        // tjekker om viewProfileDatingUser'en (hvis profil skal vises) er på loggedInDatingUser's favList
-        boolean isOnFaveList =
-                loggedInDatingUser.isViewProfileDatingUserOnFavouritesList(viewProfileDatingUser.getIdViewProfileDatingUser());
-        
-        
-        // Hvis profil som skal vises ER på favouritesList (skal den have en anden knap nemlig)
-        if(isOnFaveList)
-        {
-            return "DatingUser/viewprofilefav";
-        }
-        // else if profilen som skal vises IKKE er på favouritesList
-        return "DatingUser/viewprofile";
-        
-         */
+       
         
         return "DatingUser/viewchat";
+        
+         */
     }
     
     //------------------ POST DATINGUSER -------------------//

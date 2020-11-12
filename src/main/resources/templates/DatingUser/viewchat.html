@@ -73,20 +73,22 @@
                         <form id="message-form" action="/postMessage" method="post">
 
 
+
                             <!--TODO indsæt rigtige messages. Stylingen i viewpmessage burde kunne overføres til dem.-->
-                            <div>
+                            <div th:each="message : ${messageList}">
                                 <span id="messagefromdatinguser"
-                                      class="color fontsize viewmessage">Hej med dig. Hvordan går det?</span><br>
-                                <span>Dig</span><br><br>
+                                      class="color fontsize viewmessage" th:text="${message.getMessage()}"></span><br>
+                                <span th:text="${message.getAuthor()}"></span><br><br>
                             </div>
 
-                            <!--TODO indsæt rigtige messages. Stylingen i viewmessage burde kunne overføres til dem.-->
+
+                            <!--TODO indsæt rigtige messages. Stylingen i viewmessage burde kunne overføres til dem.
                             <div>
                                 <span id="messagefromloggedinuser"
                                       class="color fontsize viewmessage">Jo ser du, det går sku meget godt. Hvad med dig?</span><br>
                                 <span th:text="${viewProfileDatingUser.getUsername()}"></span><br><br>
                             </div>
-
+                            -->
 
                         </form>
                     </div>
