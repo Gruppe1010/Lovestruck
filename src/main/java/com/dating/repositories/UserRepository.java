@@ -991,15 +991,6 @@ public class UserRepository
     }
     
     
-    
-    // therDatingUserInChat
-    
-    // ChatFromIds()
-    
-    // metode som laver et Chat-objekt ud fra resultSet som indeholder chat_?_?
-    
-    
-    
     public ArrayList<DatingUser> createDatingUserArrayListFromResultSet(ResultSet resultSet)
     {
         ArrayList<DatingUser> allDatingUsersThatLoggedInDatingUserHasChattedWith = new ArrayList<>();
@@ -1047,6 +1038,36 @@ public class UserRepository
     }
     
     
+    public void insertMessageInChatTable(WebRequest messageFromForm, String currentChatTable,
+                                         DatingUser loggedInDatingUser)
+    {
+        chatConnection = establishConnection("lovestruck_chat");
+      
+        // for String'en currentChatTable altid sådan ud: tal_tal: fx: 3_5
+        int id1 = Integer.parseInt(String.valueOf(currentChatTable.charAt(0)));
+        int id2 = Integer.parseInt(String.valueOf(currentChatTable.charAt(2)));
+        
+                System.out.println("ID: " + id1 + id2);
+        
+    
+        try
+        {
+            String sqlCommand = "INSERT into chat_?_?(message, author) values(?,?)";
+        
+            PreparedStatement preparedStatement = chatConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, id1);
+            preparedStatement.setInt(2, id2);
+            preparedStatement.setString(3, messageFromForm.getParameter("messageinput"));
+            preparedStatement.setString(4, loggedInDatingUser.getUsername());
+        
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in insertMessageInChatTable: " + e.getMessage());
+        }
+    }
     
     public void createChatsListTableDb(int idDatingUser)
     {

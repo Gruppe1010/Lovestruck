@@ -2,10 +2,12 @@ package com.dating.models.users;
 
 import com.dating.models.PostalInfo;
 import com.dating.models.chat.Chat;
+import com.dating.models.chat.Message;
 import com.dating.viewModels.datingUser.EditDatingUser;
 import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.web.context.request.WebRequest;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +29,7 @@ public class DatingUser extends User
     private ArrayList<String> tagsList;
     private PostalInfo postalInfo;
     private ArrayList<DatingUser> favouritesList;
-    private ArrayList<Chat> chatList; // chatPage-html
+    private ArrayList<Chat> chatList; // chatPage-html // TODO måske overflødig
     private Chat currentChat; // currentChat-html
     
     // constructors
@@ -129,6 +131,14 @@ public class DatingUser extends User
     {
         this.favouritesList = favouritesList;
     }
+    public Chat getCurrentChat()
+    {
+        return currentChat;
+    }
+    public void setCurrentChat(Chat currentChat)
+    {
+        this.currentChat = currentChat;
+    }
     
     public String getUsername()
     {
@@ -190,6 +200,8 @@ public class DatingUser extends User
         
         return "malesandfemales";
     }
+    
+    
     
     /**
      * Konverterer boolean til integer-værdi
@@ -362,7 +374,6 @@ public class DatingUser extends User
         
     }
     
-    
     public ArrayList<PreviewDatingUser> convertDatingUserListToPreviewDatingUserList(ArrayList<DatingUser> list)
     {
         ArrayList<PreviewDatingUser> previewDatingUserList = new ArrayList<>();
@@ -374,7 +385,6 @@ public class DatingUser extends User
         
         return previewDatingUserList;
     }
-    
     
     // -------------------FAVOURITESLIST-----------------//
     
@@ -494,6 +504,17 @@ public class DatingUser extends User
         }
         
         return genericProfilePictureBytes;
+    }
+    
+    /**
+     * Tilføjer en besked fra messageForm til currentChat-attribut
+     *
+     * @param messageFromForm Formen som vi får beskeden fra
+     * */
+    public void updateCurrentChat(WebRequest messageFromForm)
+    {
+        currentChat.getMessageList().add(new Message(messageFromForm.getParameter(
+                "messageinput"), super.getUsername()));
     }
     
 }

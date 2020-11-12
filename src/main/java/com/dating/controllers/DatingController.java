@@ -28,6 +28,8 @@ public class DatingController
     
     ViewProfileDatingUser viewProfileDatingUser = null;
     EditDatingUser editDatingUser = null;
+    int idDatingUserToChatWith = 0;
+    String currentChatTable = null;
     
     Error error = null;
     UserService userService = new UserService();
@@ -279,12 +281,21 @@ public class DatingController
     public String viewChatIdDatingUser(@RequestParam int idDatingUserToChatWith, Model viewProfileDatingUserModel,
                                           Model loggedInDatingUserModel, Model chatModel)
     {
+        // opdaterer attributten idDatingUserToChatWith til at være den person man currently er inde på chatten med
+        // bruges i postMapping("/postMessage")
+        this.idDatingUserToChatWith = idDatingUserToChatWith;
+        
+        // TODO: Ned fra her til if'en: kan laves til en metode, som bliver kaldt flere gange
         // check om tabellen chat_id1_id2 eksisterer
         boolean doesTableExist = userRepository.checkIfChatsListTableExists(loggedInDatingUser.getIdDatingUser(),
             idDatingUserToChatWith);
     
         // hvis doesTableExist == false, bliver denne chat == null
         Chat chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+    
+        // opdaterer attributten currentChatTable til at være den chatTable man currently er inde på
+        // bruges i postMapping("/postMessage")
+        currentChatTable = loggedInDatingUser.getIdDatingUser() + "_" + idDatingUserToChatWith;
     
         // hvis der ikke findes tabel der hedder: chat_id1_id2
         if(!doesTableExist)
@@ -295,6 +306,10 @@ public class DatingController
     
             // hvis doesTableExist == false, bliver denne chat == null
             chat = userRepository.findChatTable(idDatingUserToChatWith, loggedInDatingUser.getIdDatingUser());
+    
+            // opdaterer attributten currentChatTable til at være den chatTable man currently er inde på
+            // bruges i postMapping("/postMessage")
+            currentChatTable = idDatingUserToChatWith + "_" + loggedInDatingUser.getIdDatingUser();
         
             // hvis den tabel (chat_id2_id1) HELLER IKKE findes - så OPRETTER vi den
             if(!doesTableExist)
@@ -304,6 +319,10 @@ public class DatingController
             
                 // sætter chat-variablen til at indeholde den ny-oprettede chat
                 chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
+    
+                // opdaterer attributten currentChatTable til at være den chatTable man currently er inde på
+                // bruges i postMapping("/postMessage")
+                currentChatTable = loggedInDatingUser.getIdDatingUser() + "_" + idDatingUserToChatWith;
             
                 // tilfjer loggedInDatingUser-obj. til idDatingUserToChatWith's til hinandens chats_list_?-tabeller
                 userRepository.addDatingUsersToEachOthersChatsListsInDb(loggedInDatingUser.getIdDatingUser(),
@@ -321,6 +340,9 @@ public class DatingController
         {
             messageList = chat.getMessageList();
         }
+        
+        // sæt loggedInDatingUser's attribut: currentChat
+        loggedInDatingUser.setCurrentChat(new Chat(messageList));
         
         chatModel.addAttribute("messageList", messageList);
     
@@ -416,6 +438,18 @@ public class DatingController
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
         
         return "DatingUser/editprofile"; // html
+    }
+    
+    @PostMapping("/postMessage")
+    public String postMessage(WebRequest messageFromForm)
+    {
+        // tilføj til loggedInUser's currentChat-attribut
+        loggedInDatingUser.updateCurrentChat(messageFromForm);
+        
+        // updateLoggedInUserInDb
+        userRepository.insertMessageInChatTable(messageFromForm, currentChatTable, loggedInDatingUser);
+        
+        return "redirect:/viewChat?idDatingUserToChatWith=" + idDatingUserToChatWith; // url
     }
     
     //------------------ GET ADMIN -------------------//
