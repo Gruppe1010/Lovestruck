@@ -827,133 +827,7 @@ public class UserRepository
         }
     }
   
-    
-    //------------------ IKKE DB-METODER -------------------//
-    
-    /**
-     * Nulstiller loggedInAdmin og loggedInDatingUser-klassevariabel
-     *
-     * @return void
-     */
-    public void setLoggedInUserToNull()
-    {
-        loggedInAdmin = null;
-        loggedInDatingUser = null;
-    }
-    
-    /**
-     * Opretter PreviewDatingUser-obj ud fra entitet på resultSet
-     *
-     * @param resultSet ResultSet som PreviewDatingUser-obj dannes ud fra
-     *
-     * @return PreviewDatingUser Returnerer det oprettede PreviewDatingUser-obj
-     */
-    public PreviewDatingUser createPreviewDatingUserFromResultSet(ResultSet resultSet)
-    {
-        PreviewDatingUser previewDatingUser = null;
-        try
-        {
-            Blob profilePictureBlob = resultSet.getBlob(9);
-            byte[] profilePictureBytes = profilePictureBlob.getBytes(1, (int) profilePictureBlob.length());
-            
-            
-            // TODO: skal det være noget andet end inputstream??
-            previewDatingUser = new PreviewDatingUser(resultSet.getInt(1), profilePictureBytes,
-                    resultSet.getString(3),
-                    resultSet.getInt(6));
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in createPreviewDatingUserFromResultSet: " + e.getMessage());
-        }
-        return previewDatingUser;
-    }
-    
-    /**
-     * Opretter DatingUser-obj ud fra resultSet
-     *
-     * @param resultSet ResultSet som DatingUser-obj dannes ud fra
-     *
-     * @return DatingUser Returnerer det oprettede DatingUser-obj
-     */
-    public DatingUser createDatingUserFromResultSet(ResultSet resultSet)
-    {
-        DatingUser datingUser = new DatingUser();
-        try
-        {
-            if(resultSet.next())
-            {
-                Blob profilePictureBlob = resultSet.getBlob(9);
-                byte[] profilePictureBytes = profilePictureBlob.getBytes(1, (int) profilePictureBlob.length());
-                ArrayList<DatingUser> favouritesList =
-                        convertResultSetToFavouritesList(retrieveFavouritesList(resultSet.getInt(1)));
-                
-                datingUser.setIdDatingUser(resultSet.getInt(1));
-                datingUser.setBlacklisted(datingUser.convertIntToBoolean(resultSet.getInt(2)));
-                datingUser.setUsername(resultSet.getString(3));
-                datingUser.setEmail(resultSet.getString(4));
-                datingUser.setPassword(resultSet.getString(5));
-                datingUser.setAge(resultSet.getInt(6));
-                datingUser.setSex(datingUser.convertIntToBoolean(resultSet.getInt(7)));
-                datingUser.setInterestedIn(resultSet.getInt(8));
-                datingUser.setProfilePictureBytes(profilePictureBytes);
-                datingUser.setDescription(resultSet.getString(10));
-                datingUser.setTagsList(datingUser.convertStringToTagsList(resultSet.getString(11)));
-                datingUser.setPostalInfo(findPostalInfoObjectFromIdPostalInfo(resultSet.getInt(12)));
-                datingUser.setFavouritesList(favouritesList);
-            }
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in createDatingUserFromResulSet: " + e.getMessage());
-        }
-        
-        return datingUser;
-    }
- 
-    
-    public ResultSet retrieveFavouritesList(int idDatingUser)
-    {
-        ResultSet resultSet = null;
-    
-        favouritesListConnection = establishConnection("lovestruck_favourites_list");
-        
-        try
-        {
-            String sqlCommand = "SELECT * FROM lovestruck_favourites_list.favourites_list_?;";
-        
-            PreparedStatement preparedStatement = favouritesListConnection.prepareStatement(sqlCommand);
-        
-            preparedStatement.setInt(1, idDatingUser);
-        
-            resultSet = preparedStatement.executeQuery();
-        
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in retrieveFavouritesList: " + e.getMessage());
-        }
-        return resultSet;
-    }
-    
-    public ArrayList<DatingUser> convertResultSetToFavouritesList(ResultSet resultSet)
-    {
-        ArrayList<DatingUser> favouritesList = new ArrayList<>();
-        try
-        {
-            while(resultSet.next())
-            {
-                favouritesList.add(retrieveDatingUserFromDb(resultSet.getInt(1)));
-            }
-        }
-        catch(SQLException e)
-        {
-            System.out.println("Error in convertResultSetToFavouritesList: " + e.getMessage());
-        }
-        
-        return favouritesList;
-    }
-    
+   
     
     
     //------------------ CHAT -------------------//
@@ -1261,7 +1135,141 @@ public class UserRepository
         }
     }
     
-   
+    
+    
+    
+    //------------------ IKKE DB-METODER -------------------//
+    
+    /**
+     * Nulstiller loggedInAdmin og loggedInDatingUser-klassevariabel
+     *
+     * @return void
+     */
+    public void setLoggedInUserToNull()
+    {
+        loggedInAdmin = null;
+        loggedInDatingUser = null;
+    }
+    
+    /**
+     * Opretter PreviewDatingUser-obj ud fra entitet på resultSet
+     *
+     * @param resultSet ResultSet som PreviewDatingUser-obj dannes ud fra
+     *
+     * @return PreviewDatingUser Returnerer det oprettede PreviewDatingUser-obj
+     */
+    public PreviewDatingUser createPreviewDatingUserFromResultSet(ResultSet resultSet)
+    {
+        PreviewDatingUser previewDatingUser = null;
+        try
+        {
+            Blob profilePictureBlob = resultSet.getBlob(9);
+            byte[] profilePictureBytes = profilePictureBlob.getBytes(1, (int) profilePictureBlob.length());
+            
+            
+            // TODO: skal det være noget andet end inputstream??
+            previewDatingUser = new PreviewDatingUser(resultSet.getInt(1), profilePictureBytes,
+                    resultSet.getString(3),
+                    resultSet.getInt(6));
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in createPreviewDatingUserFromResultSet: " + e.getMessage());
+        }
+        return previewDatingUser;
+    }
+    
+    /**
+     * Opretter DatingUser-obj ud fra resultSet
+     *
+     * @param resultSet ResultSet som DatingUser-obj dannes ud fra
+     *
+     * @return DatingUser Returnerer det oprettede DatingUser-obj
+     */
+    public DatingUser createDatingUserFromResultSet(ResultSet resultSet)
+    {
+        DatingUser datingUser = new DatingUser();
+        try
+        {
+            if(resultSet.next())
+            {
+                Blob profilePictureBlob = resultSet.getBlob(9);
+                byte[] profilePictureBytes = profilePictureBlob.getBytes(1, (int) profilePictureBlob.length());
+                ArrayList<DatingUser> favouritesList =
+                        convertResultSetToFavouritesList(retrieveFavouritesList(resultSet.getInt(1)));
+                
+                datingUser.setIdDatingUser(resultSet.getInt(1));
+                datingUser.setBlacklisted(datingUser.convertIntToBoolean(resultSet.getInt(2)));
+                datingUser.setUsername(resultSet.getString(3));
+                datingUser.setEmail(resultSet.getString(4));
+                datingUser.setPassword(resultSet.getString(5));
+                datingUser.setAge(resultSet.getInt(6));
+                datingUser.setSex(datingUser.convertIntToBoolean(resultSet.getInt(7)));
+                datingUser.setInterestedIn(resultSet.getInt(8));
+                datingUser.setProfilePictureBytes(profilePictureBytes);
+                datingUser.setDescription(resultSet.getString(10));
+                datingUser.setTagsList(datingUser.convertStringToTagsList(resultSet.getString(11)));
+                datingUser.setPostalInfo(findPostalInfoObjectFromIdPostalInfo(resultSet.getInt(12)));
+                datingUser.setFavouritesList(favouritesList);
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in createDatingUserFromResulSet: " + e.getMessage());
+        }
+        
+        return datingUser;
+    }
+    
+    
+    public ResultSet retrieveFavouritesList(int idDatingUser)
+    {
+        ResultSet resultSet = null;
+        
+        favouritesListConnection = establishConnection("lovestruck_favourites_list");
+        
+        try
+        {
+            String sqlCommand = "SELECT * FROM lovestruck_favourites_list.favourites_list_?;";
+            
+            PreparedStatement preparedStatement = favouritesListConnection.prepareStatement(sqlCommand);
+            
+            preparedStatement.setInt(1, idDatingUser);
+            
+            resultSet = preparedStatement.executeQuery();
+            
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in retrieveFavouritesList: " + e.getMessage());
+        }
+        return resultSet;
+    }
+    
+    public ArrayList<DatingUser> convertResultSetToFavouritesList(ResultSet resultSet)
+    {
+        ArrayList<DatingUser> favouritesList = new ArrayList<>();
+        try
+        {
+            while(resultSet.next())
+            {
+                favouritesList.add(retrieveDatingUserFromDb(resultSet.getInt(1)));
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in convertResultSetToFavouritesList: " + e.getMessage());
+        }
+        
+        return favouritesList;
+    }
+    
+    public void resetLoggedInUser()
+    {
+        loggedInDatingUser = null;
+        loggedInAdmin = null;
+    }
+    
     
     
     

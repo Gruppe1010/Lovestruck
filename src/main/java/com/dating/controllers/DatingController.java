@@ -31,7 +31,7 @@ public class DatingController
     int idDatingUserToChatWith = 0;
     String currentChatTable = null;
     
-    Error error = null;
+   
     UserService userService = new UserService();
     UserRepository userRepository = new UserRepository();
     //DatingUser loggedInDatingUser = userRepository.retrieveDatingUserFromDb(2);
@@ -64,6 +64,8 @@ public class DatingController
         // TODO: slet måske denne metode - fordi måske giver det mest mening bare skrive koden her
         resetLoggedInUsers();
         userRepository.closeConnections();
+    
+        System.out.println(loggedInAdmin == null);
         
         return "logout"; // html
     }
@@ -77,8 +79,9 @@ public class DatingController
         // vi tjekker admin-tabellen først fordi den er kortest (selvom det nok oftere er en datingUser som vil logge
         // ind)
         loggedInAdmin = userRepository.checkIfUserExistsInAdminsTable(dataFromLogInForm);
-        
-        if(loggedInAdmin.getUsername()!=null) // hvis den har fundet en admin
+    
+        // hvis den har fundet en admin
+        if(loggedInAdmin != null)
         {
             return "redirect:/startPageAdmin"; // url
         }
@@ -523,6 +526,14 @@ public class DatingController
         return "Admin/blacklistedpage"; // html
     }
     
+    @GetMapping("/editProfileAdmin")
+    public String editProfileAdmin(Model adminModel)
+    {
+        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+    
+        return "Admin/editprofileadmin"; // html
+    }
+    
     
     
     /* TODO: probably slet denne
@@ -535,11 +546,6 @@ public class DatingController
     }
     
      */
-    
- 
-    
-    
-    
     
     
     //------------------ REQUEST ADMIN -------------------//
@@ -613,11 +619,17 @@ public class DatingController
      *
      *
      * */
-    public void
-    resetLoggedInUsers()
+    public void resetLoggedInUsers()
     {
         loggedInAdmin = null;
         loggedInDatingUser = null;
+        ViewProfileDatingUser viewProfileDatingUser = null;
+        EditDatingUser editDatingUser = null;
+        int idDatingUserToChatWith = 0;
+        String currentChatTable = null;
+        
+        userRepository.resetLoggedInUser();
+        
     }
     
 }

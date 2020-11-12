@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+
     <title> Love Struck </title>
+    <meta http-equiv = "refresh" content = "10; url = /startPageAdmin"/>
 
     <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
     <meta charset="utf-8"/>
     <meta name="description" content="Love struck - tænd gnisten"/>
 
     <!-- css-filer -->
-    <link href="/startchatandfavouritespage.css" type="text/css" rel="stylesheet">
+    <link href="/editprofile.css" type="text/css" rel="stylesheet">
     <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
     <link href="/formtemplate.css" type="text/css" rel="stylesheet">
 
@@ -28,8 +30,8 @@
     <!--content der inkapsler hele siden undtagen footer-->
     <div class="content">
         <div class="logo">
-            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
-            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
+            <a href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
         </div>
 
         <div class="menubar">
@@ -42,32 +44,17 @@
             <span class="menubarheadline dropdown">
                 <span th:text="${loggedInAdmin.getUsername()}"></span>
                 <div class="dropdown-content">
-                    <a href="/createAdmin" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Opret admin</a>
+                    <a href="/createAdmin" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Opret admin</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
                     <a href="/editProfileAdmin" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
-                    <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a>
+                    <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
                 </div>
                 <i class="fas fa-caret-down"></i>
             </span>
         </div>
-
-        <div class="content-container">
-            <h4 class="startpageheadline">Her finder du alle de blacklistede brugere<i class="fas fa-heart"></i></h4>
-            <p class="startpageheadline">Tryk på en bruger og derefter på "Slet fra blacklist" for at fjerne en bruger fra blacklisten</p>
-            <div class="textbox-container">
-
-                <div th:each="previewDatingUser : ${previewDatingUsersList}">
-
-                    <a class="previewdatinguserlink" th:href="@{/viewProfileAdmin(id=${previewDatingUser.getId()})}">
-                        <div class="previewdatinguserbox">
-                            <img class="previewdatinguserpicture" th:src="'data:image/jpeg;base64,' + ${previewDatingUser.getBase64()}">
-                            <div class="previewdatinguserinfo">
-                                <div th:text="${previewDatingUser.getUsername()}"></div>
-                                <div th:text="${previewDatingUser.getAge()}"><p>&nbsp; år</p></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
+        <div id="editprofile-container">
+            <!-- Kolonne til inputfelt -->
+            <div id="form-container">
+                <h3 class="formheadline"><br><br><i class="fas fa-tools"></i> Rediger admin funktionen er desværre ikke færdig endnu <i class="fas fa-tools"></i></h3>
             </div>
         </div>
     </div>
@@ -85,4 +72,3 @@
 </div>
 </body>
 </html>
-
