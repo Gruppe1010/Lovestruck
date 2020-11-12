@@ -17,7 +17,29 @@ public class UserService
     UserRepository userRepository = new UserRepository();
     FormDatingUser input = new FormDatingUser();
     
-    ///////////  metoder
+    //---------------------------------------------- GENERAL -----------------------------------------------------//
+    
+    public void setInput(WebRequest form)
+    {
+        input.setInterestedIn(convertInterestedInStringToInt(form.getParameter("interestedininput")));
+        input.setUsername(form.getParameter("usernameinput"));
+        input.setEmail(form.getParameter("emailinput"));
+        input.setAge(Integer.parseInt(form.getParameter("ageinput")));
+        input.setPassword(form.getParameter("passwordinput"));
+        input.setPassword(form.getParameter("confirmpasswordinput"));
+        input.setDescription(form.getParameter("descriptioninput"));
+        input.setTagsList(form.getParameter("tagslistinput"));
+        
+        int zipCodeInput = 0;
+        String zipCodeInputString = form.getParameter("zipcodeinput");
+        if(!(zipCodeInputString.equals("")))
+        {
+            zipCodeInput = Integer.parseInt(zipCodeInputString);
+        }
+        
+        input.setZipCode(zipCodeInput);
+    }
+    
     /**
      * Konverterer en sex-værdi repræsenteret som String om til boolsk værdi
      * (male == false, female == true)
@@ -59,7 +81,45 @@ public class UserService
         return interestedIn;
     }
     
-    /////////// datingUser
+    public boolean checkIfPasswordsMatch(String password, String confirmPassword)
+    {
+        return password.equals(confirmPassword);
+    }
+    
+    //---------------------------------------------- DATINGUSER -----------------------------------------------------//
+    
+    /**
+     * Opretter (og returns) nyt DatingUser-obj. ud fra Create-Profile-Form
+     *
+     * @param dataFromCreateUserForm WebRequest knyttet til Create-Profile-Formen - her hentes info til nyt
+     *                                DatingUser-obj.
+     * @return DatingUser Det nye DatingUser-obj. som er blevet oprettet
+     * */
+    public DatingUser createDatingUser(WebRequest dataFromCreateUserForm)
+    {
+        DatingUser datingUser = null;
+        
+        // TODO: måske lave en metode som gør alt dette - returnerer en editdatinguser med alle disse fields
+        boolean sex = resolveSexInput(dataFromCreateUserForm.getParameter("sexinput"));
+        int interestedIn = convertInterestedInStringToInt(dataFromCreateUserForm.getParameter("interestedininput"));
+        int age = Integer.parseInt(dataFromCreateUserForm.getParameter("ageinput"));
+        String username = dataFromCreateUserForm.getParameter("usernameinput");
+        String email =  dataFromCreateUserForm.getParameter("emailinput");
+        String password = dataFromCreateUserForm.getParameter("passwordinput");
+        String confirmPassword = dataFromCreateUserForm.getParameter("confirmpasswordinput");
+        
+        boolean usernameIsAvailable = userRepository.isUsernameAvailable(username);
+        boolean emailIsAvailable = userRepository.isEmailAvailable(email);
+        
+        // brugeren bliver kun oprettet i systemet hvis:
+        if(age >= 16 && usernameIsAvailable && emailIsAvailable && checkIfPasswordsMatch(password, confirmPassword))
+        {
+            datingUser = new DatingUser(sex, interestedIn, age, username, email, password);
+        }
+        
+        return datingUser;
+    }
+    
     /**
      * Opdaterer (og returner) DatingUser-objekt til at indeholde ny data fra Edit-Profile-Form'en
      *
@@ -115,45 +175,8 @@ public class UserService
         return loggedInDatingUser;
     }
     
-    /**
-     * Opretter (og returns) nyt DatingUser-obj. ud fra Create-Profile-Form
-     *
-     * @param dataFromCreateUserForm WebRequest knyttet til Create-Profile-Formen - her hentes info til nyt
-     *                                DatingUser-obj.
-     * @return DatingUser Det nye DatingUser-obj. som er blevet oprettet
-     * */
-    public DatingUser createDatingUser(WebRequest dataFromCreateUserForm)
-    {
-        DatingUser datingUser = null;
-        
-        // TODO: måske lave en metode som gør alt dette - returnerer en editdatinguser med alle disse fields
-        boolean sex = resolveSexInput(dataFromCreateUserForm.getParameter("sexinput"));
-        int interestedIn = convertInterestedInStringToInt(dataFromCreateUserForm.getParameter("interestedininput"));
-        int age = Integer.parseInt(dataFromCreateUserForm.getParameter("ageinput"));
-        String username = dataFromCreateUserForm.getParameter("usernameinput");
-        String email =  dataFromCreateUserForm.getParameter("emailinput");
-        String password = dataFromCreateUserForm.getParameter("passwordinput");
-        String confirmPassword = dataFromCreateUserForm.getParameter("confirmpasswordinput");
-        
-        boolean usernameIsAvailable = userRepository.isUsernameAvailable(username);
-        boolean emailIsAvailable = userRepository.isEmailAvailable(email);
-        
-        // brugeren bliver kun oprettet i systemet hvis:
-        if(age >= 16 && usernameIsAvailable && emailIsAvailable && checkIfPasswordsMatch(password, confirmPassword))
-        {
-            datingUser = new DatingUser(sex, interestedIn, age, username, email, password);
-        }
-        
-        return datingUser;
-    }
+    //---------------------------------------------- EDIT PROFILE ------------------------------------------------//
     
-    public boolean checkIfPasswordsMatch(String password, String confirmPassword)
-    {
-        return password.equals(confirmPassword);
-    }
-    
-    
-    /////////// editDatingUser
     public boolean checkForProfileAlterations(MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
                                               EditDatingUser editDatingUser)
     {
@@ -291,60 +314,6 @@ public class UserService
         
         return editDatingUser;
     }
-    
-    
-    public void setInput(WebRequest form)
-    {
-        input.setInterestedIn(convertInterestedInStringToInt(form.getParameter("interestedininput")));
-        input.setUsername(form.getParameter("usernameinput"));
-        input.setEmail(form.getParameter("emailinput"));
-        input.setAge(Integer.parseInt(form.getParameter("ageinput")));
-        input.setPassword(form.getParameter("passwordinput"));
-        input.setPassword(form.getParameter("confirmpasswordinput"));
-        input.setDescription(form.getParameter("descriptioninput"));
-        input.setTagsList(form.getParameter("tagslistinput"));
-    
-        int zipCodeInput = 0;
-        String zipCodeInputString = form.getParameter("zipcodeinput");
-        if(!(zipCodeInputString.equals("")))
-        {
-            zipCodeInput = Integer.parseInt(zipCodeInputString);
-        }
-    
-        input.setZipCode(zipCodeInput);
-    }
-    
-    
-    
-    /*
-    public int findZipCodeInput(String zipCodeInputString, DatingUser loggedInDatingUser)
-    {
-        // zipCodeInput zipCode som loggedInDatingUser opdateres med - sæt til 0 som "intet input default"
-        int zipCodeInput = 0;
-    
-        // zipCodeInput fra form - kommer ud fra form i String
-    
-    
-        // hvis der ER input i feltet
-        if(!(zipCodeInputString.equals("")))
-        {
-            // parse inputtet til int
-            zipCodeInput = Integer.parseInt(zipCodeInputString);
-        
-            // hvis inputtet IKKE er det samme som det der er gemt på loggedInDatingUser
-            if(zipCodeInput!=loggedInDatingUser.getPostalInfo().getZipCode())
-            {
-                // opdater zipCode på DatingUser-obj.
-            }
-        }
-        // hvis der IKKE er input i feltet
-        else // if((zipCodeInputString.equals("")))
-        {
-            loggedInDatingUser.setPostalInfo(userRepository.findPostalInfoObjectFromZipCodeInput(zipCodeInput));
-        }
-    }
-    
-     */
     
     
 }

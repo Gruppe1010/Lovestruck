@@ -4,12 +4,9 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 public class ViewProfileDatingUser
 {
-    // tilføj de attributter som vi skal vise på denne html
-    // TODO måske slettes permanent: private boolean isBlacklisted;
-   
     private int idViewProfileDatingUser;
     private String username;
-    private String sexAndAge; // TODO! overvej at sammensmelte sex og age - da det alligevel skal stå samme sted
+    private String sexAndAge;
     private String zipCodeAndCity;
     private String description;
     private String tags;
@@ -18,7 +15,7 @@ public class ViewProfileDatingUser
     private boolean isOnFavouritesList;
     private boolean isBlacklisted;
     
-    // constructor
+    // constructors
     public ViewProfileDatingUser(){}
     public ViewProfileDatingUser(int idViewProfileDatingUser, String username,String sexAndAge, String zipCodeAndCity,
                                  String description, String tags, byte[] profilePictureBytes, boolean blacklisted)
@@ -118,12 +115,10 @@ public class ViewProfileDatingUser
         isBlacklisted = blacklisted;
     }
     
-    // andre metoder
+    //---------------------------------------------- ANDRE METODER -------------------------------------------------//
     private String byteArrayAs64String()
     {
         return Base64.encodeBase64String(this.profilePictureBytes);
     }
-    
-    
     
 }

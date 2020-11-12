@@ -6,7 +6,6 @@ import com.dating.models.chat.Message;
 import com.dating.viewModels.datingUser.EditDatingUser;
 import com.dating.viewModels.datingUser.PreviewDatingUser;
 import com.dating.viewModels.datingUser.ViewProfileDatingUser;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.web.context.request.WebRequest;
 
 import java.io.File;
@@ -17,8 +16,6 @@ import java.util.Collections;
 
 public class DatingUser extends User
 {
-    // det er smart at have denne, fordi så skal vi ikke hente den fra databasen
-    // (fx når brugeren skal tilgå sin favoritliste)
     private int idDatingUser;
     private boolean isBlacklisted; // 0 == false, 1 == true
     private boolean sex; // false == mænd, true == kvinder
@@ -29,8 +26,7 @@ public class DatingUser extends User
     private ArrayList<String> tagsList;
     private PostalInfo postalInfo;
     private ArrayList<DatingUser> favouritesList;
-    private ArrayList<Chat> chatList; // chatPage-html // TODO måske overflødig
-    private Chat currentChat; // currentChat-html
+    private Chat currentChat;
     
     // constructors
     public DatingUser(){}
@@ -140,6 +136,7 @@ public class DatingUser extends User
         this.currentChat = currentChat;
     }
     
+    // getters + setters fra SUPER-klasse
     public String getUsername()
     {
         return super.getUsername();
@@ -166,7 +163,7 @@ public class DatingUser extends User
     }
     
     
-    // -----------------------ANDRE METODER----------------------//
+    // --------------------------------------------ANDRE METODER-------------------------------//
     
     /**
      * Siger at et objekt af klassen er en DatingUser - Overskriver superklassen User's metode som siger false
@@ -180,28 +177,6 @@ public class DatingUser extends User
     }
     
     // -------------------CONVERTERE-----------------//
-    
-    // TODO: måske overflødig
-    /**
-     * Konverterer interestedIn-attribut til tilsvarende String
-     *
-     * @return String interestedIn-attributtens String-værdi
-     */
-    public String convertInterestedInToString()
-    {
-        if(interestedIn==0)
-        {
-            return "males";
-        }
-        else if(interestedIn==1)
-        {
-            return "females";
-        }
-        
-        return "malesandfemales";
-    }
-    
-    
     
     /**
      * Konverterer boolean til integer-værdi
@@ -492,7 +467,7 @@ public class DatingUser extends User
 
             //File.seperator gør at stien virker på alle systemer
             File genericProfilePictureFile = new File("src" +File.separator + "main" + File.separator + "resources" + File.separator +
-                    "static" + File.separator + "image" + File.separator + "profilepictures" + File.separator + "genericProfileImage.png");
+                    "static" + File.separator + "image" + File.separator + "genericProfileImage.png");
 
     
     
@@ -516,6 +491,5 @@ public class DatingUser extends User
         currentChat.getMessageList().add(new Message(messageFromForm.getParameter(
                 "messageinput"), super.getUsername()));
     }
-    
 }
 

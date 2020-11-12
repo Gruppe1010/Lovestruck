@@ -1,24 +1,43 @@
 package com.dating.models.users;
 
-import java.util.ArrayList;
-
 public class Admin extends User
 {
-    // TODO: overvej om denne skal slettes
-    private ArrayList<DatingUser> blacklistedUsersList;
-    
     
     // constructors
     public Admin(){}
     public Admin(String username, String email, String password)
     {
-        super(username, email, password); // den kalder superklassens constructor
-        
-        blacklistedUsersList = null;
+        // den kalder superklassens constructor
+        super(username, email, password);
     }
     
-    // getters + setters
+    // getters + setters fra SUPER-klasse
+    public String getUsername()
+    {
+        return super.getUsername();
+    }
+    public void setUsername(String username)
+    {
+        super.setUsername(username);
+    }
+    public String getEmail()
+    {
+        return super.getEmail();
+    }
+    public void setEmail(String email)
+    {
+        super.setEmail(email);
+    }
+    public String getPassword()
+    {
+        return super.getPassword();
+    }
+    public void setPassword(String password)
+    {
+        super.setPassword(password);
+    }
     
+    // andre metoder
     /**
      * Siger at et objekt af klassen er en Admin - Overskriver superklassen User's metode som siger false
      *
@@ -29,15 +48,5 @@ public class Admin extends User
     {
         return true;
     }
-    
-    // TODO: slet??
-    public User createAdmin()
-    {
-        
-        return new Admin("hej", "hej", "hej");
-    }
-    
-    
-    
     
 }

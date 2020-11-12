@@ -14,22 +14,16 @@ import java.util.ArrayList;
 @SpringBootApplication
 public class DatingApplication
 {
-
     // 2564 == id_postal_info på NULL postInfo-obj. i db
     
     public static void main(String[] args)
     {
         
         SpringApplication.run(DatingApplication.class, args);
-        UserRepository us = new UserRepository();
-
-
-        //us.writePictureToDb(6);
-        // us.readPictureFromDb(14,"testpicture2.jpg");
+     
     }
-
     
-    // TODO fjern evt.
+    // DISSE METODER BRUGTE VI TIL AT OPRETTE ALLE POSTNUMRE I DB
     private static void postnumre()
     {
         
@@ -1361,7 +1355,4 @@ public class DatingApplication
         }
         
     }
-    
-    
-    
 }

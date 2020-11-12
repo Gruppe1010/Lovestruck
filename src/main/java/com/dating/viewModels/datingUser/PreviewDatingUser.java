@@ -4,11 +4,8 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.io.InputStream;
 
-/**
- * Oplysningerne fra DatingUser som ses når bruger vises i lille firkant på forsiden, søg og på favoritlisten
- *
- *
- * */
+// Oplysningerne fra DatingUser som ses når bruger vises i lille firkant på forsiden, søg og på favoritlisten
+
 public class PreviewDatingUser
 {
     private int id;
@@ -18,7 +15,7 @@ public class PreviewDatingUser
     private String base64;
     private boolean isOnFavouritesList;
     
-    // Constructor
+    // constructors
     public PreviewDatingUser(){}
     public PreviewDatingUser(int id, byte[] profilePictureBytes, String username, int age)
     {
@@ -80,7 +77,7 @@ public class PreviewDatingUser
         this.base64 = base64;
     }
     
-    // Andre metoder
+    //---------------------------------------------- ANDRE METODER --------------------------------------------------//
     private String byteArrayAs64String()
     {
         return Base64.encodeBase64String(this.profilePictureBytes);

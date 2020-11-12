@@ -22,52 +22,64 @@ import java.util.ArrayList;
 public class DatingController
 {
     Admin loggedInAdmin = null;
-    //DatingUser loggedInDatingUser = null; // TODO det er denne som skal kopieres ind når vi ikke tester
+    DatingUser loggedInDatingUser = null;
   
-    DatingUser loggedInDatingUser = new DatingUser(true, 2, 24, "tester", "tester@hotmail.com", "hej");
-    
     ViewProfileDatingUser viewProfileDatingUser = null;
     EditDatingUser editDatingUser = null;
+    
     int idDatingUserToChatWith = 0;
     String currentChatTable = null;
     
-   
     UserService userService = new UserService();
     UserRepository userRepository = new UserRepository();
-    //DatingUser loggedInDatingUser = userRepository.retrieveDatingUserFromDb(2);
     
     /*TODO: overvej at dele Controlleren op i flere controllers!!! -
     //  fx GenerelController, AdminController, DatingUserController*/
     
-    //------------------ GET GENEREL -------------------//
+    //------------------------------------------ GENERAL ------------------------------------------------//
     
     /**
-     * Returnerer index-html-side ved /-request
+     * Nulstiller attributterne loggedInAdmin og loggedInDatingUser DatingController-klassen
      *
-     * @return String html-siden
-     */
+     *
+     *
+     * */
+    public void resetLoggedInUsers()
+    {
+        loggedInAdmin = null;
+        loggedInDatingUser = null;
+        ViewProfileDatingUser viewProfileDatingUser = null;
+        EditDatingUser editDatingUser = null;
+        int idDatingUserToChatWith = 0;
+        String currentChatTable = null;
+        
+        userRepository.resetLoggedInUser();
+        
+    }
+    
+    //------------------ GET GENEREL -------------------//
+    
     @GetMapping("/")
     public String index()
     {
-        return "index";
+        return "General/index";
     }
     
     @GetMapping("/logIn")
     public String logIn()
     {
-        return "login"; // html
+        return "General/login"; // html
     }
     
     @GetMapping("/logOut")
     public String logOut()
     {
-        // TODO: slet måske denne metode - fordi måske giver det mest mening bare skrive koden her
+        // nulstiller alle Controller-User-attributter + Repository-User-attributter
         resetLoggedInUsers();
+       
         userRepository.closeConnections();
-    
-        System.out.println(loggedInAdmin == null);
         
-        return "logout"; // html
+        return "General/logout"; // html
     }
     
     //------------------ POST GENEREL -------------------//
@@ -94,13 +106,16 @@ public class DatingController
             loggedInAdmin = null;
             return "redirect:/startPage"; // url
         }
-        // TODO: evt. skriv metode som sætter begge user-ting til null - fordi lige nu har de fået tildelt tomme brugere
-        // brugeren er ikke fundet
+        
+        // hvis den HVERKEN finder admin ELLER datingUser
         loggedInAdmin = null;
         loggedInDatingUser = null;
+        
         return "redirect:/logIn"; // url
     }
     
+ 
+    //------------------------------------------ DATINGUSER ------------------------------------------------//
     
     //------------------ GET DATINGUSER -------------------//
     
@@ -114,7 +129,7 @@ public class DatingController
     
         previewDatingUsersListModel.addAttribute("previewDatingUsersList", previewDatingUsersList);
         
-        return "DatingUser/startpage"; // html
+        return "DatingUser/MenuBar/startpage"; // html
     }
     
     @GetMapping("/chatPage")
@@ -131,18 +146,8 @@ public class DatingController
         
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "DatingUser/chatPage"; // html
+        return "DatingUser/MenuBar/chatPage"; // html
     }
-    
-    /*
-    @GetMapping("/viewChat")
-    public String viewChat(Model datingUserModel, Model chatModel)
-    {
-        
-        return "DatingUser/viewchat"; // html
-    }
-    
-     */
     
     @GetMapping("/favouritesPage")
     public String favouritesPage(Model datingUserModel, Model favouritesListModel)
@@ -153,7 +158,7 @@ public class DatingController
         
         favouritesListModel.addAttribute("favouritesList", favouritesList);
         
-        return "DatingUser/favouritespage"; // html
+        return "DatingUser/MenuBar/favouritespage"; // html
     }
     
     @GetMapping("/searchPage")
@@ -161,7 +166,7 @@ public class DatingController
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "DatingUser/searchpage"; // html
+        return "DatingUser/UnderConstruction/searchpage"; // html
     }
     
     @GetMapping("/viewMyProfile")
@@ -171,24 +176,8 @@ public class DatingController
     
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         
-        return "DatingUser/viewmyprofile";
+        return "DatingUser/MenuBar/viewmyprofile";
     }
-    
-    /*
-    @GetMapping("/viewProfile")
-    public String viewProfile(Model viewProfileDatingUserModel, Model loggedInDatingUserModel)
-    {
-        // Vi har sat klasse-variablen viewProfileDatingUser i vores RequestMapping(/viewProfile?{idViewDatingUser})
-        // (så variablen ER opdateret til at indeholde den profil vi skal vise)
-        
-        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
-    
-        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
-        
-        return "DatingUser/viewprofile";
-    }
-    
-     */
     
     @GetMapping("/editProfile")
     public String editProfile(Model editDatingUserModel)
@@ -197,7 +186,7 @@ public class DatingController
         
         editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
         
-        return "DatingUser/editprofile"; // html
+        return "DatingUser/MenuBar/editprofile"; // html
     }
     
     @GetMapping("/editProfileConfirmation")
@@ -205,9 +194,10 @@ public class DatingController
     {
         datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         
-        return "DatingUser/editprofileconfirmation"; // html
+        return "DatingUser/Confirmations/editprofileconfirmation"; // html
     }
     
+    // TODO: skriv JavaDoc
     @GetMapping("/favouritesConfirmation")
     public String favouritesConfirmation(Model viewProfileDatingUserModel, Model loggedInDatingUserModel)
     {
@@ -227,9 +217,10 @@ public class DatingController
         loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         
-        return "/DatingUser/favouritesconfirmation";
+        return "/DatingUser/Confirmations/favouritesconfirmation";
     }
     
+    // TODO: skriv JavaDoc
     @GetMapping("/favouriteRemovedConfirmation")
     public String favouriteRemovedConfirmation(Model viewProfileDatingUserModel, Model loggedInDatingUserModel)
     {
@@ -250,7 +241,7 @@ public class DatingController
         loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
     
-        return "/DatingUser/favouriteremovedconfirmation";
+        return "/DatingUser/Confirmations/favouriteremovedconfirmation";
     }
     
     //------------------ RequestMapping DatingUser -------------------//
@@ -272,10 +263,10 @@ public class DatingController
         // Hvis profil som skal vises ER på favouritesList (skal den have en anden knap nemlig)
         if(isOnFaveList)
         {
-            return "DatingUser/viewprofilefav";
+            return "DatingUser/ViewElements/viewprofilefav";
         }
         // else if profilen som skal vises IKKE er på favouritesList
-        return "DatingUser/viewprofile";
+        return "DatingUser/ViewElements/viewprofile";
     }
     
     @RequestMapping("/viewChat")
@@ -349,41 +340,7 @@ public class DatingController
         chatModel.addAttribute("messageList", messageList);
     
         
-        return "DatingUser/viewchat";
-        /*
-        // hente tabellen som stemmer overens med 2 id'er
-        Chat chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
-        
-        // hvis der ikke findes tabel der hedder: chat_idLoggedInDatingUser_idDatingUserToChatWith
-        if(chat == null)
-        {
-            // så tjekker vi om der findes en tabel som hedder: chat_idDatingUserToChatWith_idLoggedInDatingUser
-            chat = userRepository.findChatTable(idDatingUserToChatWith, loggedInDatingUser.getIdDatingUser());
-            
-            // hvis den tabel (chat_?_?) HELLER IKKE findes - så OPRETTER vi den
-            if(chat == null)
-            {
-                // opretter ny chat_id_id-tabel
-                userRepository.createChatTableInDb(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
-    
-                // sætter chat-variablen til at indeholde den ny-oprettede chat
-                chat = userRepository.findChatTable(loggedInDatingUser.getIdDatingUser(), idDatingUserToChatWith);
-                
-                // tilfjer loggedInDatingUser-obj. til idDatingUserToChatWith's til hinandens chats_list_?-tabeller
-                userRepository.addDatingUsersToEachOthersChatsListsInDb(loggedInDatingUser.getIdDatingUser(),
-                        idDatingUserToChatWith);
-            }
-        }
-    
-        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
-        loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
-        chatModel.addAttribute("chat", chat);
-        
-       
-        
-        return "DatingUser/viewchat";
-        
-         */
+        return "DatingUser/ViewElements/viewchat";
     }
     
     //------------------ POST DATINGUSER -------------------//
@@ -405,8 +362,8 @@ public class DatingController
     }
     
     @PostMapping("/postEditProfile")
-    public String postEditProfile(@RequestParam("profilepictureinput") MultipartFile profilePictureFile, WebRequest dataFromEditProfileForm,
-                                  Model editDatingUserModel)
+    public String postEditProfile(@RequestParam("profilepictureinput") MultipartFile profilePictureFile,
+                                  WebRequest dataFromEditProfileForm, Model editDatingUserModel)
     {
         // tjekker om brugeren har indtastet ny info
         boolean userAddedChanges = userService.checkForProfileAlterations(profilePictureFile, dataFromEditProfileForm,
@@ -454,6 +411,10 @@ public class DatingController
         return "redirect:/viewChat?idDatingUserToChatWith=" + idDatingUserToChatWith; // url
     }
     
+    
+    //------------------------------------------ ADMIN ------------------------------------------------//
+    
+    
     //------------------ GET ADMIN -------------------//
     
     @GetMapping("/startPageAdmin")
@@ -468,7 +429,7 @@ public class DatingController
         previewDatingUsersListModel.addAttribute("previewDatingUsersList", previewDatingUsersList);
         
         
-        return "Admin/startpageadmin"; // html
+        return "Admin/MenuBar/startpageadmin"; // html
     }
     
     @GetMapping("/searchPageAdmin")
@@ -476,7 +437,7 @@ public class DatingController
     {
         adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
         
-        return "Admin/searchpageadmin"; // html
+        return "Admin/UnderConstruction/searchpageadmin"; // html
     }
     
     @GetMapping("/createAdmin")
@@ -484,7 +445,7 @@ public class DatingController
     {
         adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
         
-        return "Admin/createadmin"; // html
+        return "Admin/UnderConstruction/createadmin"; // html
     }
     
     @GetMapping("/removeFromBlacklistConfirmation")
@@ -496,7 +457,7 @@ public class DatingController
         
         userRepository.updateDatingUsersBlacklistedColumn(viewProfileDatingUser.getIdViewProfileDatingUser(), 0);
         
-        return "/Admin/removefromblacklistconfirmation";
+        return "/Admin/Confirmations/removefromblacklistconfirmation";
     }
     
     @GetMapping("/addToBlacklistConfirmation")
@@ -508,7 +469,7 @@ public class DatingController
         
         userRepository.updateDatingUsersBlacklistedColumn(viewProfileDatingUser.getIdViewProfileDatingUser(), 1);
         
-        return "/Admin/addtoblacklistconfirmation";
+        return "/Admin/Confirmations/addtoblacklistconfirmation";
     }
     
     @GetMapping("/blacklistedPage")
@@ -523,7 +484,7 @@ public class DatingController
         previewDatingUsersListModel.addAttribute("previewDatingUsersList", previewDatingUsersList);
         
         
-        return "Admin/blacklistedpage"; // html
+        return "Admin/MenuBar/blacklistedpage"; // html
     }
     
     @GetMapping("/editProfileAdmin")
@@ -531,22 +492,8 @@ public class DatingController
     {
         adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
     
-        return "Admin/editprofileadmin"; // html
+        return "Admin/UnderConstruction/editprofileadmin"; // html
     }
-    
-    
-    
-    /* TODO: probably slet denne
-    @GetMapping("/chatPageAdmin")
-    public String chatPageAdmin(Model datingUserModel)
-    {
-        datingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
-        
-        return "DatingUser/chatpage"; // html
-    }
-    
-     */
-    
     
     //------------------ REQUEST ADMIN -------------------//
     
@@ -566,70 +513,11 @@ public class DatingController
         // Hvis profil som skal vises ER blacklisted (skal den have en anden knap nemlig)
         if(isBlacklisted)
         {
-            return "Admin/viewprofileblacklisted";
+            return "Admin/ViewElements/viewprofileblacklisted";
         }
         // else if profilen som skal vises IKKE er på favouritesList
-        return "Admin/viewprofilenotblacklisted";
+        return "Admin/ViewElements/viewprofilenotblacklisted";
     }
     
-  
-    //------------------ POST ADMIN -------------------//
-    
-    @PostMapping("/postEditProfileAdmin")
-    public String postEditProfileAdmin(WebRequest dataFromEditProfileForm, Model editDatingUserModel)
-    {
-        /*
-        // tjekker om brugeren har indtastet ny info
-        boolean userAddedChanges = userService.checkForProfileAlterations(dataFromEditProfileForm, editDatingUser);
-        
-        // hvis bruger har indtastet ny info
-        if(userAddedChanges)
-        {
-            // TODO NICE lav måske en errorPage som skriver hvilken fejl det er og skifter tilbage til
-            //  editProfile-html'en
-            // TODO: fix at den siger confirmationPage ved zipcode 0000 - ved ikkesisterende-zipcode
-            boolean isUsernameEmailPasswordValid = userService.checkUsernameEmailPassword(dataFromEditProfileForm, editDatingUser);
-            
-            if(isUsernameEmailPasswordValid)
-            {
-                loggedInDatingUser = userService.updateLoggedInDatingUser(dataFromEditProfileForm, loggedInDatingUser);
-                userRepository.updateLoggedInDatingUserInDb(loggedInDatingUser);
-                
-                return "redirect:/editProfileConfirmation"; // url
-            }
-        }
-        
-        // Hvis INGEN ny info ELLER hvis usernameEmailPassword er invalid
-        // editDatingUser opdateres fordi viewet skal vise det brugeren skrev ind!!!!!!!!!!!!!!!!
-        editDatingUser = userService.updateEditDatingUser(dataFromEditProfileForm,
-                loggedInDatingUser.getUsername(),
-                loggedInDatingUser.getEmail());
-        editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
-        
-         */
-        
-        return "Admin/editprofileadmin"; // html
-    }
-    
-    //------------------ ANDRE METODER -------------------//
-    
-    /**
-     * Nulstiller attributterne loggedInAdmin og loggedInDatingUser DatingController-klassen
-     *
-     *
-     *
-     * */
-    public void resetLoggedInUsers()
-    {
-        loggedInAdmin = null;
-        loggedInDatingUser = null;
-        ViewProfileDatingUser viewProfileDatingUser = null;
-        EditDatingUser editDatingUser = null;
-        int idDatingUserToChatWith = 0;
-        String currentChatTable = null;
-        
-        userRepository.resetLoggedInUser();
-        
-    }
     
 }

@@ -128,7 +128,7 @@ public class EditDatingUser
         this.tagsList = tagsList;
     }
     
-    // andre metoder
+    //---------------------------------------------- ANDRE METODER--------------------------------------------------//
     public String checkIfInterestedInMales()
     {
         if(interestedIn == 0)
