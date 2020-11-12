@@ -28,13 +28,15 @@ public class DatingController
     EditDatingUser editDatingUser = null;
     
     int idDatingUserToChatWith = 0;
-    String currentChatTable = null;
+    int id1 = 0;
+    int id2 = 0;
     
     UserService userService = new UserService();
     UserRepository userRepository = new UserRepository();
     
     /*TODO: overvej at dele Controlleren op i flere controllers!!! -
     //  fx GenerelController, AdminController, DatingUserController*/
+    // TOOD: Lav evt. DatingControlleren som en super-klasse
     
     //------------------------------------------ GENERAL ------------------------------------------------//
     
@@ -287,7 +289,9 @@ public class DatingController
     
         // opdaterer attributten currentChatTable til at være den chatTable man currently er inde på
         // bruges i postMapping("/postMessage")
-        currentChatTable = loggedInDatingUser.getIdDatingUser() + "_" + idDatingUserToChatWith;
+        id1 = loggedInDatingUser.getIdDatingUser();
+        id2 = idDatingUserToChatWith;
+    
     
         // hvis der ikke findes tabel der hedder: chat_id1_id2
         if(!doesTableExist)
@@ -301,7 +305,8 @@ public class DatingController
     
             // opdaterer attributten currentChatTable til at være den chatTable man currently er inde på
             // bruges i postMapping("/postMessage")
-            currentChatTable = idDatingUserToChatWith + "_" + loggedInDatingUser.getIdDatingUser();
+            id1 = idDatingUserToChatWith;
+            id2 = loggedInDatingUser.getIdDatingUser();
         
             // hvis den tabel (chat_id2_id1) HELLER IKKE findes - så OPRETTER vi den
             if(!doesTableExist)
@@ -314,7 +319,9 @@ public class DatingController
     
                 // opdaterer attributten currentChatTable til at være den chatTable man currently er inde på
                 // bruges i postMapping("/postMessage")
-                currentChatTable = loggedInDatingUser.getIdDatingUser() + "_" + idDatingUserToChatWith;
+               
+                id1 = loggedInDatingUser.getIdDatingUser();
+                id2 = idDatingUserToChatWith;
             
                 // tilfjer loggedInDatingUser-obj. til idDatingUserToChatWith's til hinandens chats_list_?-tabeller
                 userRepository.addDatingUsersToEachOthersChatsListsInDb(loggedInDatingUser.getIdDatingUser(),
@@ -406,7 +413,7 @@ public class DatingController
         loggedInDatingUser.updateCurrentChat(messageFromForm);
         
         // updateLoggedInUserInDb
-        userRepository.insertMessageInChatTable(messageFromForm, currentChatTable, loggedInDatingUser);
+        userRepository.insertMessageInChatTable(messageFromForm, id1, id2, loggedInDatingUser);
         
         return "redirect:/viewChat?idDatingUserToChatWith=" + idDatingUserToChatWith; // url
     }

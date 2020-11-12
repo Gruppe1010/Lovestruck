@@ -535,6 +535,7 @@ public class UserRepository
      */
     public Admin checkIfUserExistsInAdminsTable(WebRequest dataFromLogInForm)
     {
+        
         lovestruckConnection = establishConnection("lovestruck");
         
         try
@@ -543,6 +544,7 @@ public class UserRepository
             
             if(resultSet.next()) // hvis admin er fundet i db
             {
+                loggedInAdmin = new Admin();
                 loggedInAdmin.setUsername(resultSet.getString(2));
                 loggedInAdmin.setEmail(resultSet.getString(3));
                 loggedInAdmin.setPassword(resultSet.getString(4));
@@ -1001,17 +1003,10 @@ public class UserRepository
         
     }
     
-    public void insertMessageInChatTable(WebRequest messageFromForm, String currentChatTable,
+    public void insertMessageInChatTable(WebRequest messageFromForm, int id1, int id2,
                                          DatingUser loggedInDatingUser)
     {
         chatConnection = establishConnection("lovestruck_chat");
-        
-        // for String'en currentChatTable altid sådan ud: tal_tal: fx: 3_5
-        int id1 = Integer.parseInt(String.valueOf(currentChatTable.charAt(0)));
-        int id2 = Integer.parseInt(String.valueOf(currentChatTable.charAt(2)));
-        
-        System.out.println("ID: " + id1 + id2);
-        
         
         try
         {
