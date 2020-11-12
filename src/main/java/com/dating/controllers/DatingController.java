@@ -90,6 +90,9 @@ public class DatingController
     @PostMapping("/postLogIn")
     public String postLogIn(WebRequest dataFromLogInForm)
     {
+        // sikrer at alle User-attributter i Controller og Repository bliver nulstillet
+        resetLoggedInUsers();
+        
         // vi tjekker admin-tabellen først fordi den er kortest (selvom det nok oftere er en datingUser som vil logge
         // ind)
         loggedInAdmin = userRepository.checkIfUserExistsInAdminsTable(dataFromLogInForm);
