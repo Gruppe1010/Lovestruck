@@ -423,14 +423,14 @@ public class UserRepository
             
             if(resultSet.next()) // hvis admin er fundet i db
             {
-                loggedInAdmin.setUsername(resultSet.getString(3));
-                loggedInAdmin.setEmail(resultSet.getString(4));
-                loggedInAdmin.setPassword(resultSet.getString(5));
+                loggedInAdmin.setUsername(resultSet.getString(2));
+                loggedInAdmin.setEmail(resultSet.getString(3));
+                loggedInAdmin.setPassword(resultSet.getString(4));
             }
         }
         catch(SQLException e)
         {
-            System.out.println("Error in isEmailAvailable: " + e.getMessage());
+            System.out.println("Error in checkIfUserExistsInAdminsTable: " + e.getMessage());
         }
         
         return loggedInAdmin;
@@ -725,7 +725,7 @@ public class UserRepository
     
     /**
      * Laver ArrayList med PreviewDatingUser-objekter ud fra ALLE datingUsers i tabel (undtaget
-     * datingUser-obj med idDatingUser)
+     * datingUser-obj med idDatingUser OG dem som er blacklisted)
      *
      * @param idDatingUser id som henviser til bruger der IKKE skal gemmes på listen
      *
@@ -739,7 +739,7 @@ public class UserRepository
     
         try
         {
-            String sqlCommand = "SELECT * FROM dating_users WHERE NOT id_dating_user = ?";
+            String sqlCommand = "SELECT * FROM dating_users WHERE NOT id_dating_user = ? AND NOT blacklisted = 1";
         
             // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
             // henter ALLE datingUsers fra tabel BORTSET fra den der er logget ind
@@ -760,6 +760,71 @@ public class UserRepository
             System.out.println("Error in findPostalInfoObjectFromZipCodeInput: " + e.getMessage());
         }
         return datingUsersList;
+    }
+    
+    
+    //------------------ ADMIN -------------------//
+    
+    /**
+     * Laver ArrayList med PreviewDatingUser-objekter ud fra ALLE datingUsers i tabel
+     * - som (alt efter param blacklisted) enten IKKE er blacklisted eller ER blacklisted
+     *
+     * @param blacklisted Fortæller om det er blacklisted eller IKKE blacklisted users den skal hente
+     *
+     * @return ArrayList<PreviewDatingUser> Returnerer liste med ALLE PreviewDatingUser's
+     */
+    public ArrayList<PreviewDatingUser> createListOfAllDatingUsersToAdmin(int blacklisted)
+    {
+        lovestruckConnection = establishConnection("lovestruck");
+        
+        ArrayList<PreviewDatingUser> datingUsersList = new ArrayList<>();
+        
+        try
+        {
+            String sqlCommand = "SELECT * FROM dating_users WHERE blacklisted = ?";
+            
+            // det er vores SQL sætning som vi beder om at få prepared til at blive sendt til databasen:
+            // henter ALLE datingUsers fra tabel BORTSET fra den der er logget ind
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+    
+            preparedStatement.setInt(1, blacklisted);
+            
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            while(resultSet.next()) // hvis der IKKE ligger noget i resultSettet sættes det til null
+            {
+                PreviewDatingUser previewDatingUser = createPreviewDatingUserFromResultSet(resultSet);
+                datingUsersList.add(previewDatingUser);
+            }
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in findPostalInfoObjectFromZipCodeInput: " + e.getMessage());
+        }
+        return datingUsersList;
+    }
+    
+    
+    
+    public void updateDatingUsersBlacklistedColumn(int idDatingUser, int blacklisted)
+    {
+        lovestruckConnection = establishConnection("lovestruck");
+    
+        try
+        {
+            String sqlCommand = "UPDATE dating_users SET blacklisted = ? WHERE id_dating_user = ?";
+        
+            PreparedStatement preparedStatement = lovestruckConnection.prepareStatement(sqlCommand);
+        
+            preparedStatement.setInt(1, blacklisted);
+            preparedStatement.setInt(2, idDatingUser);
+        
+            preparedStatement.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println("Error in updateDatingUsersBlacklistedColumn: " + e.getMessage());
+        }
     }
   
     

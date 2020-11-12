@@ -111,8 +111,6 @@ public class DatingController
     
         previewDatingUsersListModel.addAttribute("previewDatingUsersList", previewDatingUsersList);
         
-        //urlModel.addAttribute("baseurl", "/viewProfile");
-        
         return "DatingUser/startpage"; // html
     }
     
@@ -279,7 +277,7 @@ public class DatingController
     
     @RequestMapping("/viewChat")
     public String viewChatIdDatingUser(@RequestParam int idDatingUserToChatWith, Model viewProfileDatingUserModel,
-                                          Model loggedInDatingUserModel, Model chatModel) //, Model colorConditionModel)
+                                          Model loggedInDatingUserModel, Model chatModel)//, Model colorConditionModel)
     {
         // opdaterer attributten idDatingUserToChatWith til at være den person man currently er inde på chatten med
         // bruges i postMapping("/postMessage")
@@ -456,12 +454,75 @@ public class DatingController
     //------------------ GET ADMIN -------------------//
     
     @GetMapping("/startPageAdmin")
-    public String startPageAdmin(Model adminModel)
+    public String startPageAdmin(Model adminModel, Model previewDatingUsersListModel)
     {
         adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+    
+        // 0 == fordi den skal hente alle IKKE-blacklistede brugere
+        ArrayList<PreviewDatingUser> previewDatingUsersList =
+                userRepository.createListOfAllDatingUsersToAdmin(0);
+    
+        previewDatingUsersListModel.addAttribute("previewDatingUsersList", previewDatingUsersList);
+        
         
         return "Admin/startpageadmin"; // html
     }
+    
+    @GetMapping("/searchPageAdmin")
+    public String searchPageAdmin(Model adminModel)
+    {
+        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        
+        return "Admin/searchpageadmin"; // html
+    }
+    
+    @GetMapping("/createAdmin")
+    public String createAdmin(Model adminModel)
+    {
+        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        
+        return "Admin/createadmin"; // html
+    }
+    
+    @GetMapping("/removeFromBlacklistConfirmation")
+    public String removeFromBlacklistConfirmation(Model viewProfileDatingUserModel, Model loggedInAdminModel)
+    {
+    
+        loggedInAdminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        
+        userRepository.updateDatingUsersBlacklistedColumn(viewProfileDatingUser.getIdViewProfileDatingUser(), 0);
+        
+        return "/Admin/removefromblacklistconfirmation";
+    }
+    
+    @GetMapping("/addToBlacklistConfirmation")
+    public String addToBlacklistConfirmation(Model viewProfileDatingUserModel, Model loggedInAdminModel)
+    {
+        
+        loggedInAdminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        
+        userRepository.updateDatingUsersBlacklistedColumn(viewProfileDatingUser.getIdViewProfileDatingUser(), 1);
+        
+        return "/Admin/addtoblacklistconfirmation";
+    }
+    
+    @GetMapping("/blacklistedPage")
+    public String blacklistedPage(Model adminModel, Model previewDatingUsersListModel)
+    {
+        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        
+        // 0 == fordi den skal hente alle IKKE-blacklistede brugere
+        ArrayList<PreviewDatingUser> previewDatingUsersList =
+                userRepository.createListOfAllDatingUsersToAdmin(1);
+        
+        previewDatingUsersListModel.addAttribute("previewDatingUsersList", previewDatingUsersList);
+        
+        
+        return "Admin/blacklistedpage"; // html
+    }
+    
     
     
     /* TODO: probably slet denne
@@ -475,54 +536,36 @@ public class DatingController
     
      */
     
-    @GetMapping("/blacklistedUsersPageAdmin")
-    public String blacklistedUsersPageAdmin(Model adminModel)
-    {
-        /*
-        Possibly noget ala:
-        tager som param:
-             - Model blacklistedUsersListModel
-        
-        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
-        blacklistedUsersListModel.addAttribute("blacklistedUsersList", loggedInAdmin.getBlacklistedUsersList());
-        
-       og så thymeleafer vi en array på favouritespage-html'en
-         */
-        return "Admin/blacklisteduserspageadmin"; // html
-    }
+ 
     
-    @GetMapping("/searchPageAdmin")
-    public String searchPageAdmin(Model adminModel)
-    {
-        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
-        
-        return "DatingUser/searchpage"; // html
-    }
     
-    @GetMapping("/viewProfileAdmin")
-    public String viewProfileAdmin(Model adminModel, Model viewProfileDatingUserModel)
+    
+    
+    
+    //------------------ REQUEST ADMIN -------------------//
+    
+    @RequestMapping("/viewProfileAdmin")
+    public String viewProfileAdminIdDatingUser(@RequestParam int id, Model viewProfileDatingUserModel,
+                                          Model loggedInAdminModel)
     {
-        adminModel.addAttribute("loggedInAdmin", loggedInAdmin);
+        loggedInAdminModel.addAttribute("loggedInAdmin", loggedInAdmin);
         
-        viewProfileDatingUser = loggedInDatingUser.convertDatingUserToViewProfileDatingUser();
+        viewProfileDatingUser = userRepository.findDatingUserInDbToView(id);
         
         viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         
-        return "DatingUser/viewprofile";
+        // tjekker om viewProfileDatingUser'en (hvis profil skal vises) er blacklisted
+        boolean isBlacklisted = viewProfileDatingUser.isBlacklisted();
+        
+        // Hvis profil som skal vises ER blacklisted (skal den have en anden knap nemlig)
+        if(isBlacklisted)
+        {
+            return "Admin/viewprofileblacklisted";
+        }
+        // else if profilen som skal vises IKKE er på favouritesList
+        return "Admin/viewprofilenotblacklisted";
     }
     
-    @GetMapping("/editProfileAdmin")
-    public String editProfileAdmin(Model editDatingUserModel)
-    {
-        editDatingUser = loggedInDatingUser.convertDatingUserToEditDatingUser();
-        
-        editDatingUserModel.addAttribute("editDatingUser", editDatingUser);
-        
-        return "DatingUser/editprofile"; // html
-    }
-    
-    
- 
   
     //------------------ POST ADMIN -------------------//
     

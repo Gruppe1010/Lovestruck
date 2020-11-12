@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title> Love Struck </title>
+
+    <link rel="icon" href="https://i.imgur.com/LToUXOO.png" type="image/png"/>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Love struck - tænd gnisten"/>
+
+    <!-- css-filer -->
+    <link href="/startchatandfavouritespage.css" type="text/css" rel="stylesheet">
+    <link href="/pagetemplate.css" type="text/css" rel="stylesheet">
+    <link href="/formtemplate.css" type="text/css" rel="stylesheet">
+
+    <!-- bootstraaaaap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!--Font-->
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@700&display=swap" rel="stylesheet">
+    <!-- font-family: 'Bitter', sans-serif; -->
+
+    <!--Icon-->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+</head>
+<body>
+<!--pagecontainer der tager footer med-->
+<div class="pagecontainer">
+    <!--content der inkapsler hele siden undtagen footer-->
+    <div class="content">
+        <div class="logo">
+            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/h8kGO5J.png" alt="" class="logo"></a>
+            <a class="linklogo" href="/startPage"><img src="https://i.imgur.com/LToUXOO.png" alt="" class="logo"></a>
+        </div>
+
+        <div class="menubar">
+            <!--for at style linkene skulle a have sin egen klasse-->
+            <span class="menubarheadline"><a class="linkmenubarheadlineactive" href="/startPageAdmin"> <i class="fas fa-home"></i> Start</a></span>
+            <!--TODO: admin skal evt. kunne chatte med users (for fx at give advarsler pga. dårlig opførsel)
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/chatPage"><i class="fas fa-envelope-open-text"></i> Chat</a></span> -->
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/blacklistedPage"><i class="fas fa-skull-crossbones"></i> Blacklistede brugere</a></span>
+            <span class="menubarheadline"><a class="linkmenubarheadline" href="/searchPageAdmin"><i class="fas fa-search"></i> Søg</a></span>
+            <span class="menubarheadline dropdown">
+                <span th:text="${loggedInAdmin.getUsername()}"></span>
+                <div class="dropdown-content">
+                    <a href="/createAdmin" class="linkmenubarheadline"><i class="fas fa-grin-hearts"></i>&nbsp;&nbsp;Opret admin</a> <!--TODO href skal ændres alt efter hvilken bruger der er logget ind-->
+                    <a href="/editProfileAdmin" class="linkmenubarheadline"><i class="fas fa-pen"></i>&nbsp;&nbsp;Rediger profil</a>
+                    <a href="/logOut" class="linkmenubarheadline"><i class="fas fa-door-open"></i>&nbsp;&nbsp;Log ud</a> <!--TODO hvis brugeren vælger denne, skal loggedInUser nulstilles-->
+                </div>
+                <i class="fas fa-caret-down"></i>
+            </span>
+        </div>
+
+        <div class="content-container">
+            <h4 class="startpageheadline">Hej ADMIN! <i class="fas fa-heart"></i></h4>
+            <p class="startpageheadline">Her er en oversigt over profilerne - tjek dem godt igennem for upassende materiale, og blacklist dem</p>
+            <div class="textbox-container">
+
+                <div th:each="previewDatingUser : ${previewDatingUsersList}">
+
+                    <a class="previewdatinguserlink" th:href="@{/viewProfileAdmin(id=${previewDatingUser.getId()})}">
+                        <div class="previewdatinguserbox">
+                            <img class="previewdatinguserpicture" th:src="'data:image/jpeg;base64,' + ${previewDatingUser.getBase64()}">
+                            <div class="previewdatinguserinfo">
+                                <div th:text="${previewDatingUser.getUsername()}"></div>
+                                <div th:text="${previewDatingUser.getAge()}"><p>&nbsp; år</p></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div>
+            <div class="floatright">
+                <span><a class="footertext" href="https://www.google.com/maps/place/Lygten+37,+2400+K%C3%B8benhavn/data=!4m2!3m1!1s0x465252496d687ed3:0xab513417c1575967?sa=X&ved=2ahUKEwj9ya6NqJHsAhUPzqQKHYjIAKoQ8gEwAHoECAwQAQ">
+                    Lygten 37, 2400 København</a></span>
+                <span><a class="footertext" href="mailto:kontakt@lovestruck.dk">kontakt@lovestruck.dk</a></span>
+                <span><a class="footertext" href="tel:+45 0000 1010">+45 0000 1010</a></span>
+            </div>
+        </div>
+
+    </footer>
+</div>
+</body>
+</html>
+

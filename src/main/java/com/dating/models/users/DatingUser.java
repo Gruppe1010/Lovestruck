@@ -370,7 +370,7 @@ public class DatingUser extends User
         
         
         return new ViewProfileDatingUser(idDatingUser, super.getUsername(), sexAndAge, zipCodeAndCity,
-                descriptionInput, tagsListString, profilePictureBytes);
+                descriptionInput, tagsListString, profilePictureBytes, isBlacklisted);
         
     }
     

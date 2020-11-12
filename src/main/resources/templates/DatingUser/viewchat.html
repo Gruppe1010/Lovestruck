@@ -72,30 +72,18 @@
 
                         <form id="message-form" action="/postMessage" method="post">
 
-
-
-                            <!--TODO indsæt rigtige messages. Stylingen i viewpmessage burde kunne overføres til dem.-->
                             <div th:each="message : ${messageList}">
                                 <span id="messagefromdatinguser"
                                       class="color fontsize viewmessage" th:text="${message.getMessage()}"></span><br>
                                 <span th:text="${message.getAuthor()}"></span><br><br>
                             </div>
 
-                            <!--
+                            <!-- TODO: dette gør evt. at den skifter farve alt efter hvilken author det er
                             th:class="'color'+${condition ? 'condition-true' : 'condition-false'}"
                             th:class="'base '+${condition ? 'condition-true' : 'condition-false'}">
-
                             <span th:attr="class=${condition ? 'base condition-true' : 'base condition-false'}">
-   This HTML is consolidated, which is good, but the Thymeleaf attribute still has some redundancy in it.
-</span> -->
-
-
-                            <!--TODO indsæt rigtige messages. Stylingen i viewmessage burde kunne overføres til dem.
-                            <div>
-                                <span id="messagefromloggedinuser"
-                                      class="color fontsize viewmessage">Jo ser du, det går sku meget godt. Hvad med dig?</span><br>
-                                <span th:text="${viewProfileDatingUser.getUsername()}"></span><br><br>
-                            </div>
+                            This HTML is consolidated, which is good, but the Thymeleaf attribute still has some redundancy in it.
+                            </span>
                             -->
 
                         </form>

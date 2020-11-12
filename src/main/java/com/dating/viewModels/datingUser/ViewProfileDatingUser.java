@@ -16,11 +16,12 @@ public class ViewProfileDatingUser
     private byte[] profilePictureBytes;
     private String base64;
     private boolean isOnFavouritesList;
+    private boolean isBlacklisted;
     
     // constructor
     public ViewProfileDatingUser(){}
     public ViewProfileDatingUser(int idViewProfileDatingUser, String username,String sexAndAge, String zipCodeAndCity,
-                                 String description, String tags, byte[] profilePictureBytes)
+                                 String description, String tags, byte[] profilePictureBytes, boolean blacklisted)
     {
         this.idViewProfileDatingUser = idViewProfileDatingUser;
         this.username = username;
@@ -31,6 +32,7 @@ public class ViewProfileDatingUser
         this.profilePictureBytes = profilePictureBytes;
         this.base64 = byteArrayAs64String();
         this.isOnFavouritesList = false;
+        this.isBlacklisted = blacklisted;
     }
     
     
@@ -106,6 +108,14 @@ public class ViewProfileDatingUser
     public void setIsOnFavouritesList(boolean onFavouritesList)
     {
         this.isOnFavouritesList = onFavouritesList;
+    }
+    public boolean isBlacklisted()
+    {
+        return isBlacklisted;
+    }
+    public void setBlacklisted(boolean blacklisted)
+    {
+        isBlacklisted = blacklisted;
     }
     
     // andre metoder
