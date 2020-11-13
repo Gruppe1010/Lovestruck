@@ -275,8 +275,8 @@ public class DatingController
     }
     
     @RequestMapping("/viewChat")
-    public String viewChatIdDatingUser(@RequestParam int idDatingUserToChatWith, Model viewProfileDatingUserModel,
-                                          Model loggedInDatingUserModel, Model chatModel)//, Model colorConditionModel)
+    public String viewChatIdDatingUser(@RequestParam int idDatingUserToChatWith, Model loggedInDatingUserModel,
+                                       Model chatModel)
     {
         // opdaterer attributten idDatingUserToChatWith til at være den person man currently er inde på chatten med
         // bruges i postMapping("/postMessage")
@@ -332,7 +332,7 @@ public class DatingController
             }
         }
     
-        viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
+        // viewProfileDatingUserModel.addAttribute("viewProfileDatingUser", viewProfileDatingUser);
         loggedInDatingUserModel.addAttribute("loggedInDatingUser", loggedInDatingUser);
     
         ArrayList<Message> messageList = new ArrayList<>();

@@ -17,7 +17,7 @@ public class ViewProfileDatingUser
     
     // constructors
     public ViewProfileDatingUser(){}
-    public ViewProfileDatingUser(int idViewProfileDatingUser, String username,String sexAndAge, String zipCodeAndCity,
+    public ViewProfileDatingUser(int idViewProfileDatingUser, String username, String sexAndAge, String zipCodeAndCity,
                                  String description, String tags, byte[] profilePictureBytes, boolean blacklisted)
     {
         this.idViewProfileDatingUser = idViewProfileDatingUser;

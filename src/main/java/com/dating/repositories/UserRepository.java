@@ -17,7 +17,7 @@ public class UserRepository
 {
     Connection lovestruckConnection = null;
     Connection favouritesListConnection = null;
-    Connection chatsListConnection = null;
+    Connection chatslistConnection = null;
     Connection chatConnection = null;
 
     DatingUser loggedInDatingUser = new DatingUser();
@@ -61,9 +61,9 @@ public class UserRepository
             {
                 favouritesListConnection.close();
             }
-            if(chatsListConnection != null)
+            if(chatslistConnection != null)
             {
-                chatsListConnection.close();
+                chatslistConnection.close();
             }
             if(chatConnection != null)
             {
@@ -765,7 +765,7 @@ public class UserRepository
     
     public void createChatsListTableDb(int idDatingUser)
     {
-        chatsListConnection = establishConnection("lovestruck_chats_list");
+        chatslistConnection = establishConnection("lovestruck_chats_list");
         
         try
         {
@@ -777,7 +777,7 @@ public class UserRepository
                                         "PRIMARY " +
                                         "KEY (id_dating_user));";
             
-            PreparedStatement preparedStatement = chatsListConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
             
             preparedStatement.setInt(1, idDatingUser);
             
@@ -844,11 +844,11 @@ public class UserRepository
     {
         boolean doesTableExist = false;
         
-        chatsListConnection = establishConnection("lovestruck_chat");
+        chatslistConnection = establishConnection("lovestruck_chat");
         
         try
         {
-            DatabaseMetaData dbm = chatsListConnection.getMetaData();
+            DatabaseMetaData dbm = chatslistConnection.getMetaData();
             
             // check om tabellen er der
             ResultSet tables = dbm.getTables(null, null,
@@ -877,14 +877,14 @@ public class UserRepository
     
     public void addDatingUserToChatsListTable(int chatsListId, int idDatingUserToAdd)
     {
-        chatsListConnection = establishConnection("lovestruck_chats_list");
+        chatslistConnection = establishConnection("lovestruck_chats_list");
         
         try
         {
             String sqlCommand = "INSERT into chats_list_?(id_dating_user) values(?)";
             // String sqlCommand = "UPDATE chats_list_? SET id_dating_user = ?";
             
-            PreparedStatement preparedStatement = chatsListConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
             
             preparedStatement.setInt(1, chatsListId);
             preparedStatement.setInt(2, idDatingUserToAdd);
@@ -962,13 +962,13 @@ public class UserRepository
     {
         ResultSet resultSet = null;
         
-        chatsListConnection = establishConnection("lovestruck_chats_list");
+        chatslistConnection = establishConnection("lovestruck_chats_list");
         
         try
         {
             String sqlCommand = "SELECT * FROM lovestruck_chats_list.chats_list_?;";
             
-            PreparedStatement preparedStatement = chatsListConnection.prepareStatement(sqlCommand);
+            PreparedStatement preparedStatement = chatslistConnection.prepareStatement(sqlCommand);
             
             preparedStatement.setInt(1, idDatingUser);
             
