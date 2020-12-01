@@ -1,6 +1,8 @@
 package com.dating.models.chat;
 
-public class Message
+import com.dating.controllers.DatingController;
+
+public class Message extends DatingController
 {
     private String message;
     private String author;

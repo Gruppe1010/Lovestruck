@@ -41,7 +41,7 @@ public class DatingUser extends User
         profilePictureBytes = createGenericProfilePictureBytes();
         description = null;
         tagsList = new ArrayList<>();
-        postalInfo = new PostalInfo(0,"");
+        postalInfo = new PostalInfo(0,""); // bliver sat til vores dummy postal objekt
         favouritesList = new ArrayList<>();
         ArrayList<Chat> chatList = new ArrayList<>();
     }
